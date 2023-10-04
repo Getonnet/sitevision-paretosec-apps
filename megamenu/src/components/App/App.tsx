@@ -1,19 +1,42 @@
 import * as React from "react";
 // import styles from "./App.scss";
-import SearchMobile from "../Mobile/SearchMobile";
-import MobileMenuIcon from "../Mobile/MobileMenuIcon";
-import MobileSearchFieldVisibilityTrigger from "../Mobile/MobileSearchFieldVisibilityTrigger";
-import MobileLogin from "../Mobile/MobileLogin";
-import MobileNavbar from "../Mobile/MobileNavbar";
-import Navbar from "../Desktop/Navbar";
-import Search from "../Desktop/Search";
-import Login from "../Desktop/Login";
+import SearchMobile from "./Mobile/SearchMobile";
+import MobileMenuIcon from "./Mobile/MobileMenuIcon";
+import MobileSearchFieldVisibilityTrigger from "./Mobile/MobileSearchFieldVisibilityTrigger";
+import MobileLogin from "./Mobile/MobileLogin";
+import MobileNavbar from "./Mobile/MobileNavbar";
+import Navbar from "./Desktop/Navbar";
+import Search from "./Desktop/Search";
+import Login from "./Desktop/Login";
+import requester from "@sitevision/api/client/requester";
+import { useEffect } from "react/index";
 
 export interface AppProperties {
   name: string;
 }
 
+const URL =
+  "https://use-pareto.sitevision-cloud.se/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
+
 const App: React.FunctionComponent<AppProperties> = ({ name }) => {
+  const getMenuItems = () => {
+    console.log("running data fetch  func");
+    requester
+      .doGet({
+        url: URL,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
+
+  useEffect(() => {
+    getMenuItems();
+  }, []);
+
   return (
     <>
       {/*<p className={styles.text}>{name}</p>*/}
