@@ -9,7 +9,6 @@ import Navbar from "./Desktop/Navbar";
 import Search from "./Desktop/Search";
 import Login from "./Desktop/Login";
 import requester from "@sitevision/api/client/requester";
-import { useEffect } from "react/index";
 
 export interface AppProperties {
   name: string;
@@ -33,7 +32,7 @@ const App: React.FunctionComponent<AppProperties> = ({ name }) => {
       });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getMenuItems();
   }, []);
 
