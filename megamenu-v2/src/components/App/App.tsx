@@ -9,72 +9,14 @@ import Search from "../Desktop/Search";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
+import type {
+  AppProperties,
+  ILink,
+  ISubMenuItems,
+  MegaMenuMenu,
+  LinkType,
+} from "./types";
 // import styles from "./App.scss";
-
-type LinkType = "Megamenu" | "Dropdown" | "Link";
-
-export interface AppProperties {
-  message: string;
-  name: string;
-}
-
-export interface ILink {
-  id: string;
-  type: "sv:folder" | "sv:link";
-  name: string;
-  path: string;
-  properties: Properties;
-}
-
-export interface Properties {
-  nofollow?: boolean;
-  publishedBy: string;
-  displayName: string;
-  publishDate: number;
-  ggLinkType: LinkType;
-  "jcr:uuid": string;
-  locale: string;
-  URI: string;
-  URL: string;
-  lastPublishDate: number;
-  visibleInMenus: boolean;
-  useCustomWindowSize?: boolean;
-  useDownload?: boolean;
-  usePathName: boolean;
-  comments: any[];
-  lastModifiedDate: number;
-  lastModifiedBy: string;
-  customWindowHeight?: number;
-  published: boolean;
-  lastPublishedBy: string;
-  creationDate: number;
-  visibleCount: number;
-  rawURI?: string;
-  createdBy: string;
-  "jcr:mixinTypes": string[];
-  customWindowWidth?: number;
-  linkType?: string;
-  "jcr:primaryType": string;
-  openInNewWindow?: boolean;
-  ggParentChildId: string;
-  robotsIndex?: boolean;
-  resourcePriority?: number;
-  downloadProtected?: boolean;
-}
-
-export type DropdownMenu = {
-  type: "Dropdown";
-  items: ILink[];
-};
-
-export type MegaMenuMenu = {
-  type: "Megamenu";
-  columns: Array<ILink[]>;
-};
-
-export interface ISubMenuItems {
-  [key: string]: DropdownMenu | MegaMenuMenu;
-}
 
 const MAIN_URL =
   "https://use-pareto.sitevision-cloud.se/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";

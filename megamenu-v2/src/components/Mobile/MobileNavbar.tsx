@@ -1,7 +1,6 @@
 import React from "react";
 import type { INavBar } from "../Desktop/Navbar";
 import { ILink } from "../App/App";
-import MegaMenuFirstLink from "../Desktop/megamenuFirstLink";
 import MegaMenuFirstLinkMobile from "./megamenuFirstLinkMobile";
 
 const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
