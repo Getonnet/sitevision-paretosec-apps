@@ -1,288 +1,76 @@
 import React from "react";
+import type { INavBar } from "../Desktop/Navbar";
+import { ILink } from "../App/App";
+import MegaMenuFirstLink from "../Desktop/megamenuFirstLink";
+import MegaMenuFirstLinkMobile from "./megamenuFirstLinkMobile";
 
-const MobileNavBar = () => {
+const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
+  React.useEffect(() => {
+    // @ts-ignore
+    window.Webflow && window.Webflow.destroy();
+    // @ts-ignore
+    window.Webflow && window.Webflow.ready();
+  }, [menuItems, subMenuItems]);
+
   return (
     <nav role="navigation" className="mobile-nav w-nav-menu">
-      <a href="#" className="mobile-nav-link w-nav-link">
-        Home
-      </a>
-      <a href="#" className="mobile-nav-link w-nav-link">
-        Projects
-      </a>
-      <div
-        data-delay={0}
-        data-hover="false"
-        className="mobile-dropdown w-dropdown"
-      >
-        <div className="mobile-toggle w-dropdown-toggle">
-          <div className="w-icon-dropdown-toggle" />
-          <div>Om oss</div>
-        </div>
-        <nav className="dropdown-list-simple-mob w-dropdown-list">
-          <a href="#" className="navigation-link-block-mob w-inline-block">
-            <div className="nav-dd-link">ETF-handel</div>
-          </a>
-          <a href="#" className="navigation-link-block-mob w-inline-block">
-            <div className="nav-dd-link">Obligasjonshandel</div>
-          </a>
-          <a href="#" className="navigation-link-block-mob w-inline-block">
-            <div className="nav-dd-link">Aksjesparekonto</div>
-          </a>
-          <a href="#" className="navigation-link-block-mob w-inline-block">
-            <div className="nav-dd-link">Prisliste</div>
-          </a>
-        </nav>
-      </div>
+      {menuItems.map((item) => {
+        const ddItem = subMenuItems[item.properties.ggParentChildId] || null;
 
-      <div
-        data-delay={0}
-        data-hover="false"
-        className="mobile-dropdown w-dropdown"
-      >
-        <div className="mobile-toggle w-dropdown-toggle">
-          <div className="w-icon-dropdown-toggle" />
-          <div>Services</div>
-        </div>
-        <nav className="dropdown-list-mob w-dropdown-list">
-          <div className="dropdown-list-wrapper-mob">
-            <div className="navigation-column-mob">
-              <div className="navigation-column-title-mob">
-                <div className="nav-title">Aksjehandel på nett</div>
-                <div className="icon-embed-custom-4 w-embed">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 17 11"
-                    fill="none"
-                    preserveAspectRatio="xMidYMid meet"
-                    aria-hidden="true"
-                    role="img"
-                  >
-                    <path
-                      d="M12.1216 0.5L11.0405 1.58108L14.1486 4.82432H0.5V6.17567H14.1486L11.0405 9.41892L12.1216 10.5L16.0405 6.58108L16.9865 5.5L16.0405 4.55405L12.1216 0.5Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="nav-content-wrap-mob">
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Aksjehandel på nett</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">
-                    Trading og avansert aksjehandel
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Handel i utlandet</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">
-                    Handle unoterte aksjer i Norge
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Fondssenter</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">ETF-handel</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Obligasjonshandel</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Aksjesparekonto</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Prisliste</div>
-                </a>
-              </div>
+        if (item.type !== "sv:link") return;
+
+        return item.properties.ggLinkType === "Link" ? (
+          <a href={item.properties.URL} className="mobile-nav-link w-nav-link">
+            {item.name}
+          </a>
+        ) : (
+          <div
+            data-delay={0}
+            data-hover="false"
+            className="mobile-dropdown w-dropdown"
+          >
+            <div className="mobile-toggle w-dropdown-toggle">
+              <div className="w-icon-dropdown-toggle" />
+              <div>{item.name}</div>
             </div>
-            <div className="navigation-column-mob">
-              <div className="navigation-column-title-mob">
-                <div className="nav-title">Megler Kontotyper</div>
-                <div className="icon-embed-custom-4 w-embed">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 17 11"
-                    fill="none"
-                    preserveAspectRatio="xMidYMid meet"
-                    aria-hidden="true"
-                    role="img"
+
+            {ddItem && ddItem.type === "Dropdown" ? (
+              <nav className="dropdown-list-simple-mob w-dropdown-list">
+                {ddItem.items.map((di: ILink) => (
+                  <a
+                    href={di.properties.URL}
+                    className="navigation-link-block-mob w-inline-block"
                   >
-                    <path
-                      d="M12.1216 0.5L11.0405 1.58108L14.1486 4.82432H0.5V6.17567H14.1486L11.0405 9.41892L12.1216 10.5L16.0405 6.58108L16.9865 5.5L16.0405 4.55405L12.1216 0.5Z"
-                      fill="currentColor"
-                    />
-                  </svg>
+                    <div className="nav-dd-link">{di.name}</div>
+                  </a>
+                ))}
+              </nav>
+            ) : ddItem && ddItem.type === "Megamenu" ? (
+              <nav className="dropdown-list-mob w-dropdown-list">
+                <div className="dropdown-list-wrapper-mob">
+                  {ddItem.columns.map((col) => (
+                    <div className="navigation-column-mob">
+                      <MegaMenuFirstLinkMobile link={col[0]} />
+                      <div className="nav-content-wrap-mob">
+                        {col.slice(1).map((linkItem) => (
+                          <a
+                            href={linkItem.properties.URL}
+                            className="navigation-link-block-mob w-inline-block"
+                          >
+                            <div className="nav-dd-link">{linkItem.name}</div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="nav-content-wrap-mob">
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Belåning av aksjer</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Aksjekreditt</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Intradagskreditt</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Shorthandel</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Lån ut dine aksjer</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Dynamiske belåningsgrader</div>
-                </a>
-              </div>
-            </div>
-            <div className="navigation-column-mob">
-              <div className="navigation-column-title-mob">
-                <div className="nav-title">Lån &amp; andre tjenester</div>
-                <div className="icon-embed-custom-4 w-embed">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 17 11"
-                    fill="none"
-                    preserveAspectRatio="xMidYMid meet"
-                    aria-hidden="true"
-                    role="img"
-                  >
-                    <path
-                      d="M12.1216 0.5L11.0405 1.58108L14.1486 4.82432H0.5V6.17567H14.1486L11.0405 9.41892L12.1216 10.5L16.0405 6.58108L16.9865 5.5L16.0405 4.55405L12.1216 0.5Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="nav-content-wrap-mob">
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Analyse</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Investtech hos Pareto</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Investeringsrådgivning</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">VPS Investortjenester</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Kundeavtaler</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Prosjektfinansiering</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Kunnskapssenter</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Traders Corner</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Spørsmål og svar</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Paretopodden</div>
-                </a>
-                <a
-                  href="#"
-                  className="navigation-link-block-mob w-inline-block"
-                >
-                  <div className="nav-dd-link">Flytt til Pareto</div>
-                </a>
-              </div>
-            </div>
+              </nav>
+            ) : (
+              ""
+            )}
           </div>
-        </nav>
-      </div>
-      <a href="#" className="mobile-nav-link w-nav-link">
-        Clients
-      </a>
+        );
+      })}
     </nav>
   );
 };

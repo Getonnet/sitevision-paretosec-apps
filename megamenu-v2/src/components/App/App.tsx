@@ -1,5 +1,4 @@
 import * as React from "react";
-// import styles from "./App.scss";
 import SearchMobile from "../Mobile/SearchMobile";
 import MobileMenuIcon from "../Mobile/MobileMenuIcon";
 import MobileSearchFieldVisibilityTrigger from "../Mobile/MobileSearchFieldVisibilityTrigger";
@@ -10,6 +9,7 @@ import Search from "../Desktop/Search";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
+// import styles from "./App.scss";
 
 type LinkType = "Megamenu" | "Dropdown" | "Link";
 
@@ -84,14 +84,9 @@ const URL_SUFFIX =
 
 const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
-  const [, setChildMenuitems, childMenuitems] = useState<ISubMenuItems>({});
+  const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
 
-  const fetchData = (
-    url: string,
-    type: LinkType,
-    parentID?: string,
-    columnNo?: number
-  ) => {
+  const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
       .doGet({
         url: url,
@@ -112,7 +107,7 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
            * just need to fetch once
            */
           if (!parentID) return;
-          setChildMenuitems((prev) => ({
+          setChildMenuItems((prev) => ({
             ...prev,
             [parentID]: {
               type: "Dropdown",
@@ -125,9 +120,9 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
            * inside coluns are links
            */
           if (!parentID) return;
-          if (Object.keys(childMenuitems.current).includes(parentID)) {
-            const menuItem = childMenuitems.current[parentID] as MegaMenuMenu;
-            setChildMenuitems((prev) => ({
+          if (Object.keys(childMenuItems.current).includes(parentID)) {
+            const menuItem = childMenuItems.current[parentID] as MegaMenuMenu;
+            setChildMenuItems((prev) => ({
               ...prev,
               [parentID]: {
                 ...menuItem,
@@ -135,7 +130,7 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
               },
             }));
           } else {
-            setChildMenuitems((prev) => ({
+            setChildMenuItems((prev) => ({
               ...prev,
               [parentID]: {
                 type: "Megamenu",
@@ -151,7 +146,7 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
   };
 
   const getMenuItems = () => {
-    console.log("running data fetch  func");
+    // console.log("running data fetch  func");
     fetchData(MAIN_URL, "Link").then((res) => getSubMenuItems(res as ILink[]));
   };
 
@@ -165,7 +160,7 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
             URL_PREFIX + r.path + URL_SUFFIX,
             "Dropdown",
             r.properties.ggParentChildId
-          ).then(() => console.log(childMenuitems.current));
+          ).then(() => console.log(childMenuItems.current));
         } else if (r.properties.ggLinkType === "Megamenu") {
           // fetch 1 level to get columns
           requester
@@ -175,13 +170,12 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
             .then((res) => {
               const data = res as ILink[];
               // for each columns fetch again to get child
-              data.map((col, i) =>
+              data.map((col) =>
                 fetchData(
                   URL_PREFIX + col.path + URL_SUFFIX,
                   "Megamenu",
-                  r.properties.ggParentChildId,
-                  i + 1
-                ).then(() => console.log(childMenuitems.current))
+                  r.properties.ggParentChildId
+                ).then(() => console.log(childMenuItems.current))
               );
             })
             .catch((e) => console.log(e));
@@ -225,7 +219,7 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
 
                 <Navbar
                   menuItems={topMenuItems.current}
-                  subMenuItems={childMenuitems.current}
+                  subMenuItems={childMenuItems.current}
                 />
               </div>
 
@@ -270,7 +264,10 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
               />
             </a>
 
-            <MobileNavbar />
+            <MobileNavbar
+              menuItems={topMenuItems.current}
+              subMenuItems={childMenuItems.current}
+            />
 
             <div className="spacer-h" />
 
