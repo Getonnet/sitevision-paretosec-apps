@@ -1,6 +1,6 @@
 import React from "react";
 import type { INavBar } from "../Desktop/Navbar";
-import { ILink } from "../App/App";
+import type { ILink } from "../App/types";
 import MegaMenuFirstLinkMobile from "./megamenuFirstLinkMobile";
 
 const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
@@ -47,11 +47,11 @@ const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
             ) : ddItem && ddItem.type === "Megamenu" ? (
               <nav className="dropdown-list-mob w-dropdown-list">
                 <div className="dropdown-list-wrapper-mob">
-                  {ddItem.columns.map((col) => (
+                  {ddItem.columns.map((col: any) => (
                     <div className="navigation-column-mob">
                       <MegaMenuFirstLinkMobile link={col[0]} />
                       <div className="nav-content-wrap-mob">
-                        {col.slice(1).map((linkItem) => (
+                        {col.slice(1).map((linkItem: ILink) => (
                           <a
                             href={linkItem.properties.URL}
                             className="navigation-link-block-mob w-inline-block"

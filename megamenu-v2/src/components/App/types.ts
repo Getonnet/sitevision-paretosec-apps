@@ -1,8 +1,16 @@
+import appData from "@sitevision/api/server/appData";
+
 export type LinkType = "Megamenu" | "Dropdown" | "Link";
 
 export interface AppProperties {
-  message: string;
-  name: string;
+  data: {
+    desktopLogo: string;
+    mobileLogo: string;
+    loginBtnText: string;
+    loginBtnLink: string;
+    ctaBtnText: string;
+    ctaLink: string;
+  };
 }
 
 export interface ILink {

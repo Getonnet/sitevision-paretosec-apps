@@ -1,5 +1,5 @@
 import React from "react";
-import { ILink, ISubMenuItems } from "../App/App";
+import { ILink, ISubMenuItems } from "../App/types";
 import MegaMenuFirstLink from "./megamenuFirstLink";
 
 export interface INavBar {
@@ -51,11 +51,11 @@ const Navbar = ({ menuItems, subMenuItems }: INavBar) => {
               <nav className="dropdown-list-megamenu w-dropdown-list">
                 <div className="dropdown-list-full-wrapper">
                   <div className="navigation-drop-container">
-                    {ddItem.columns.map((col) => (
+                    {ddItem.columns.map((col: any) => (
                       <div className="navigation-column">
                         <MegaMenuFirstLink link={col[0]} />
                         <div className="nav-content-wrap">
-                          {col.slice(1).map((linkItem) => (
+                          {col.slice(1).map((linkItem: ILink) => (
                             <a
                               href={linkItem.properties.URL}
                               className="navigation-link-block w-inline-block"

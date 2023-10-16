@@ -1,7 +1,13 @@
 import React from "react";
 
 // TODO: settings
-const Login = () => {
+const Login = ({
+  loginText,
+  loginLink,
+}: {
+  loginText: string;
+  loginLink: string;
+}) => {
   return (
     <a
       href="https://login.paretosec.com/no/Account/Login"

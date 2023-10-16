@@ -1,5 +1,5 @@
 import React from "react";
-import type { ILink } from "../App/App";
+import type { ILink } from "../App/types";
 
 const MegaMenuFirstLink = ({ link }: { link: ILink }) => {
   return (

@@ -24,9 +24,11 @@ const URL_PREFIX = "https://use-pareto.sitevision-cloud.se/rest-api/1/0";
 const URL_SUFFIX =
   "/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 
-const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
+const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
+
+  console.log(data);
 
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
@@ -34,7 +36,6 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
         url: url,
       })
       .then((response) => {
-        console.log(response);
         const data = response as ILink[];
         /**
          * for top level, save to sate
@@ -132,10 +133,6 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
 
   return (
     <>
-      {/*<p className={styles.text}>{name}</p>*/}
-      {/* TODO: Add header markup here, with loaders for the menu items, static items should show on load */}
-      {/* TODO: use the requested to fetch data from rest api, might need to do that in index.tsx? */}
-
       <div className="navigation-wrap">
         <div
           data-collapse="medium"
@@ -151,9 +148,9 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
             <div className="navigation-container">
               <div className="navigation-left">
                 <a href="/" className="brand w-nav-brand">
-                  {/*TODO: settings*/}
                   <img
-                    src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db38/1693492056924/pareto-Logo.svg"
+                    //src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db38/1693492056924/pareto-Logo.svg"
+                    src={data.desktopLogo}
                     loading="lazy"
                     alt="Pareto Securities Logo"
                   />
@@ -168,15 +165,18 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
               <div className="navigation-right">
                 <Search />
 
-                <Login />
+                <Login
+                  loginText={data.loginBtnText}
+                  loginLink={data.loginBtnLink}
+                />
 
-                {/*TODO: settings*/}
                 <a
-                  href="https://paretosec.com/no/bli-kunde"
+                  //href="https://paretosec.com/no/bli-kunde"
+                  href={data.ctaLink}
                   target="_blank"
                   className="button w-button"
                 >
-                  Bli kunde
+                  {data.ctaBtnText}
                 </a>
               </div>
             </div>
@@ -200,7 +200,8 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
               className="brand-2 w-nav-brand w--current"
             >
               <img
-                src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db39/1693492056942/pareto-mobile-logo.svg"
+                // src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db39/1693492056942/pareto-mobile-logo.svg"
+                src={data.mobileLogo}
                 alt="Pareto Securities Logo"
                 className="mobile-logo"
               />
@@ -213,7 +214,10 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
 
             <div className="spacer-h" />
 
-            <MobileLogin />
+            <MobileLogin
+              loginLink={data.loginBtnLink}
+              loginText={data.loginBtnText}
+            />
 
             <MobileSearchFieldVisibilityTrigger />
 

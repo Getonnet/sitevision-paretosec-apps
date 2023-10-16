@@ -19,6 +19,7 @@ const App = ({ pageUrl }: AppProperties) => {
         target={"_blank"}
         rel="noreferrer"
         className={styles.icon}
+        aria-label="Share article on twitter"
       >
         <svg
           width="40"
@@ -41,6 +42,7 @@ const App = ({ pageUrl }: AppProperties) => {
         className={styles.icon}
         target={"_blank"}
         rel="noreferrer"
+        aria-label="Share article on linkedin"
       >
         <svg
           width="40"
@@ -63,6 +65,7 @@ const App = ({ pageUrl }: AppProperties) => {
         className={styles.icon}
         target={"_blank"}
         rel="noreferrer"
+        aria-label="Share article on facebook"
       >
         <svg
           width="40"
