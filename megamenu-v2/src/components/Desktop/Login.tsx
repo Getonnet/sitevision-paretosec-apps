@@ -9,10 +9,7 @@ const Login = ({
   loginLink: string;
 }) => {
   return (
-    <a
-      href="https://login.paretosec.com/no/Account/Login"
-      className="button is-transparent w-inline-block"
-    >
+    <a href={loginLink} className="button is-transparent w-inline-block">
       <div className="icon-embed-custom-2 w-embed">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +27,7 @@ const Login = ({
           />
         </svg>
       </div>
-      {/*TODO: settings*/}
-      <div>Logg inn</div>
+      <div>{loginText}</div>
     </a>
   );
 };

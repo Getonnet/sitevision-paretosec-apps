@@ -1,0 +1,17 @@
+{
+  "id": "tickers",
+  "version": "0.0.1",
+  "name": {
+    "en": "Tickers"
+  },
+  "author": "Getonnet.no",
+  "description": {
+    "en": "Tickers"
+  },
+  "helpUrl": "https://getonnet.no/kontakt",
+  "type": "WebApp",
+  "bundled": true,
+  "requiredLibs": {
+    "react": "17.0.2"
+  }
+}

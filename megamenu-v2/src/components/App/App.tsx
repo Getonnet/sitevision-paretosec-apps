@@ -173,7 +173,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                 <a
                   //href="https://paretosec.com/no/bli-kunde"
                   href={data.ctaLink}
-                  target="_blank"
                   className="button w-button"
                 >
                   {data.ctaBtnText}
