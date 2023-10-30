@@ -15,6 +15,7 @@ export default (initialState: any, el: HTMLElement) => {
       month={initialState.month}
       year={initialState.year}
       yearToDate={initialState.yearToDate}
+      newToken={initialState.newToken}
     />,
     el
   );

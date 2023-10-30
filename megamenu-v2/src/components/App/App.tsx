@@ -28,7 +28,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
 
-  console.log(data);
+  // console.log(data);
 
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
@@ -83,8 +83,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           }
         }
       })
-      .catch((response) => {
-        console.log(response);
+      .catch((e) => {
+        console.log(e);
       });
   };
 
@@ -103,7 +103,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
             URL_PREFIX + r.path + URL_SUFFIX,
             "Dropdown",
             r.properties.ggParentChildId
-          ).then(() => console.log(childMenuItems.current));
+          );
+          // .then(() => console.log(childMenuItems.current));
         } else if (r.properties.ggLinkType === "Megamenu") {
           // fetch 1 level to get columns
           requester
@@ -113,12 +114,14 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
             .then((res) => {
               const data = res as ILink[];
               // for each columns fetch again to get child
-              data.map((col) =>
-                fetchData(
-                  URL_PREFIX + col.path + URL_SUFFIX,
-                  "Megamenu",
-                  r.properties.ggParentChildId
-                ).then(() => console.log(childMenuItems.current))
+              data.map(
+                (col) =>
+                  fetchData(
+                    URL_PREFIX + col.path + URL_SUFFIX,
+                    "Megamenu",
+                    r.properties.ggParentChildId
+                  )
+                // .then(() => console.log(childMenuItems.current))
               );
             })
             .catch((e) => console.log(e));

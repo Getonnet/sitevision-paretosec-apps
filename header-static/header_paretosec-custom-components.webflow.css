@@ -137,6 +137,7 @@
   align-items: center;
   font-size: 16px;
   display: flex;
+  padding: 8px 0;
 }
 
 .navigation-drop-container {
@@ -870,7 +871,7 @@
 }
 
 /* custom code */
-header {
+header[role="navigation"] {
   position: sticky;
   top: 0;
   z-index: 9;
