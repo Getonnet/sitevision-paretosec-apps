@@ -1,27 +1,15 @@
 import * as React from "react";
-import styles from "./App.scss";
-import { ArrowDown, ArrowUp } from "./icons";
 import { useState } from "react";
 import requester from "@sitevision/api/client/requester";
 import { useEffect } from "react";
 import { NORWAY_TICKERS } from "../norway-feed";
 import { COUNTRY_FEED_CODE } from "../settings";
-import { SWEDEN_FEED, SWEDEN_TICKERS } from "../sweden-feed";
-import { FINLAND_FEED, FINLAND_TICKERS } from "../finland-feed";
+import { SWEDEN_TICKERS } from "../sweden-feed";
+import { FINLAND_TICKERS } from "../finland-feed";
 import { DENMARK_TICKERS } from "../denmark-feed";
 import { Ticker } from "./Ticker";
 
-export interface AppProperties {
-  // token: string;
-  // tickers: string[];
-  // articleId: string;
-}
-
-const options = {
-  payload: {
-    properties: ["ticker", "hide_tickers"],
-  },
-};
+export interface AppProperties {}
 
 export interface FeedID {
   feed: string | number;
@@ -46,8 +34,6 @@ export interface TickerData {
 }
 
 const App: React.FunctionComponent<AppProperties> = () => {
-  // console.log(token);
-  // const [tickersData, setTickersData] = useState([]);
   const [tickers, setTickers] = useState<string[]>([]);
   const [token, setToken] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
