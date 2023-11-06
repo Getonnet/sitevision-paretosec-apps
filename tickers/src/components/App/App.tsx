@@ -34,12 +34,15 @@ export interface ArticleProperties {
 }
 
 export interface TickerData {
+  fullName: string;
   ticker: string;
   oneWeek: number;
   oneMonth: number;
   oneYear: number;
   yearToDate: number;
   price: number;
+  Change: number;
+  ChangePercent: number;
 }
 
 const App: React.FunctionComponent<AppProperties> = () => {
@@ -198,6 +201,8 @@ const App: React.FunctionComponent<AppProperties> = () => {
           // @ts-ignore
           ticker: data.get(InfrontSDK.SymbolField.Ticker),
           // @ts-ignore
+          fullName: data.get(InfrontSDK.SymbolField.FullName),
+          // @ts-ignore
           oneWeek: data.get(InfrontSDK.SymbolField.PreChange1W),
           // @ts-ignore
           oneMonth: data.get(InfrontSDK.SymbolField.PreChange1M),
@@ -207,6 +212,10 @@ const App: React.FunctionComponent<AppProperties> = () => {
           yearToDate: data.get(InfrontSDK.SymbolField.PreChangeYearToDate),
           // @ts-ignore
           price: data.get(InfrontSDK.SymbolField.PreMarketPrice),
+          // @ts-ignore
+          Change: data.get(InfrontSDK.SymbolField.Change),
+          // @ts-ignore
+          ChangePercent: data.get(InfrontSDK.SymbolField.ChangePercent),
         },
       ]);
     };
@@ -230,9 +239,17 @@ const App: React.FunctionComponent<AppProperties> = () => {
     <div style={{ paddingBottom: tickers.length ? "30px" : 0 }}>
       {tickers && tickers.length ? (
         <>
-          {tickers.map((t: string) => (
-            <Ticker key={t} data={finalData.filter((f) => f.ticker === t)[0]} />
-          ))}
+          {tickers.map((t: string) => {
+            const tData = finalData.filter((f) => f.ticker === t)[0];
+            if (tData) {
+              return (
+                <Ticker
+                  key={t}
+                  data={finalData.filter((f) => f.ticker === t)[0]}
+                />
+              );
+            }
+          })}
         </>
       ) : (
         ""
