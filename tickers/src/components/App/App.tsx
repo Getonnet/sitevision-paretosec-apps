@@ -4,28 +4,21 @@ import { ArrowDown, ArrowUp } from "./icons";
 import { useState } from "react";
 
 export interface AppProperties {
-  token: string;
-  tickers: string[];
-  // titleShort: string;
-  // title: string;
-  // price: string;
-  // growthNumber: string;
-  // growthPercent: string;
-  // week: string;
-  // month: string;
-  // year: string;
-  // yearToDate: string;
-  // newToken: any;
+  // token: string;
+  // tickers: string[];
+  articleId: string;
 }
 
-const App: React.FunctionComponent<AppProperties> = ({ token, tickers }) => {
-  console.log(token);
-  const [tickersData, setTickersData] = useState([]);
+const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
+  //console.log(token);
+  // const [tickersData, setTickersData] = useState([]);
+  const [tickers, setTickers] = useState([]);
 
   // fetch data then update tickers
 
   return (
     <div style={{ paddingBottom: "30px" }}>
+      <h1>Article ID: {articleId}</h1>
       {tickers && tickers.length
         ? tickers.map((t: string) => (
             <div className={styles.tickerBtnWrap}>
