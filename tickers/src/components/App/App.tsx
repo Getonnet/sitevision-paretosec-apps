@@ -31,12 +31,13 @@ export interface TickerData {
   price: number;
   Change: number;
   ChangePercent: number;
+  currency: string;
 }
 
 const App: React.FunctionComponent<AppProperties> = () => {
   const [tickers, setTickers] = useState<string[]>([]);
   const [token, setToken] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const [feedIDs, setFeedIDs] = useState<FeedID[]>([]);
   const [feedIDsAreReady, setFeedIDsAreReady] = useState<boolean>(false);
   const [finalData, setFinalData] = useState<TickerData[]>([]);
@@ -106,11 +107,11 @@ const App: React.FunctionComponent<AppProperties> = () => {
         const data = response as ArticleProperties;
         if (data.hide_tickers === "Show") {
           setTickers(data.ticker);
-          setLoading(true);
+          // setLoading(true);
           prepareFeedIDs(data.ticker);
         } else {
           setTickers([]);
-          setLoading(false);
+          // setLoading(false);
         }
       })
       .catch((response) => {
@@ -180,6 +181,16 @@ const App: React.FunctionComponent<AppProperties> = () => {
         // @ts-ignore
         data.get(InfrontSDK.SymbolField.PreMarketPrice)
       );
+      console.log(
+        `Currency:`,
+        // @ts-ignore
+        data.get(InfrontSDK.SymbolField.Currency)
+      );
+      console.log(
+        `Currency enterprize:`,
+        // @ts-ignore
+        data.get(InfrontSDK.SymbolField.EnterpriseCurrency)
+      );
 
       setFinalData((prev) => [
         ...prev,
@@ -202,6 +213,8 @@ const App: React.FunctionComponent<AppProperties> = () => {
           Change: data.get(InfrontSDK.SymbolField.Change),
           // @ts-ignore
           ChangePercent: data.get(InfrontSDK.SymbolField.ChangePercent),
+          // @ts-ignore
+          currency: data.get(InfrontSDK.SymbolField.Currency),
         },
       ]);
     };
@@ -210,6 +223,8 @@ const App: React.FunctionComponent<AppProperties> = () => {
       content: {
         Basic: true,
         HistoricalPerformance: true,
+        Currency: true,
+        Metadata: true,
       },
       id: id,
       subscribe: subscribe,

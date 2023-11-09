@@ -18,6 +18,7 @@ export const Ticker = ({ data }: TickerProps) => {
     price,
     Change,
     ChangePercent,
+    currency,
   } = data || {};
 
   return (
@@ -42,8 +43,7 @@ export const Ticker = ({ data }: TickerProps) => {
 
         <div className={"tt-body"}>
           <div className={styles.price}>
-            {/*${(Math.random() * (300 - 120) + 120).toFixed(2)}*/}$
-            {price.toFixed(2)}
+            {currency ?? "" + price.toFixed(2)}
           </div>
 
           <div

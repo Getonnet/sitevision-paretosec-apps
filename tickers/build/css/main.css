@@ -77,6 +77,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  font-family: "Roboto", sans-serif;
 }
 .zhJbYmdBUnEjToIm4uw5 .njOXVbhLr6qIWNrlhGRY {
   color: #544952;
@@ -109,7 +110,7 @@
   line-height: normal;
 }
 .zhJbYmdBUnEjToIm4uw5 .RRXP7alBuiJV31Wjl1Ao {
-  color: #6ed97d;
+  color: var(--green, #6ed97d);
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
@@ -132,7 +133,7 @@
   line-height: normal;
 }
 .zhJbYmdBUnEjToIm4uw5 .iVBxcA7XxHCeHd1i7McK {
-  color: #527db3;
+  color: var(--positive, #527db3);
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
@@ -140,7 +141,7 @@
   padding-top: 8px;
 }
 .zhJbYmdBUnEjToIm4uw5 .m4zVSD7J5etKyixlIw9H {
-  color: #d96967;
+  color: var(--negative, #d96967);
 }
 .zhJbYmdBUnEjToIm4uw5 .IOUIcRXkuCgId80vV1Yr {
   color: #544952;
