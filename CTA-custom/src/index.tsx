@@ -5,8 +5,16 @@ import appData from "@sitevision/api/server/appData";
 import App from "./components/App";
 
 router.get("/", (req, res) => {
-  const message = "Hello, world!";
-  const name = appData.get("name") as string;
+  const data = {
+    bgImg: appData.get("bgImg", "URI") as string,
+    imagePosition: appData.get("imagePosition") as "left" | "right",
+    smallTitle: appData.get("smallTitle") as string,
+    title: appData.get("title") as string,
+    description: appData.get("description") as string,
+    buttonText: appData.get("buttonText") as string,
+    buttonLink: appData.get("buttonLink") as string,
+    assertiveText: appData.get("assertiveText") as string,
+  };
 
-  res.send(renderToStaticMarkup(<App message={message} name={name} />));
+  res.send(renderToStaticMarkup(<App data={data} />));
 });
