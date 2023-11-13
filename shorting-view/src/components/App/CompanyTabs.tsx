@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import "./CompanyTabs.css";
+import React, { useEffect } from "react";
+import useState from "react-usestateref";
 import useTimeout from "../../hooks/useTimeOut"; // Assumes you have extracted the styles into a separate CSS file
+// import "./CompanyTabs.css";
 
 // Extend the Window interface to include the infront property
 declare global {
@@ -10,27 +11,30 @@ declare global {
   }
 }
 
-// Assuming you have installed the 'infront' SDK as a module
-const Infront = window.Infront;
-const InfrontSDK = window.InfrontSDK;
+const Infront = typeof window !== "undefined" && window.Infront;
+const InfrontSDK = typeof window !== "undefined" && window.InfrontSDK;
 const marketFeed = 18177;
 
 const CompanyTabs = ({ token }: { token: string }) => {
-  const [infrontUI, setInfrontUI] = useState<any>(null);
-  const [currentFeed, setCurrentFeed] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [widget, setWidget] = useState<any>(null);
-  const [instruments, setInstruments] = useState<any[]>([]);
-  const [listeners, setListeners] = useState([]); // TODO: can be removed?
-  const [infSDK, setInfSDK] = useState<any>(null);
-  const [timer, setTimer] = useState<any>(null);
+  const [infrontUI, setInfrontUI, infrontUIRef] = useState<any>(null);
+  const [currentFeed, setCurrentFeed, currentFeedRef] = useState(0);
+  const [loading, setLoading, loadingRef] = useState(false);
+  const [widget, setWidget, widgetRef] = useState<any>(null);
+  const [instruments, setInstruments, instrumentsRef] = useState<any[]>([]);
+  const [listeners, setListeners, listenersRef] = useState([]); // TODO: can be removed?
+  const [infSDK, setInfSDK, infSDKRef] = useState<any>(null);
+  const [timer, setTimer, timerRef] = useState<any>(null);
 
   const timeoutRef = useTimeout(() => {
     initWidget();
   }, timer);
 
   useEffect(() => {
-    if (token) {
+    if (
+      token &&
+      typeof Infront !== "undefined" &&
+      typeof InfrontSDK !== "undefined"
+    ) {
       setLoading(true);
       const opts = new Infront.InfrontUIOptions();
       opts.language = "no";
@@ -49,6 +53,11 @@ const CompanyTabs = ({ token }: { token: string }) => {
         onReady: infrontSDKReady,
       });
       setInfSDK(sdk);
+    } else {
+      console.log("Infront or InfrontSDK not loaded ->");
+      console.log(Infront);
+      console.log(InfrontSDK);
+      console.log("-----------------------------------");
     }
   }, [token]);
 
@@ -158,6 +167,8 @@ const CompanyTabs = ({ token }: { token: string }) => {
   };
 
   const loadFeed = (feed: any) => {
+    console.log(infSDK);
+
     infSDK.get(
       InfrontSDK.feedContents({
         contentType: InfrontSDK.FeedContentType.SymbolIds,
@@ -230,42 +241,39 @@ const CompanyTabs = ({ token }: { token: string }) => {
     <div>
       <ul className="companyTabs customTabs">
         <li>
-          <a onClick={() => changeFeed(18177)}>Norge</a>
+          <button onClick={() => changeFeed(18177)}>Norge</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(17665)}>Danmark</a>
+          <button onClick={() => changeFeed(17665)}>Danmark</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(100)}>Finland</a>
+          <button onClick={() => changeFeed(100)}>Finland</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(26)}>Tyskland</a>
+          <button onClick={() => changeFeed(26)}>Tyskland</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(19)}>UK</a>
+          <button onClick={() => changeFeed(19)}>UK</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(2008)}>Frankrike</a>
+          <button onClick={() => changeFeed(2008)}>Frankrike</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(2012)}>Spania</a>
+          <button onClick={() => changeFeed(2012)}>Spania</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(2047)}>Italia</a>
+          <button onClick={() => changeFeed(2047)}>Italia</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(14)}>USA - NYSE</a>
+          <button onClick={() => changeFeed(14)}>USA - NYSE</button>
         </li>
         <li>
-          <a onClick={() => changeFeed(15)}>USA - NASDAQ</a>
+          <button onClick={() => changeFeed(15)}>USA - NASDAQ</button>
         </li>
       </ul>
 
-      {loading ? (
-        <div id="loader">Loading...</div>
-      ) : (
-        <div id="norwayLists">{/* Render your lists or widgets here */}</div>
-      )}
+      {loading ? <div id="loader">Loading...</div> : ""}
+      <div id="norwayLists" />
     </div>
   );
 };

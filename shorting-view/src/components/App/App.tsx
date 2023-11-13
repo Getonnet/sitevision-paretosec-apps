@@ -1,7 +1,7 @@
 import * as React from "react";
-import styles from "./App.scss";
-import requester from "@sitevision/api/client/requester";
-import CompanyTabs from "./CompanyTabs";
+// import requester from "@sitevision/api/client/requester";
+// import styles from "./App.scss";
+// import CompanyTabs from "./CompanyTabs";
 
 export interface AppProperties {
   message: string;
@@ -9,8 +9,9 @@ export interface AppProperties {
 }
 
 const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
-  const [token, setToken] = React.useState("");
+  // const [token, setToken] = React.useState("");
 
+  /*
   React.useEffect(() => {
     // fetch in-front token
     const getToken = () => {
@@ -21,21 +22,18 @@ const App: React.FunctionComponent<AppProperties> = ({ message, name }) => {
         .then((response) => {
           console.log("Token: ", response);
           const data = response as { token: string };
-          setToken(data.token);
+          // setToken(data.token);
         })
         .catch((response) => {
           console.log(response);
         });
     };
 
-    getToken();
+    // getToken();
   }, []);
+  */
 
-  return (
-    <div className={styles.container}>
-      <CompanyTabs token={token} />
-    </div>
-  );
+  return <div id="norwayLists" />;
 };
 
 export default App;

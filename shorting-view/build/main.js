@@ -6,19 +6,9 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-define(["react","react-dom","requester"], function(__WEBPACK_EXTERNAL_MODULE_react__, __WEBPACK_EXTERNAL_MODULE_react_dom__, __WEBPACK_EXTERNAL_MODULE__sitevision_api_client_requester__) { return /******/ (function() { // webpackBootstrap
+define(["react","react-dom"], function(__WEBPACK_EXTERNAL_MODULE_react__, __WEBPACK_EXTERNAL_MODULE_react_dom__) { return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
-
-/***/ "./src/components/App/App.scss":
-/*!*************************************!*\
-  !*** ./src/components/App/App.scss ***!
-  \*************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n/* harmony default export */ __webpack_exports__[\"default\"] = ({});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9BcHAvQXBwLnNjc3MiLCJtYXBwaW5ncyI6IjtBQUFBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zaG9ydGluZy12aWV3Ly4vc3JjL2NvbXBvbmVudHMvQXBwL0FwcC5zY3NzPzFiZGEiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gZXh0cmFjdGVkIGJ5IG1pbmktY3NzLWV4dHJhY3QtcGx1Z2luXG5leHBvcnQgZGVmYXVsdCB7fTsiXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/components/App/App.scss\n");
-
-/***/ }),
 
 /***/ "./src/components/App/App.tsx":
 /*!************************************!*\
@@ -26,7 +16,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extr
   \************************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _App_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.scss */ \"./src/components/App/App.scss\");\n/* harmony import */ var _sitevision_api_client_requester__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @sitevision/api/client/requester */ \"@sitevision/api/client/requester\");\n/* harmony import */ var _sitevision_api_client_requester__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_sitevision_api_client_requester__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\nconst App = ({ message, name }) => {\n    const [token, setToken] = react__WEBPACK_IMPORTED_MODULE_0__.useState(\"\");\n    // fetch in-front token\n    const getToken = () => {\n        _sitevision_api_client_requester__WEBPACK_IMPORTED_MODULE_2___default().doGet({\n            url: \"/rest-api/Infront%20token/token\",\n        })\n            .then((response) => {\n            console.log(\"Token: \", response);\n            const data = response;\n            setToken(data.token);\n        })\n            .catch((response) => {\n            console.log(response);\n        });\n    };\n    react__WEBPACK_IMPORTED_MODULE_0__.useEffect(() => {\n        getToken();\n    }, []);\n    return react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"div\", { className: _App_scss__WEBPACK_IMPORTED_MODULE_1__[\"default\"].container }, token);\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (App);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9BcHAvQXBwLnRzeCIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL3Nob3J0aW5nLXZpZXcvLi9zcmMvY29tcG9uZW50cy9BcHAvQXBwLnRzeD84Yzg5Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHN0eWxlcyBmcm9tIFwiLi9BcHAuc2Nzc1wiO1xuaW1wb3J0IHJlcXVlc3RlciBmcm9tIFwiQHNpdGV2aXNpb24vYXBpL2NsaWVudC9yZXF1ZXN0ZXJcIjtcbmNvbnN0IEFwcCA9ICh7IG1lc3NhZ2UsIG5hbWUgfSkgPT4ge1xuICAgIGNvbnN0IFt0b2tlbiwgc2V0VG9rZW5dID0gUmVhY3QudXNlU3RhdGUoXCJcIik7XG4gICAgLy8gZmV0Y2ggaW4tZnJvbnQgdG9rZW5cbiAgICBjb25zdCBnZXRUb2tlbiA9ICgpID0+IHtcbiAgICAgICAgcmVxdWVzdGVyXG4gICAgICAgICAgICAuZG9HZXQoe1xuICAgICAgICAgICAgdXJsOiBcIi9yZXN0LWFwaS9JbmZyb250JTIwdG9rZW4vdG9rZW5cIixcbiAgICAgICAgfSlcbiAgICAgICAgICAgIC50aGVuKChyZXNwb25zZSkgPT4ge1xuICAgICAgICAgICAgY29uc29sZS5sb2coXCJUb2tlbjogXCIsIHJlc3BvbnNlKTtcbiAgICAgICAgICAgIGNvbnN0IGRhdGEgPSByZXNwb25zZTtcbiAgICAgICAgICAgIHNldFRva2VuKGRhdGEudG9rZW4pO1xuICAgICAgICB9KVxuICAgICAgICAgICAgLmNhdGNoKChyZXNwb25zZSkgPT4ge1xuICAgICAgICAgICAgY29uc29sZS5sb2cocmVzcG9uc2UpO1xuICAgICAgICB9KTtcbiAgICB9O1xuICAgIFJlYWN0LnVzZUVmZmVjdCgoKSA9PiB7XG4gICAgICAgIGdldFRva2VuKCk7XG4gICAgfSwgW10pO1xuICAgIHJldHVybiBSZWFjdC5jcmVhdGVFbGVtZW50KFwiZGl2XCIsIHsgY2xhc3NOYW1lOiBzdHlsZXMuY29udGFpbmVyIH0sIHRva2VuKTtcbn07XG5leHBvcnQgZGVmYXVsdCBBcHA7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/components/App/App.tsx\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n\nconst App = ({ message, name }) => {\n    // const [token, setToken] = React.useState(\"\");\n    /*\n    React.useEffect(() => {\n      // fetch in-front token\n      const getToken = () => {\n        requester\n          .doGet({\n            url: \"/rest-api/Infront%20token/token\",\n          })\n          .then((response) => {\n            console.log(\"Token: \", response);\n            const data = response as { token: string };\n            // setToken(data.token);\n          })\n          .catch((response) => {\n            console.log(response);\n          });\n      };\n  \n      // getToken();\n    }, []);\n    */\n    return react__WEBPACK_IMPORTED_MODULE_0__.createElement(\"div\", { id: \"norwayLists\" });\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (App);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9BcHAvQXBwLnRzeCIsIm1hcHBpbmdzIjoiOzs7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zaG9ydGluZy12aWV3Ly4vc3JjL2NvbXBvbmVudHMvQXBwL0FwcC50c3g/OGM4OSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgKiBhcyBSZWFjdCBmcm9tIFwicmVhY3RcIjtcbmNvbnN0IEFwcCA9ICh7IG1lc3NhZ2UsIG5hbWUgfSkgPT4ge1xuICAgIC8vIGNvbnN0IFt0b2tlbiwgc2V0VG9rZW5dID0gUmVhY3QudXNlU3RhdGUoXCJcIik7XG4gICAgLypcbiAgICBSZWFjdC51c2VFZmZlY3QoKCkgPT4ge1xuICAgICAgLy8gZmV0Y2ggaW4tZnJvbnQgdG9rZW5cbiAgICAgIGNvbnN0IGdldFRva2VuID0gKCkgPT4ge1xuICAgICAgICByZXF1ZXN0ZXJcbiAgICAgICAgICAuZG9HZXQoe1xuICAgICAgICAgICAgdXJsOiBcIi9yZXN0LWFwaS9JbmZyb250JTIwdG9rZW4vdG9rZW5cIixcbiAgICAgICAgICB9KVxuICAgICAgICAgIC50aGVuKChyZXNwb25zZSkgPT4ge1xuICAgICAgICAgICAgY29uc29sZS5sb2coXCJUb2tlbjogXCIsIHJlc3BvbnNlKTtcbiAgICAgICAgICAgIGNvbnN0IGRhdGEgPSByZXNwb25zZSBhcyB7IHRva2VuOiBzdHJpbmcgfTtcbiAgICAgICAgICAgIC8vIHNldFRva2VuKGRhdGEudG9rZW4pO1xuICAgICAgICAgIH0pXG4gICAgICAgICAgLmNhdGNoKChyZXNwb25zZSkgPT4ge1xuICAgICAgICAgICAgY29uc29sZS5sb2cocmVzcG9uc2UpO1xuICAgICAgICAgIH0pO1xuICAgICAgfTtcbiAgXG4gICAgICAvLyBnZXRUb2tlbigpO1xuICAgIH0sIFtdKTtcbiAgICAqL1xuICAgIHJldHVybiBSZWFjdC5jcmVhdGVFbGVtZW50KFwiZGl2XCIsIHsgaWQ6IFwibm9yd2F5TGlzdHNcIiB9KTtcbn07XG5leHBvcnQgZGVmYXVsdCBBcHA7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/components/App/App.tsx\n");
 
 /***/ }),
 
@@ -67,16 +57,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
 /***/ (function(module) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_react_dom__;
-
-/***/ }),
-
-/***/ "@sitevision/api/client/requester":
-/*!****************************!*\
-  !*** external "requester" ***!
-  \****************************/
-/***/ (function(module) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__sitevision_api_client_requester__;
 
 /***/ })
 

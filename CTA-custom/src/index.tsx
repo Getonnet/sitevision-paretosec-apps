@@ -14,6 +14,8 @@ router.get("/", (req, res) => {
     buttonText: appData.get("buttonText") as string,
     buttonLink: appData.get("buttonLink") as string,
     assertiveText: appData.get("assertiveText") as string,
+    newTab: appData.get("newTab") as boolean,
+    buttonStyle: appData.get("buttonStyle") as "button" | "text",
   };
 
   res.send(renderToStaticMarkup(<App data={data} />));

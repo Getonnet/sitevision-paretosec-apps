@@ -11,6 +11,8 @@ export interface AppProperties {
     buttonText: string;
     buttonLink: string;
     assertiveText: string;
+    newTab: boolean;
+    buttonStyle: "button" | "text";
   };
 }
 
@@ -24,6 +26,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
     buttonText,
     buttonLink,
     assertiveText,
+    newTab,
+    buttonStyle,
   } = data;
 
   return (
@@ -42,6 +46,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                 bgImg ||
                 "/images/18.77ae0016189943c42b183468/1692106251285/img-004.jpg"
               })`,
+              minWidth: "50%",
             }}
           />
 
@@ -57,36 +62,51 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               <div id="entrydecorline" />
               <div className="entrydecorline" />
             </div>
+
             <div className="sv-text-portlet sv-use-margins sv-template-portlet">
               <div id="Subheading">{/* Subheading */}</div>
               <div className="sv-text-portlet-content">
                 <p className="sv-font-cta-sub-heading">{smallTitle}</p>
               </div>
             </div>
+
             <div className="sv-text-portlet sv-use-margins sv-template-portlet">
               <div id="Heading-3">{/* Heading */}</div>
               <div className="sv-text-portlet-content">
                 <h2 className="subheading">{title}</h2>
               </div>
             </div>
+
             <div className="sv-text-portlet sv-use-margins sv-template-portlet c14">
               <div id="Text-8" />
               <div className="sv-text-portlet-content">
                 <p className="normal">{description}</p>
               </div>
             </div>
+
             <div className="sv-custom-module sv-marketplace-sitevision-button sv-template-portlet">
               <div id="Blikunde">{/* Bli kunde */}</div>
               <div className="env-d--flex  env-flex--row">
-                <a
-                  className="env-button env-button--primary"
-                  href={buttonLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {buttonText}
-                  <span className="env-assistive-text">{assertiveText}</span>
-                </a>
+                {buttonStyle === "text" ? (
+                  <a
+                    className="env-button env-button--small env-button--link w--current"
+                    href={buttonLink}
+                    target={newTab ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                  >
+                    {assertiveText}
+                  </a>
+                ) : (
+                  <a
+                    className="env-button env-button--primary"
+                    href={buttonLink}
+                    target={newTab ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                  >
+                    {buttonText}
+                    <span className="env-assistive-text">{assertiveText}</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>

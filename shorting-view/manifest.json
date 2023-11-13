@@ -2,13 +2,13 @@
   "id": "shorting-view",
   "version": "0.0.1",
   "name": {
-    "en": "WebApp boilerplate"
+    "en": "Shorting View"
   },
-  "author": "My Company",
+  "author": "GetOnNet",
   "description": {
-    "en": "A WebApp boilerplate"
+    "en": "Shorting View"
   },
-  "helpUrl": "https://example.com/webapps",
+  "helpUrl": "https://getonnet.no/support",
   "type": "WebApp",
   "bundled": true,
   "requiredLibs": {

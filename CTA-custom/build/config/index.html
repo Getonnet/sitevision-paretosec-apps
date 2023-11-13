@@ -27,32 +27,49 @@
     </div>
 
     <div class="form-group">
-      <label><%= i18n('smallTitle') %></label>
+      <label>Small title</label>
       <input class="form-control" name="smallTitle" />
     </div>
 
     <div class="form-group">
-      <label><%= i18n('title') %></label>
+      <label>Title</label>
       <input class="form-control" name="title" />
     </div>
 
     <div class="form-group">
-      <label><%= i18n('description') %></label>
+      <label>Description</label>
       <textarea class="form-control" name="description"></textarea>
     </div>
 
-    <br />
     <hr />
-    <br />
 
     <div class="form-group">
-      <label><%= i18n('buttonText') %></label>
+      <label>Button text</label>
       <input class="form-control" name="buttonText" />
     </div>
 
     <div class="form-group">
-      <label><%= i18n('buttonLink') %></label>
+      <label>Button link</label>
       <input class="form-control" name="buttonLink" />
+    </div>
+
+    <!-- link in new tab -->
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="newTab" data-value-type="boolean" /> Open
+        in new tab
+      </label>
+    </div>
+
+    <!-- button style: button / text link -->
+    <div class="form-group">
+      <div><label>Button style</label></div>
+      <label>
+        <input type="radio" value="button" name="buttonStyle" /> Button
+      </label>
+      <label>
+        <input type="radio" value="text" name="buttonStyle" /> Text link
+      </label>
     </div>
 
     <div class="form-group">
