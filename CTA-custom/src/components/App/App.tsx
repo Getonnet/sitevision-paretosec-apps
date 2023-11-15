@@ -94,7 +94,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                     target={newTab ? "_blank" : "_self"}
                     rel="noopener noreferrer"
                   >
-                    {assertiveText}
+                    {buttonText}
+                    <span className="env-assistive-text">{assertiveText}</span>
                   </a>
                 ) : (
                   <a

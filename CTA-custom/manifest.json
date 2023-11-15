@@ -1,12 +1,12 @@
 {
-  "id": "CTA-custom",
+  "id": "Pareto-CTA-box",
   "version": "0.0.1",
   "name": {
-    "en": "CTA-custom"
+    "en": "Pareto CTA box"
   },
   "author": "Getonnet.no",
   "description": {
-    "en": "CTA-custom"
+    "en": "Pareto CTA box"
   },
   "helpUrl": "https://getonnet.no/kontakt",
   "type": "WebApp",

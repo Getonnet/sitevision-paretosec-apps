@@ -25,7 +25,7 @@ export const ArrowUp = () => (
   >
     <path
       d="M2.88675 5.04736e-07L5.7735 5L-8.74228e-07 5L2.88675 5.04736e-07Z"
-      fill="#6ED97D"
+      fill="#527db3"
     />
   </svg>
 );

@@ -7,7 +7,7 @@
     "description": "Registrering med BankID på 3 minutter.",
     "buttonText": "Bli kunde",
     "buttonLink": "https://paretosec.com/no/bli-kunde",
-    "assertiveText": "Åpnes i nytt vindu",
+    "assertiveText": "",
     "newTab": false,
     "buttonStyle": "button"
   }
