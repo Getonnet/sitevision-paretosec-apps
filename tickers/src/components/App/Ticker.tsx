@@ -43,7 +43,7 @@ export const Ticker = ({ data }: TickerProps) => {
 
         <div className={"tt-body"}>
           <div className={styles.price}>
-            {currency ?? "" + price.toFixed(2)}
+            {(currency ?? "") + " " + price.toFixed(2)}
           </div>
 
           <div
@@ -62,7 +62,11 @@ export const Ticker = ({ data }: TickerProps) => {
             ) : (
               <ArrowDown />
             )}
-            {Change.toFixed(2) + " " + " (" + ChangePercent.toFixed(2) + "%)"}
+            {(Change?.toFixed(2) || "0") +
+              " " +
+              " (" +
+              (ChangePercent?.toFixed(2) || "0") +
+              "%)"}
           </div>
         </div>
 

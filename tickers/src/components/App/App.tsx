@@ -40,34 +40,35 @@ const App: React.FunctionComponent<AppProperties> = () => {
   // const [loading, setLoading] = useState<boolean>(true);
   const [feedIDs, setFeedIDs] = useState<FeedID[]>([]);
   const [feedIDsAreReady, setFeedIDsAreReady] = useState<boolean>(false);
-  const [finalData, setFinalData] = useState<TickerData[]>([]);
+  const [finalData, setFinalData] = useState<Record<string, TickerData>>({});
 
   const prepareFeedIDs = (tickers: string[]) => {
     const feedIDs: FeedID[] = [];
 
     tickers.forEach((ticker) => {
-      if (NORWAY_TICKERS.includes(ticker)) {
+      let upperCTicker = ticker.toUpperCase();
+      if (NORWAY_TICKERS.includes(upperCTicker)) {
         feedIDs.push({
           feed: COUNTRY_FEED_CODE.NORWAY,
-          ticker: ticker,
+          ticker: upperCTicker,
         });
-      } else if (SWEDEN_TICKERS.includes(ticker)) {
+      } else if (SWEDEN_TICKERS.includes(upperCTicker)) {
         feedIDs.push({
           feed: COUNTRY_FEED_CODE.SWEEDEN,
-          ticker: ticker,
+          ticker: upperCTicker,
         });
-      } else if (FINLAND_TICKERS.includes(ticker)) {
+      } else if (FINLAND_TICKERS.includes(upperCTicker)) {
         feedIDs.push({
           feed: COUNTRY_FEED_CODE.FINLAND,
-          ticker: ticker,
+          ticker: upperCTicker,
         });
-      } else if (DENMARK_TICKERS.includes(ticker)) {
+      } else if (DENMARK_TICKERS.includes(upperCTicker)) {
         feedIDs.push({
           feed: COUNTRY_FEED_CODE.DENMARK,
-          ticker: ticker,
+          ticker: upperCTicker,
         });
       } else {
-        console.log("Ticker did not match any country: ", ticker);
+        console.log("Ticker did not match any country: ", upperCTicker);
       }
     });
 
@@ -166,6 +167,11 @@ const App: React.FunctionComponent<AppProperties> = () => {
         )}, Full name: ${data.get(InfrontSDK.SymbolField.FullName)}`
       );
       // @ts-ignore
+      console.log(`Change:`, data.get(InfrontSDK.SymbolField.Change));
+      // @ts-ignore
+      console.log(`ChangeP:`, data.get(InfrontSDK.SymbolField.ChangePercent));
+      /*
+      // @ts-ignore
       console.log(`1w:`, data.get(InfrontSDK.SymbolField.PreChange1W));
       // @ts-ignore
       console.log(`1M:`, data.get(InfrontSDK.SymbolField.PreChange1M));
@@ -186,15 +192,13 @@ const App: React.FunctionComponent<AppProperties> = () => {
         // @ts-ignore
         data.get(InfrontSDK.SymbolField.Currency)
       );
-      console.log(
-        `Currency enterprize:`,
-        // @ts-ignore
-        data.get(InfrontSDK.SymbolField.EnterpriseCurrency)
-      );
 
-      setFinalData((prev) => [
+       */
+
+      setFinalData((prev) => ({
         ...prev,
-        {
+        // @ts-ignore
+        [data.get(InfrontSDK.SymbolField.Ticker)]: {
           // @ts-ignore
           ticker: data.get(InfrontSDK.SymbolField.Ticker),
           // @ts-ignore
@@ -216,20 +220,73 @@ const App: React.FunctionComponent<AppProperties> = () => {
           // @ts-ignore
           currency: data.get(InfrontSDK.SymbolField.Currency),
         },
-      ]);
+      }));
+
+      // @ts-ignore
+      data.observe(InfrontSDK.SymbolField.FullName, (v) => {
+        setFinalData((prev) => ({
+          ...prev,
+          // @ts-ignore
+          [data.get(InfrontSDK.SymbolField.Ticker)]: {
+            // @ts-ignore
+            ...prev[data.get(InfrontSDK.SymbolField.Ticker)],
+            fullName: v,
+          },
+        }));
+      });
+
+      // @ts-ignore
+      data.observe(InfrontSDK.SymbolField.Currency, (v) => {
+        setFinalData((prev) => ({
+          ...prev,
+          // @ts-ignore
+          [data.get(InfrontSDK.SymbolField.Ticker)]: {
+            // @ts-ignore
+            ...prev[data.get(InfrontSDK.SymbolField.Ticker)],
+            currency: v,
+          },
+        }));
+      });
+
+      // @ts-ignore
+      data.observe(InfrontSDK.SymbolField.Change, (v) => {
+        console.log("Change: ", v);
+        setFinalData((prev) => ({
+          ...prev,
+          // @ts-ignore
+          [data.get(InfrontSDK.SymbolField.Ticker)]: {
+            // @ts-ignore
+            ...prev[data.get(InfrontSDK.SymbolField.Ticker)],
+            Change: v,
+          },
+        }));
+      });
+
+      // @ts-ignore
+      data.observe(InfrontSDK.SymbolField.ChangePercent, (v) => {
+        console.log("ChangePercent: ", v);
+        setFinalData((prev) => ({
+          ...prev,
+          // @ts-ignore
+          [data.get(InfrontSDK.SymbolField.Ticker)]: {
+            // @ts-ignore
+            ...prev[data.get(InfrontSDK.SymbolField.Ticker)],
+            ChangePercent: v,
+          },
+        }));
+      });
     };
 
     const options = {
       content: {
         Basic: true,
         HistoricalPerformance: true,
-        Currency: true,
         Metadata: true,
+        Currency: true,
       },
       id: id,
       subscribe: subscribe,
       onData: onData,
-      currency: "USD",
     };
 
     // @ts-ignore
@@ -241,14 +298,12 @@ const App: React.FunctionComponent<AppProperties> = () => {
       {tickers && tickers.length ? (
         <>
           {tickers.map((t: string) => {
-            const tData = finalData.filter((f) => f.ticker === t)[0];
+            const tData = Object.values(finalData).filter(
+              (f) => f.ticker === t.toUpperCase()
+            )[0];
+
             if (tData) {
-              return (
-                <Ticker
-                  key={t}
-                  data={finalData.filter((f) => f.ticker === t)[0]}
-                />
-              );
+              return <Ticker key={t} data={tData} />;
             }
           })}
         </>
