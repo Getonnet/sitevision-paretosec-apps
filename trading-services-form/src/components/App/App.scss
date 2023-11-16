@@ -1,9 +1,16 @@
-.container {
-  background-color: var(--env-block-background-color);
-  border: 1px solid var(--env-block-border-color);
-}
+.wrapper {
+  label {
+    display: none;
+  }
 
-.text {
-  font-family: var(--env-font-family);
-  color: var(--env-block-font-color);
+  .sv-defaultFormTheme select {
+    padding: 20px 0;
+    height: max-content;
+    height: auto;
+    min-height: auto;
+  }
+
+  .sv-defaultFormTheme input[type="submit"]:hover {
+    background-color: #b8006b;
+  }
 }
