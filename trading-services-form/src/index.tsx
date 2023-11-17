@@ -8,8 +8,16 @@ export type FormType = "mobile" | "web" | "active";
 
 router.get("/", (req, res) => {
   const formType = appData.get("formType") as FormType;
+  const redirectPageUrl = (appData.get("redirectPageUrl", "URI") ||
+    "#") as string;
 
-  res.agnosticRender(renderToString(<App formType={formType} />), {
-    formType,
-  });
+  res.agnosticRender(
+    renderToString(
+      <App formType={formType} redirectPageUrl={redirectPageUrl} />
+    ),
+    {
+      formType,
+      redirectPageUrl,
+    }
+  );
 });
