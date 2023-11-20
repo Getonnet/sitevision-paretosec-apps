@@ -1,5 +1,6 @@
 import * as React from "react";
-import styles from "./App.scss";
+// import styles from "./App.scss";
+import { makeDarker } from "./utility";
 
 export interface AppProperties {
   data: {
@@ -13,10 +14,14 @@ export interface AppProperties {
     assertiveText: string;
     newTab: boolean;
     buttonStyle: "button" | "text";
+    backgroundColor: string;
+    textColor: string;
   };
 }
 
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
+  const [hover, setHover] = React.useState(false);
+
   const {
     bgImg,
     imagePosition,
@@ -28,10 +33,24 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
     assertiveText,
     newTab,
     buttonStyle,
+    backgroundColor,
+    textColor,
   } = data;
+
+  const normalStyle = {
+    backgroundColor: backgroundColor,
+  };
+
+  const hoverStyle = {
+    backgroundColor: makeDarker(backgroundColor, 15),
+  };
+
+  const handleMouseEnter = () => setHover(true);
+  const handleMouseLeave = () => setHover(false);
 
   return (
     <div className="sv-vertical sv-layout section-padding-full-width-mobile ielayoutfix sv-template-layout c21">
+      {/*TODO: solve background color problem with inline css?*/}
       <div className="sv-fluid-grid sv-grid-desktop-1280px-12-col-30-px sv-layout sv-skip-spacer sv-template-layout">
         <div
           className="sv-row sv-layout pareto-cta-container sv-skip-spacer sv-template-layout"
@@ -99,13 +118,23 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                   </a>
                 ) : (
                   <a
-                    className="env-button env-button--primary"
+                    className={`env-button env-button--primary`}
                     href={buttonLink}
                     target={newTab ? "_blank" : "_self"}
                     rel="noopener noreferrer"
+                    style={hover ? hoverStyle : normalStyle}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                   >
                     {buttonText}
-                    <span className="env-assistive-text">{assertiveText}</span>
+                    <span
+                      className="env-assistive-text"
+                      style={{
+                        color: textColor,
+                      }}
+                    >
+                      {assertiveText}
+                    </span>
                   </a>
                 )}
               </div>
@@ -113,6 +142,12 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           </div>
         </div>
       </div>
+
+      {/*<div>*/}
+      {/*{JSON.stringify(backgroundColor)}*/}
+      {/*{JSON.stringify(colorUtil.getColorByName(data.backgroundColor))}*/}
+      {/*{JSON.stringify(colorUtil.getColorByHtmlHexValue(data.backgroundColor))}*/}
+      {/*</div>*/}
     </div>
   );
 };

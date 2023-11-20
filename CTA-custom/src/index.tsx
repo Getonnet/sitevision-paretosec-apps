@@ -16,6 +16,8 @@ router.get("/", (req, res) => {
     assertiveText: appData.get("assertiveText") as string,
     newTab: appData.get("newTab") as boolean,
     buttonStyle: appData.get("buttonStyle") as "button" | "text",
+    backgroundColor: appData.get("backgroundColor", "htmlHexValue") as string,
+    textColor: appData.get("backgroundColor", "htmlHexValue") as string,
   };
 
   res.send(renderToStaticMarkup(<App data={data} />));
