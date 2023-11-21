@@ -5,7 +5,7 @@ import MobileSearchFieldVisibilityTrigger from "../Mobile/MobileSearchFieldVisib
 import MobileLogin from "../Mobile/MobileLogin";
 import MobileNavbar from "../Mobile/MobileNavbar";
 import Navbar from "../Desktop/Navbar";
-import Search from "../Desktop/Search";
+import SearchDesktop from "../Desktop/SearchDesktop";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
@@ -16,7 +16,6 @@ import type {
   MegaMenuMenu,
   LinkType,
 } from "./types";
-// import styles from "./App.scss";
 
 const MAIN_URL =
   "/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
@@ -27,8 +26,6 @@ const URL_SUFFIX =
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
-
-  // console.log(data);
 
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
@@ -165,7 +162,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               </div>
 
               <div className="navigation-right">
-                <Search />
+                <SearchDesktop />
 
                 <Login
                   loginText={data.loginBtnText}

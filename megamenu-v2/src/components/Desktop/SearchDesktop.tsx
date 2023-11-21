@@ -1,6 +1,6 @@
 import React from "react";
 
-const Search = () => {
+const SearchDesktop = () => {
   return (
     <form
       method="get"
@@ -9,11 +9,11 @@ const Search = () => {
     >
       <input
         type="submit"
-        defaultValue="Search"
+        defaultValue="SearchDesktop"
         className="search-button w-button"
       />
       <label htmlFor="search" className="field-label">
-        Search
+        SearchDesktop
       </label>
       <input
         type="search"
@@ -28,4 +28,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchDesktop;
