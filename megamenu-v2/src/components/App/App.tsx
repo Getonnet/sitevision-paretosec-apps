@@ -5,7 +5,7 @@ import MobileSearchFieldVisibilityTrigger from "../Mobile/MobileSearchFieldVisib
 import MobileLogin from "../Mobile/MobileLogin";
 import MobileNavbar from "../Mobile/MobileNavbar";
 import Navbar from "../Desktop/Navbar";
-import Search from "../Desktop/Search";
+import Search from "../Desktop/SearchDesktop";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";

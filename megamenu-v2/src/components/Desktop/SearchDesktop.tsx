@@ -10,7 +10,7 @@ const Search = () => {
     const getResult = (term: string) => {
       requester
         .doGet({
-          url: `https://use-pareto.sitevision-cloud.se/2.54e1ff71188bd8464773cc67/12.4ca3d05b18bd10771975ec.json?state=autoComplete&term=${term}`,
+          url: `${window.location.origin}/2.54e1ff71188bd8464773cc67/12.4ca3d05b18bd10771975ec.json?state=autoComplete&term=${term}`,
         })
         .then((response : any) => {
           setResult(response);

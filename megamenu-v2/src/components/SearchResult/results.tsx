@@ -25,13 +25,19 @@ const Results : React.FC<ResultsProps> = ({results, query}) => {
             {
                 results.length !== 0 &&
                 results.map((result : any) => {
-                    return <Result name={result} query={query}/>
+                    return <Result name={result} />
                 })
             }
-            <li>
-                {searchIcon}
-                <a href={`${hostname}/ovrigt/sok?query=${query}`}>Se fullstendig søkeresultat</a>
-            </li>
+            {
+                results[0] !== 'Ingen resultater.' &&
+                <p>
+                    <a className='see-all-result' href={`${hostname}/ovrigt/sok?query=${query}`}>
+                        {searchIcon}
+                        <span>Se fullstendig søkeresultat</span>
+                    </a>
+                </p>
+            }
+            
         </ul>
     )
 }
