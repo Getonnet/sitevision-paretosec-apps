@@ -27,6 +27,7 @@ const URL_SUFFIX =
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
+  const [ mobileSearchToggle, setMobileSearchToggle ] = useState(false);
 
   // console.log(data);
 
@@ -221,13 +222,13 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               loginText={data.loginBtnText}
             />
 
-            <MobileSearchFieldVisibilityTrigger />
+            <MobileSearchFieldVisibilityTrigger toggleMenu={() => setMobileSearchToggle(!mobileSearchToggle)}/>
 
             <MobileMenuIcon />
           </div>
         </div>
 
-        <SearchMobile />
+        <SearchMobile isOpen={mobileSearchToggle}/>
 
         <div
           data-w-id="60fed403-f4fb-0814-b602-51d5dbefbbfd"
