@@ -1,12 +1,7 @@
-type filterTickersArgs = {
-    tickers: any[],
-    term: string
+export const filterTickers = (tickers: any[], term: string) => {
+    const filter = tickers.filter(ticker => {
+        return ticker.displayName.toLowerCase().includes(term.toLowerCase());
+    });
+
+    return filter || [];
 }
-
-const filterTickers = ({tickers, term}: filterTickersArgs) => {
-    const filter = tickers.filter(ticker => ticker.displayName.toLowerCase() === term.toLowerCase());
-
-    return filter ? filter : [];
-}
-
-export {filterTickers};

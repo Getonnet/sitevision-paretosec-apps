@@ -8,5 +8,5 @@ export const filterResult = ({result, exclude} : filterResultType) => {
         return !exclude.includes(item);
     });
 
-    return filterResult;
+    return filterRes;
 }
