@@ -5,7 +5,7 @@ import MobileSearchFieldVisibilityTrigger from "../Mobile/MobileSearchFieldVisib
 import MobileLogin from "../Mobile/MobileLogin";
 import MobileNavbar from "../Mobile/MobileNavbar";
 import Navbar from "../Desktop/Navbar";
-import Search from "../Desktop/SearchDesktop";
+import SearchDesktop from "../Desktop/SearchDesktop";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
@@ -16,20 +16,16 @@ import type {
   MegaMenuMenu,
   LinkType,
 } from "./types";
-// import styles from "./App.scss";
 
 const MAIN_URL =
-  "https://use-pareto.sitevision-cloud.se/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
-const URL_PREFIX = "https://use-pareto.sitevision-cloud.se/rest-api/1/0";
+  "/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
+const URL_PREFIX = "/rest-api/1/0";
 const URL_SUFFIX =
   "/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
-  const [ mobileSearchToggle, setMobileSearchToggle ] = useState(false);
-
-  // console.log(data);
 
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
@@ -153,7 +149,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               <div className="navigation-left">
                 <a href="/" className="brand w-nav-brand">
                   <img
-                    //src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db38/1693492056924/pareto-Logo.svg"
                     src={data.desktopLogo}
                     loading="lazy"
                     alt="Pareto Securities Logo"
@@ -167,18 +162,14 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               </div>
 
               <div className="navigation-right">
-                <Search />
+                <SearchDesktop />
 
                 <Login
                   loginText={data.loginBtnText}
                   loginLink={data.loginBtnLink}
                 />
 
-                <a
-                  //href="https://paretosec.com/no/bli-kunde"
-                  href={data.ctaLink}
-                  className="button w-button"
-                >
+                <a href={data.ctaLink} className="button w-button">
                   {data.ctaBtnText}
                 </a>
               </div>
@@ -203,7 +194,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               className="brand-2 w-nav-brand w--current"
             >
               <img
-                // src="https://use-pareto.sitevision-cloud.se/images/18.1411d29318a26018f962db39/1693492056942/pareto-mobile-logo.svg"
                 src={data.mobileLogo}
                 alt="Pareto Securities Logo"
                 className="mobile-logo"
@@ -222,13 +212,13 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               loginText={data.loginBtnText}
             />
 
-            <MobileSearchFieldVisibilityTrigger toggleMenu={() => setMobileSearchToggle(!mobileSearchToggle)}/>
+            <MobileSearchFieldVisibilityTrigger />
 
             <MobileMenuIcon />
           </div>
         </div>
 
-        <SearchMobile isOpen={mobileSearchToggle}/>
+        <SearchMobile />
 
         <div
           data-w-id="60fed403-f4fb-0814-b602-51d5dbefbbfd"
