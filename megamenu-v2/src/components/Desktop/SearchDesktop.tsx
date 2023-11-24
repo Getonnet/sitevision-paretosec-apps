@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from "react";
 import requester from "@sitevision/api/client/requester";
 import Results from "../SearchResult/results";
+import { getTickers } from "../../actions/getTickers";
+import { filterTickers } from "../../utils/filterTickers";
 
 const Search = () => {
   const [ result, setResult ] = useState<string[]>([]);
   const [ term, setTerm ] = useState<string>('');
+  const tickers = getTickers();
+  const tickersProp = tickers.map((ticker: any) => ticker.properties);
+
+  const searchResults = {
+    resultQuery: [],
+    tickerQuery: []
+  }
 
   useEffect(() => {
     const getResult = (term: string) => {
+
       requester
         .doGet({
           url: `${window.location.origin}/2.54e1ff71188bd8464773cc67/12.4ca3d05b18bd10771975ec.json?state=autoComplete&term=${term}`,
         })
         .then((response : any) => {
-          setResult(response);
+          searchResults.resultQuery = response;
+          searchResults.tickerQuery = tickersProp && filterTickers(tickersProp, term);
+
+          console.log(searchResults);
         })
         .catch((error : any) => {
           if(term === '') {
