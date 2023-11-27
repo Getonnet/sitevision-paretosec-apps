@@ -108,6 +108,23 @@ db.put("token", {
 */
 
 /**
+ * ----------------------------------------------
+ * fetch data for `Månedsportefølje table to module`
+ * ----------------------------------------------
+ */
+router.get("/maanedsportefolje", (req, res) => {
+  requester
+    .get("https://online.paretosec.com/api/ModelPortfolio/no")
+    .done((data: any) => {
+      res.json(data);
+    })
+    .fail((error: any) => {
+      log.error(JSON.stringify(error));
+    });
+});
+// END fetch data for `Månedsportefølje table to module`
+
+/**
  * OLD examples
  */
 // router.get("/myroute", (req, res) => {
