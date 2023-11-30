@@ -1,0 +1,362 @@
+<link rel="stylesheet" type="text/css" href="https://wtk.infrontservices.com/css/InfrontFramework-3.10.5.css" />
+<link type="text/css" rel="stylesheet" href="https://wtk.infrontservices.com/beta/themes/light-3.7.5/theme.css" />
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.highcharts.com/stock/5.0.7/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/5.0.7/highcharts-more.js"></script>
+
+<script type="text/javascript" src="https://wtk.infrontservices.com/js/CommonFramework-2.10.5.min.js"></script>
+<script type="text/javascript" src="https://wtk.infrontservices.com/js/InfrontUI-3.10.5.min.js"></script>
+
+<script type="text/javascript">
+  var infrontUI_nr = null;
+  var quoteListWidget_nr = null;
+  var marketFeed_nr = 18177;
+  var chartWidget_nr = null;
+  var chartWidgetOptions_nr = null;
+
+  //include InfrontSessionInclude
+
+  function CompanyPageLink_nr(companyName) {
+    if (companyName) {
+      var slug = companyName.replace(/ /g, "-");
+      return "/selskap/" + slug;
+    }
+  }
+
+  $(document).ready(function () {
+    var infrontSession_nr = null;
+
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        var token_nr = data.token;
+
+        if (token_nr) {
+          let opts = new Infront.InfrontUIOptions();
+
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token_nr;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_nr = new Infront.UI(opts);
+          infrontUI_nr.registerEventObserver("onReady", infrontReady_nr);
+          infrontUI_nr.init();
+          // infrontSDK = new InfrontSDK.SDK({
+          //   signedToken: token_nr,
+          //   onReady: infrontSDKReady_nr,
+          // });
+        }
+      });
+  });
+
+  function infrontReady_nr() {
+    // Market overview
+    overviewWidget = infrontUI_nr.indexOverviewWidget("#overview", {
+      instrument: {
+        feed: 18177,
+        ticker: "OSEBX",
+      },
+      primaryValue: "PCT_CHANGE",
+    });
+
+    // Quotes list
+    var quoteListOptions = new Infront.QuoteListWidgetOptions();
+    quoteListOptions.columns = ["TICKER", "PCT_CHANGE", "LAST_VALID"];
+    quoteListOptions.sortable = false;
+    quoteListOptions.enableChangeStatusColors = true;
+    quoteListOptions.interactionHighlight = true;
+    quoteListOptions.rowSelectable = true;
+    quoteListOptions.linkChannels = [1000];
+    quoteListOptions.selectedRow = 0;
+
+    quoteListOptions.instruments = [
+      {
+        ticker: "OSEBX",
+        feed: 18177,
+      },
+      // {
+      // ticker: "OMXS30",
+      // feed: 17921,
+      //},
+      // {
+      //  ticker: "OMXC20",
+      //  feed: 17665,
+      // },
+      // {
+      //  ticker: "OMXH25",
+      //   feed: 100,
+      //  },
+      {
+        ticker: "SEKNOK",
+        feed: 12,
+      },
+      {
+        ticker: "EURNOK",
+        feed: 12,
+      },
+      {
+        ticker: "USDNOK",
+        feed: 12,
+      },
+    ];
+
+    quoteListWidget_nr = infrontUI_nr.quoteList("#indicatorList", quoteListOptions);
+
+    // Chart Deprecated
+    chartWidgetOptions_nr = new Infront.ChartWidgetOptions2();
+    chartWidgetOptions_nr.instruments = new Infront.Instrument(18177, "OSEBX");
+    chartWidgetOptions_nr.showVolume = false;
+    chartWidgetOptions_nr.defaultPeriod = "24H";
+    chartWidgetOptions_nr.streaming = true;
+    //chartWidgetOptions_nr.type = Infront.Chart.ChartType.AREA;
+    chartWidgetOptions_nr.zoom = false;
+    chartWidgetOptions_nr.linkChannels = [1000];
+    chartWidgetOptions_nr.showComplexChartInColorbox = true;
+    chartWidgetOptions_nr.yAxisOpposite = true;
+    chartWidgetOptions_nr.chartUI = {
+      availableChartTypes: ["area"],
+      tooltipVersion: "standard",
+      periodMenu: false,
+      indicatorMenu: false,
+      expandButton: false,
+      chartTypeMenu: "Area",
+      searchBox: false,
+      chart: {
+        type: "area",
+        defaultSeriesType: "area",
+      },
+    };
+
+    // console.log(chartWidgetOptions_nr.chartUI);
+
+    chartWidget_nr = infrontUI_nr.chartWidget2("#chart", chartWidgetOptions_nr);
+
+    // Winners
+    var winnersOpts = new Infront.RankingWidgetOptions();
+    winnersOpts.feed = marketFeed_nr;
+    winnersOpts.streaming = true;
+    winnersOpts.rankingField = Infront.RankingField.PCT_CHANGE;
+    winnersOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
+    winnersOpts.navButtonClicked = function () {
+      //window.location.assign("/Market/Rankings");
+    };
+    winnersOpts.columns = ["TICKER", "PCT_CHANGE", "LAST_VALID", "TURNOVER"];
+    winnersOpts.sortOrder = Infront.SortOrder.Desc;
+    winnersOpts.enableChangeStatusColors = true;
+    winnersOpts.enablePeriodSelector = false;
+    winnersOpts.rows = 7;
+    winnersOpts.instrumentTypes = ["STOCK"];
+    winnersOpts.interactionHighlight = true;
+    winnersOpts.onInstrumentSelected = function (instrument) {
+      window.location.assign(CompanyPageLink_nr(instrument.full_name));
+    };
+    infrontUI_nr.rankingWidget("#winners", winnersOpts);
+
+    // Losers
+    var losersOpts = new Infront.RankingWidgetOptions();
+    losersOpts.feed = marketFeed_nr;
+    losersOpts.streaming = true;
+    losersOpts.enablePeriodSelector = false;
+    losersOpts.rankingField = Infront.RankingField.LV_PCT_CHANGE;
+    losersOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
+    losersOpts.navButtonClicked = function () {
+      //window.location.assign("/Market/Rankings");
+    };
+    losersOpts.columns = ["TICKER", "PCT_CHANGE", "LAST_VALID", "TURNOVER"];
+    losersOpts.sortOrder = Infront.SortOrder.Asc;
+    losersOpts.enableChangeStatusColors = true;
+    losersOpts.enablePeriodeSelector = false;
+    losersOpts.rows = 7;
+    losersOpts.instrumentTypes = ["STOCK"];
+    losersOpts.interactionHighlight = true;
+    losersOpts.onInstrumentSelected = function (instrument) {
+      window.location.assign(CompanyPageLink_nr(instrument.full_name));
+    };
+    infrontUI_nr.rankingWidget("#losers", losersOpts);
+
+    // Highest turnover
+    var rankingOpts2 = new Infront.RankingWidgetOptions();
+    rankingOpts2.feed = marketFeed_nr;
+    rankingOpts2.navButton = Infront.WidgetNavButtonType.EXPAND;
+    rankingOpts2.columns = ["TICKER", "PCT_CHANGE", "LAST_VALID", "TURNOVER"];
+    rankingOpts2.sortOrder = Infront.SortOrder.Desc;
+    rankingOpts2.rankingField = Infront.RankingField.TURNOVER;
+    rankingOpts2.enableChangeStatusColors = true;
+    rankingOpts2.enablePeriodeSelector = false;
+    rankingOpts2.rows = 7;
+    rankingOpts2.instrumentTypes = ["STOCK"];
+    rankingOpts2.streaming = true;
+    rankingOpts2.interactionHighlight = true;
+    rankingOpts2.enablePeriodSelector = false;
+    rankingOpts2.onInstrumentSelected = function (instrument) {
+      window.location.assign(CompanyPageLink_nr(instrument.full_name));
+    };
+    infrontUI_nr.rankingWidget("#turnover", rankingOpts2);
+
+    // News
+    var nlOpts = new Infront.NewsListWidgetOptions();
+    // nlOpts.feeds = [1189, 1160, 18182, 1380];
+    nlOpts.feeds = [1189, 1160, 1380];
+    nlOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
+    nlOpts.navButtonClicked = function () {
+      window.location.assign("/Market/News/");
+    };
+    nlOpts.maxItems = 6;
+    nlOpts.enableSourceSelector = false;
+    infrontUI_nr.newsListWidget("news", nlOpts);
+
+    // Financial calendar
+    var opts2 = new Infront.FinancialCalendarWidgetOptions();
+    opts2.countryCodes = ["NO"];
+    opts2.navButton = Infront.WidgetNavButtonType.EXPAND;
+    opts2.endDate = InfrontUtil.addMonths(new Date(), 6);
+    opts2.layout = Infront.FinancialCalendarLayout.EXPANDED;
+    opts2.paging = false;
+    opts2.pageItems = 7;
+    infrontUI_nr.financialCalendarWidget("#fincal", opts2);
+  }
+</script>
+
+<style>
+  .norge-data > .env-flex {
+    margin-bottom: 16px;
+  }
+
+  .norge-data .env-flex {
+    gap: 16px;
+  }
+
+  .norge-data .env-flex h3 {
+    margin-top: 0;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    color: #544952;
+    font-weight: 500;
+  }
+
+  .graph-container {
+    border: none;
+    padding: 15px;
+    height: 280px;
+    overflow: hidden;
+    font-size: 12px;
+    background: #ffffff;
+  }
+
+  .norge-data .cell-h4 {
+    display: none;
+  }
+
+  .norge-data {
+    color: #544952;
+  }
+
+  .cell-flex-row.cell-widget-med-text > :first-child {
+    font-weight: 500;
+  }
+
+  .cell-chart-wrapper .highcharts-plot-band,
+  .cell-chart-wrapper .highcharts-pane {
+    fill: #fff !important;
+  }
+
+  .cell-tbl-change-bars--down {
+    background: linear-gradient(to right, #cc00002e, #cc000094) !important;
+  }
+
+  .cell-tbl-change-bars--no-change {
+    background-color: #c8cacd !important;
+  }
+
+  .cell-tbl-change-bars--up {
+    background: linear-gradient(to right, #00659fa3, #00659f2e) !important;
+  }
+
+  .cell-chart-wrapper .highcharts-graph {
+    stroke: #00659f !important;
+  }
+
+  #indicatorList .cell-row--interaction {
+    border-top: 1px solid #e6e6e6;
+  }
+
+  .norge-data .cell-status-positive {
+    color: #527db3;
+  }
+
+  .norge-data .cell-status-negative {
+    color: #d96967;
+  }
+
+  @media (max-width: 979px) {
+    .norge-data .env-flex {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .market-indicators {
+      height: auto;
+    }
+
+    .market-indicators .env-flex {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="norge-data">
+  <div class="env-flex">
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="overview" class="graph-container"></div>
+    </div>
+
+    <div class="env-flex__item env-flex__item--length-2">
+      <div class="graph-container market-indicators">
+        <h3>Indikatorer</h3>
+        <div class="env-flex">
+          <div class="env-flex__item env-flex__item--length-1">
+            <div id="chart" style="height: 220px"></div>
+          </div>
+          <div class="env-flex__item env-flex__item--length-1">
+            <div id="indicatorList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="env-flex">
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="winners" class="graph-container">
+        <h3>Vinnere</h3>
+      </div>
+    </div>
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="losers" class="graph-container">
+        <h3>Tapere</h3>
+      </div>
+    </div>
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="turnover" class="graph-container">
+        <h3>Mest omsatt</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="env-flex">
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="news" class="graph-container">
+        <h3>Nyheter</h3>
+      </div>
+    </div>
+    <div class="env-flex__item env-flex__item--length-1">
+      <div id="fincal" class="graph-container">
+        <h3>Finanskalender</h3>
+      </div>
+    </div>
+  </div>
+</div>

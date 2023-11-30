@@ -1,0 +1,78 @@
+<script type="text/javascript">
+  // var infrontSession_ifIssued = null;
+  var infrontUI_ifIssued = null;
+  // var quoteListWidget_ifIssued = null;
+  // var marketFeed_ifIssued = 18177;
+  // var chartWidget_ifIssued = null;
+  // var chartWidgetOptions_ifIssued = null;
+
+  //include InfrontSessionInclude
+  $(document).ready(function () {
+    // var infrontSession = null;
+
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        var token = data.token;
+
+        if (token) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_ifIssued = new Infront.UI(opts);
+          infrontUI_ifIssued.registerEventObserver("onReady", infrontReady_ifIssued);
+          infrontUI_ifIssued.init();
+          // infrontSDK = new InfrontSDK.SDK({
+          //   signedToken: data,
+          //   onReady: infrontSDKReady_ifIssued,
+          // });
+        }
+      });
+  });
+
+  // End Include
+  function createBaseListOptions_ifIssued() {
+    var cvOpts = new Infront.QuoteListWidgetOptions();
+    cvOpts.feed = 2593;
+    cvOpts.sortable = true;
+    cvOpts.enableChangeStatusColors = true;
+    cvOpts.showFilters = false;
+    cvOpts.columns = [
+      {
+        name: "TICKER",
+        hover: "FULL_NAME",
+        flag: true,
+      },
+      "BID",
+      "ASK",
+      "OPEN",
+      "Last",
+    ];
+
+    return cvOpts;
+  }
+
+  function infrontReady_ifIssued() {
+    var potiListOpts = createBaseListOptions_ifIssued();
+    potiListWidget = infrontUI_ifIssued.quoteList("#potiList", potiListOpts);
+  }
+</script>
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>If issued</h1>
+    <p>
+      If issued-handel er en type handel som foregår i perioden før et selskap blir tatt opp til handel. If
+      issued-handel er betinget av visse vilkår. Blant annet at selskapet det avtales handel i blir tatt opp til handel
+      og hvis relevant at kapitalforhøyelsen blir godkjent av generalforsamlingen i selskapet og registrert i
+      Foretaksregisteret. Dersom vilkårene som er satt for if issued-handelen ikke oppfylles vil ikke if issued-handelen
+      bli gjennomført. Handlene i kurslisten nedenfor er derfor betinget av at disse vilkårene oppfylles.
+    </p>
+    <p>If issued-handel tilbys utelukkende til profesjonelle investorer.</p>
+    <div id="potiList" class="col-md-12"></div>
+  </div>
+</div>

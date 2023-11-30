@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src=https://wtk.infrontservices.com/js/CommonFramework-latest.min.js></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            const sdk = new InfrontSDK.SDK({
+                signedToken: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE2OTkzMjI3OTgsImlhdCI6MTY5OTI4Njc5OCwianRpIjoiYzY4MzBlMDctN2U4OS00N2I1LThiYWUtMjc3MmY4YjU5MjQ1IiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiMjIxYWI3MzYtMmQzZC00YmU5LWIyOGUtNTM1ZDlhMWYyYzg0IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.k8MVpXcF87D4xQdXGRtoZjl0zN8yo2o8x79bQV1U9ciLY6ZEVnh807oVcpGIGchrkjoo0cwvhUmg_2kuOz3HOP2nulgvgXPhslzud7umARTaAlleRt96RT_2p22a8n7ju3fUWoBkYZJ1X0DEBnhQADoPvW4S8ydREqFZXndYwmWzwSMELX4Yimgcu4vkfhMZ0i_tlgjd6F5iY7oJD4OSZJjsddncQrBrNUVqF49cAxfluIXDlKbSSs_Sjl-1A7Wb5_bTHwJmVedJHNQ7GPJYnftkL21hwOjEu-gDb75fs4o8gayrAx8C1teNzsa9EKporge9-uKGLBXrxM_4vW2_Kg",
+                onReady: (event) => {
+                    SDKReady(sdk);
+                },
+                onDisconnect: (event) => {
+                    console.warn("Disconnected:", event);
+                }
+            });
+        });
+
+
+        /* Infront SDK ready to go, defining widgets inside the SDKReady function */
+        function SDKReady(sdk) {
+            // Define info type
+            //Create an id (https://docs.infrontfinance.com/sdk/api/Symbol/SymbolId/11950)
+            const id = { feed: 26, ticker: "BMW" };
+
+            // Define if you want to subscribe (https://docs.infrontfinance.com/sdk/api/InfrontSDK/DataRequestOptions/11771)
+            const subscribe = false;
+
+            // Define onData callback (https://docs.infrontfinance.com/sdk/api/Alerts/onData/136)
+            const onData = data => {
+                console.log(`Symbol data, Ticker: ${data.get(InfrontSDK.SymbolField.Ticker)}, Full name: ${data.get(InfrontSDK.SymbolField.FullName)}`);
+                console.log(`Symbol data:`, data.get(InfrontSDK.SymbolField.PreChange1W));
+                console.log(`Symbol data:`, data.get(InfrontSDK.SymbolField.PreChange1M));
+                console.log(`Symbol data:`, data.get(InfrontSDK.SymbolField.PreChange1Y));
+                console.log(`Symbol data:`, data.get(InfrontSDK.SymbolField.PreChangeYearToDate));
+                console.log(`Symbol data:`, data.get(InfrontSDK.SymbolField.PreMarketPrice));
+                console.log(`Symbol change:`, data.get(InfrontSDK.SymbolField.Change));
+                console.log(`Symbol change %:`, data.get(InfrontSDK.SymbolField.ChangePercent));
+
+            };
+
+            // Define options (https://docs.infrontfinance.com/sdk/api/Symbol/SymbolDataOptions/11963)
+            const options = {
+                // Define symbol data content (https://docs.infrontfinance.com/sdk/api/Symbol/SymbolDataContent/11957)
+                content: {
+                    Basic: true,
+                    HistoricalPerformance: true,
+                    //HistPerformanceField: true,
+                    // CompanyMetaData: true,
+                    // CompanyFundamentals: true,
+                    // FundDetails: true
+                },
+                id: id,
+                subscribe: subscribe,
+                onData: onData,
+                currency: 'USD'
+            };
+
+            // Request data
+            sdk.get(InfrontSDK.symbolData(options));
+        }
+    </script>
+    <title>Head</title>
+</head>
+
+<body class="cell-body"></body>
+
+</html>
