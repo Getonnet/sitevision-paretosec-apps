@@ -248,6 +248,7 @@
         },
       })
     );
+    // updateShowAllButtonVisibility();
   }
 
   function update(instrument) {
@@ -279,7 +280,7 @@
     });
     element.classList.add("activeTab");
 
-    setTimeout(updateShowAllButtonVisibility, 2000);
+    // setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function handleMobileSorting(element) {
@@ -287,6 +288,10 @@
     changeFeed(parseInt(selected));
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
+
+  // on change of table data, runupdateShowAllButtonVisibility
+  const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+  observer.observe(document.getElementById("norwayLists"), { attributes: true, childList: true, subtree: true });
 </script>
 
 <style>
