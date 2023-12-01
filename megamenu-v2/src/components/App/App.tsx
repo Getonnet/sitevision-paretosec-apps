@@ -17,15 +17,19 @@ import type {
   LinkType,
 } from "./types";
 
-const MAIN_URL =
-  "/rest-api/1/0/Pareto%20AS/Page%20Repository/Site%20Page/main-menu/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 const URL_PREFIX = "/rest-api/1/0";
+const MAIN_URL =
+  URL_PREFIX +
+  "/19.162ad65718a92ee55e3282e0/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 const URL_SUFFIX =
   "/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
+  const [mobileSearchToggle, setMobileSearchToggle] = useState(false);
+
+  // console.log(data);
 
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
@@ -212,13 +216,15 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               loginText={data.loginBtnText}
             />
 
-            <MobileSearchFieldVisibilityTrigger />
+            <MobileSearchFieldVisibilityTrigger
+              toggleMenu={() => setMobileSearchToggle(!mobileSearchToggle)}
+            />
 
             <MobileMenuIcon />
           </div>
         </div>
 
-        <SearchMobile />
+        <SearchMobile isOpen={mobileSearchToggle} />
 
         <div
           data-w-id="60fed403-f4fb-0814-b602-51d5dbefbbfd"

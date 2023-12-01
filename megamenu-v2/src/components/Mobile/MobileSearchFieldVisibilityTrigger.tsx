@@ -1,16 +1,18 @@
 import React from "react";
 
 interface MobileTriggerProps {
-  toggleMenu: () => void,
+  toggleMenu: () => void;
 }
 
-const MobileSearchFormVisibilityTrigger : React.FC<MobileTriggerProps> = ({toggleMenu}) => {
+const MobileSearchFormVisibilityTrigger: React.FC<MobileTriggerProps> = ({
+  toggleMenu,
+}) => {
   return (
     <div
       data-w-id="348d40d7-fd14-b770-e6cd-1573ef073efe"
       className="mobile_search-form-open"
     >
-      <div className="icon-embed-custom-2 w-embed" >
+      <div className="icon-embed-custom-2 w-embed">
         <svg
           width={18}
           height={19}
