@@ -30,11 +30,11 @@ export function formatTimestampToNorwegianDate(timestamp) {
   return `${day} ${norwegianMonths[monthIndex]} ${year}`;
 }
 
-export const convertHtmlEntities = (input) => {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = input;
-  return textarea.value;
-};
+// export const convertHtmlEntities = (input) => {
+//   const textarea = document.createElement("textarea");
+//   textarea.innerHTML = input;
+//   return textarea.value;
+// };
 
 export function filterNonASCIICharacters(str) {
   return str.replace(/[^\x00-\x7F]/g, "");

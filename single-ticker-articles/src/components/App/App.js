@@ -8,9 +8,9 @@ import {
   formatTimestampToNorwegianDate,
 } from "../util";
 
-const articlePerRequest = 35;
-const thumbnailPlaceholder =
-  "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg";
+const articlePerRequest = 20;
+// const thumbnailPlaceholder =
+//   "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg";
 
 const App = () => {
   const [, setImages, images] = useState({});
@@ -42,10 +42,10 @@ const App = () => {
     typeof window !== "undefined" && getTickerCode();
   }, []);
 
-  const getFeaturedImageFromId = (articleId) => {
+  const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${articleId}/properties`,
+        url: `/rest-api/1/0/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -66,8 +66,14 @@ const App = () => {
       .doGet({
         url: `/rest-api/1/0/3.113c8d5d18b5cf299b63922/nodes`,
         data: {
-          properties: ["ticker", "SV.Image", "creationDate"],
-          skip: articlePerRequest * currentPage,
+          properties: [
+            "ticker",
+            "SV.Image",
+            "creationDate",
+            "URL",
+            "article_summary",
+          ],
+          skip: articlePerRequest * currentPage.current,
           limit: articlePerRequest,
         },
       })
@@ -75,7 +81,8 @@ const App = () => {
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
-        console.log("Articles ---------", res);
+        // console.log("Articles ---------", res);
+
         // filter data
         res.map((article) => {
           if (
@@ -83,13 +90,14 @@ const App = () => {
             article.properties.ticker.includes(tickerId)
           ) {
             setFirst3Articles((oldArticles) => [...oldArticles, article]);
-            console.count("matched ticker");
-            getFeaturedImageFromId(article.id);
+            // console.count("matched ticker");
+            // fetch featured image
+            getFeaturedImageFromId(article.id, article.properties["SV.Image"]);
           } else {
-            console.count("no match");
+            // console.count("no match");
           }
         });
-        console.log("mapping is done - - - - xx");
+        // console.log("mapping is done - - - - xx");
 
         if (
           first3Articles.current.length < 3 &&
@@ -104,6 +112,10 @@ const App = () => {
       });
   };
 
+  // console.log(currentPage.current);
+  // console.log(images.current);
+  // console.log(first3Articles.current);
+
   return (
     <>
       <h2 className={styles.title}>
@@ -114,22 +126,19 @@ const App = () => {
         {first3Articles.current.length
           ? first3Articles.current.slice(0, 3).map((a) => (
               <article className={styles.article} key={a.id} id={a.id}>
-                <a
-                  href="/aktuelt/2023-11-14-otovo-selskapspresentasjon-og-qa"
-                  title="Otovo: Selskapspresentasjon og Q&A"
-                >
+                <a href={a.properties.URL} title={a.name}>
                   <div
                     role="img"
-                    aria-label="Otovo"
-                    className="sv-newslist__gallery-item__image"
+                    aria-label={pageTickerCode.current}
+                    // className="sv-newslist__gallery-item__image"
                     style={{
                       backgroundImage: `url(${
-                        images.current.length
-                          ? images.current[a.id]
-                          : thumbnailPlaceholder.replace("&quot;", "")
+                        images.current[a.id] ||
+                        "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg"
                       })`,
                       height: 260,
                       minHeight: 260,
+                      backgroundSize: "cover",
                     }}
                   />
                 </a>
@@ -143,14 +152,11 @@ const App = () => {
                       av Pareto Securities | Aktuelt
                     </small>
                     <h3 className="subheading3">
-                      <a href="/aktuelt/2023-11-14-otovo-selskapspresentasjon-og-qa">
+                      <a href={a.properties.URL}>
                         {filterNonASCIICharacters(a.name)}
                       </a>
                     </h3>
-                    {/*<p className="normal">*/}
-                    {/*  Når du handler i utenlandske aksjer uten valutakonto vil*/}
-                    {/*  du få valutarisiko. Lær hvordan du...*/}
-                    {/*</p>*/}
+                    <p className="normal">{a.properties.article_summary}</p>
                   </header>
                 </div>
               </article>
