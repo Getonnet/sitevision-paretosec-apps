@@ -39,3 +39,9 @@ export function formatTimestampToNorwegianDate(timestamp) {
 export function filterNonASCIICharacters(str) {
   return str.replace(/[^\x00-\x7F]/g, "");
 }
+
+export function limitSentenceTo15Words(sentence) {
+  const words = sentence.split(" ");
+  const limitedWords = words.slice(0, 15);
+  return limitedWords.join(" ");
+}

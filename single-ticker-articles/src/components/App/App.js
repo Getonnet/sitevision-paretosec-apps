@@ -6,6 +6,7 @@ import useState from "react-usestateref";
 import {
   filterNonASCIICharacters,
   formatTimestampToNorwegianDate,
+  limitSentenceTo15Words,
 } from "../util";
 
 const articlePerRequest = 20;
@@ -156,7 +157,10 @@ const App = () => {
                         {filterNonASCIICharacters(a.name)}
                       </a>
                     </h3>
-                    <p className="normal">{a.properties.article_summary}</p>
+                    <p className="normal">
+                      {limitSentenceTo15Words(a.properties.article_summary)}
+                      {"..."}
+                    </p>
                   </header>
                 </div>
               </article>
