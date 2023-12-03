@@ -2,13 +2,13 @@
   "id": "single-article-suggestion",
   "version": "0.0.1",
   "name": {
-    "en": "WebApp boilerplate"
+    "en": "Les også"
   },
-  "author": "My Company",
+  "author": "GetOnNet As",
   "description": {
-    "en": "A WebApp boilerplate"
+    "en": "Les også"
   },
-  "helpUrl": "https://example.com/webapps",
+  "helpUrl": "https://getonnet.no/support",
   "type": "WebApp",
   "bundled": true,
   "requiredLibs": {
