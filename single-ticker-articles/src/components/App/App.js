@@ -165,7 +165,7 @@ const App = () => {
                 </div>
               </article>
             ))
-          : "Laster..."}
+          : "Laster inn..."}
       </div>
     </>
   );
