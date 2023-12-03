@@ -11,6 +11,7 @@ interface ArticleData {
   shortId: string;
   "SV.Title": string;
   "SV.Image": string;
+  URL: string;
 }
 
 interface ArticleImgData {
@@ -20,7 +21,12 @@ interface ArticleImgData {
 const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
   console.log("article data =>");
   console.log(articleId);
-  const [, setArticle, article] = useState<ArticleData | {}>({});
+  const [, setArticle, article] = useState<ArticleData>({
+    shortId: "",
+    "SV.Title": "",
+    "SV.Image": "",
+    URL: "",
+  });
   const [, setArticleImg, articleImg] = useState("");
 
   const getFeaturedImageFromId = (aId: string, imgId: string) => {
@@ -43,7 +49,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
       .doGet({
         url: `/rest-api/1/0/${articleId}/properties`,
         data: {
-          properties: ["shortId", "SV.Title", "SV.Image"],
+          properties: ["shortId", "SV.Title", "SV.Image", "URL"],
         },
       })
       .then((res) => {
@@ -61,9 +67,10 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
 
   return (
     <>
-      {article.current ? (
-        <article className={styles.container}>
-          <div
+      {article.current.shortId ? (
+        <article className={styles.container} key={article.current.shortId}>
+          <a
+            href={article.current.URL}
             className={styles.thumbnail}
             style={{
               backgroundImage: `url(${
@@ -74,14 +81,14 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
             }}
           />
 
-          <div className={styles.content}>
+          <a href={article.current.URL} className={styles.content}>
             <p className={styles.text}>Les også</p>
+
             <h2 className={styles.title}>
-              Prøv oss ut i tre måneder med våre beste betingelser, full
-              analysetilgang og populære Infront Web Trader.{" "}
+              {article.current["SV.Title"]}{" "}
               <span className={styles.icon}>→</span>
             </h2>
-          </div>
+          </a>
         </article>
       ) : (
         <article className={styles.container}>Laster inn...</article>

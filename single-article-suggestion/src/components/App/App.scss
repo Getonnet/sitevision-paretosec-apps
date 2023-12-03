@@ -13,6 +13,11 @@
   }
 }
 
+.thumbnail {
+  display: block;
+  height: auto;
+}
+
 .text {
   color: var(--Main-blue, #003255);
   font-family: "Roboto", sans-serif;
