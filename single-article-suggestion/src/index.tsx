@@ -5,11 +5,9 @@ import appData from "@sitevision/api/server/appData";
 import App from "./components/App";
 
 router.get("/", (req, res) => {
-  const message = "Hello, world!";
-  const name = appData.get("name") as string;
+  const articleId = appData.get("article") as string;
 
-  res.agnosticRender(renderToString(<App message={message} name={name} />), {
-    message,
-    name,
+  res.agnosticRender(renderToString(<App articleId={articleId} />), {
+    articleId: articleId,
   });
 });
