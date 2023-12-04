@@ -70,7 +70,10 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               ...prev,
               [parentID]: {
                 ...menuItem,
-                columns: [...menuItem.columns, data],
+                columns: [
+                  ...(Array.isArray(menuItem.columns) ? menuItem.columns : []),
+                  data,
+                ],
               },
             }));
           } else {
