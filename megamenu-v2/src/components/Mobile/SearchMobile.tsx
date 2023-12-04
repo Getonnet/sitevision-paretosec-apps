@@ -4,7 +4,7 @@ import requester from "@sitevision/api/client/requester";
 import Results from "../SearchResult/results";
 
 interface SearchMobileProps {
-  isOpen: boolean
+  isOpen: boolean,
 }
 
 const SearchMobile : React.FC<SearchMobileProps> = ({isOpen}) => {
@@ -28,6 +28,8 @@ const SearchMobile : React.FC<SearchMobileProps> = ({isOpen}) => {
           }
         })
     }
+
+    console.log(term);
 
     getResult(term);
   }, [term])

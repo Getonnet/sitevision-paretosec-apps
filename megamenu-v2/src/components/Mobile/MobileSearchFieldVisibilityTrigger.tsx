@@ -1,7 +1,7 @@
 import React from "react";
 
 interface MobileTriggerProps {
-  toggleMenu: () => void,
+  toggleMenu?: () => void,
 }
 
 const MobileSearchFormVisibilityTrigger : React.FC<MobileTriggerProps> = ({toggleMenu}) => {
