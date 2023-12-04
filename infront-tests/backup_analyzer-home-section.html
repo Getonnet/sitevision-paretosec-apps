@@ -3,16 +3,13 @@
   let analyze_infrontUI = null;
 
   let analyze_news57research = null;
+
   //let analyze_news57researchreader = null;
 
   function convertDateFormat(inputDate) {
-    console.log(inputDate);
-
-    if (!inputDate) return;
-
-    const dateObj = new Date(inputDate);
-
-    const day = dateObj.getDate();
+    // Split the input date into day, month, and year
+    const [day, month, year] = inputDate.split(".");
+    // Define an array of Norwegian month names
     const norwegianMonths = [
       "januar",
       "februar",
@@ -27,12 +24,10 @@
       "november",
       "desember",
     ];
-
-    const month = norwegianMonths[dateObj.getMonth()];
-    const year = dateObj.getFullYear().toString().slice(-2);
-
-    console.log(`${day} ${month} 20${year}`);
-    return `${day} ${month} 20${year}`;
+    // Get the Norwegian month name based on the month number
+    const norwegianMonth = norwegianMonths[parseInt(month) - 1];
+    // Construct the output date in the desired format
+    return `${day} ${norwegianMonth} 20${year}`;
   }
 
   (function ($) {
@@ -75,20 +70,7 @@
     news57nlOpts.useLightbox = false;
     news57nlOpts.feeds = [1433];
     // news57nlOpts.columns = ["TIME", "HEADLINE"];
-    news57nlOpts.columns = [
-      {
-        name: "TIME",
-        translate: (value) => {
-          return convertDateFormat(value.time);
-        },
-      },
-      {
-        name: "HEADLINE",
-        translate: (value) => {
-          return value.headline + " <span class='arrow-icon'>→</span>";
-        },
-      },
-    ];
+    news57nlOpts.columns = ["TIME", "HEADLINE"];
     news57nlOpts.onNewsItemSelected = function () {
       window.open("https://online.paretosec.com/Research", "_blank");
     };
@@ -148,13 +130,12 @@
     font-weight: 400;
     line-height: 140%;
   }
-  #news57research .arrow-icon .arrow-icon {
-    display: none;
-  }
+
   @media screen and (min-width: 768px) {
     #news57research .cell-table__txt--news-date {
       font-size: 0.875rem;
     }
+
     #news57research .cell-table__txt--news-heading {
       font-size: 1.3125rem;
       line-height: 140%;
@@ -189,9 +170,9 @@
 <!-- content holder for analyzer -->
 <div id="news57research"></div>
 
-<div class="newsResearchCta">
+<div className="newsResearchCta">
   <a href="https://online.paretosec.com/Research">
-    <span class="icon">
+    <span className="icon">
       <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M13.7459 0L12.4672 1.2973L16.1434 5.18919H0V6.81081H16.1434L12.4672 10.7027L13.7459 12L18.3811 7.2973L19.5 6L18.3811 4.86486L13.7459 0Z"
