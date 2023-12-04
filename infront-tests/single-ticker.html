@@ -13,6 +13,8 @@
   var st_historicalOverview = null;
   // var st_searchWIdget = null;
 
+  let tickerData = null;
+
   function st_InitCharts() {
     /** Default chart formatting **/
     Infront.DefaultChartOptions = {
@@ -96,26 +98,52 @@
   $(document).ready(function () {
     var infrontSession = null;
 
-    fetch("https://use-pareto.sitevision-cloud.se/rest-api/Infront%20token/token")
+    // fetch ticker details
+    fetch(`/rest-api/1/0/${window.sv.PageContext.pageId}/properties`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.token) {
-          let opts = new Infront.InfrontUIOptions();
-          opts.language = "no";
-          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
-          opts.streaming = true;
-          opts.signed_token = data.token;
-          opts.token_type = "JWT";
-          opts.client_application = "WEB";
-          st_infrontUI = new Infront.UI(opts);
-          st_infrontUI.registerEventObserver("onReady", st_infrontReady);
-          st_infrontUI.init();
-          // infrontSDK = new InfrontSDK.SDK({
-          //     signedToken: token,
-          //     onReady: infrontSDKReady
-          // });
-        }
+        /* fullName, tekst, website, altName, feed, isin, currency, instrumentType, exchangeInstrumentId,tickerCode */
+        tickerData = data;
+        console.log(data);
+
+        $(".about-container").append("<p>" + data.tekst + "</p>");
+
+        // fetch in-front data
+        fetckTokenAndData();
+
+        // update dom links
+        $(".companyTabs a, .action-btn a").each(function () {
+          let link = $(this).attr("href");
+          link = link.replace("{{feed}}", tickerData.feed);
+          link = link.replace("{{ticker}}", tickerData.tickerCode);
+          link = link.replace("{{isin}}", tickerData.isin);
+
+          $(this).attr("href", link);
+        });
       });
+
+    function fetckTokenAndData() {
+      fetch("/rest-api/Infront%20token/token")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.token) {
+            let opts = new Infront.InfrontUIOptions();
+            opts.language = "no";
+            opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+            opts.streaming = true;
+            opts.signed_token = data.token;
+            opts.token_type = "JWT";
+            opts.client_application = "WEB";
+            st_infrontUI = new Infront.UI(opts);
+            st_infrontUI.registerEventObserver("onReady", st_infrontReady);
+            st_infrontUI.init();
+            // infrontSDK = new InfrontSDK.SDK({
+            //     signedToken: token,
+            //     onReady: infrontSDKReady
+            // });
+          }
+        });
+    }
   });
 
   //End Include
@@ -126,47 +154,53 @@
   }
 
   function st_infrontReady(event) {
+    // console.log("running SDK ready -----------");
+    // console.log(tickerData);
+    const { feed, tickerCode } = tickerData;
+
     var optsYar = new Infront.OrderbookWidgetOptions();
     optsYar.instrument = {
-      feed: 18177,
-      ticker: "EQNR",
+      feed: feed,
+      ticker: tickerCode,
     };
-    optsYar.widgetTitle = "orderBook";
+
+    optsYar.widgetTitle = "Ordrebok";
     optsYar.levels = 5;
     optsYar.layout = Infront.OrderbookRowLayout.WIDE;
-    optsYar.hideOrders = true;
+    //optsYar.hideOrders = true;
 
     st_infrontUI.orderbookWidget("#orderbookContainer", optsYar);
     st_infrontUI.orderbookWidget("#orderbookContainerMobile", optsYar);
 
     st_InitCharts();
 
-    var instrument = new Infront.Instrument(18177, "EQNR");
+    var instrument = new Infront.Instrument(feed, tickerCode);
     var opts = new Infront.ChartWidgetOptions2();
     /*opts.type = Infront.ChartWidgetConstants.kInteractive;
-        opts.periodSelectorPosition = Infront.ChartWidgetConstants.kPeriodSelectorPosRight;*/
-    opts.defaultPeriod = "6M";
+          opts.periodSelectorPosition = Infront.ChartWidgetConstants.kPeriodSelectorPosRight;*/
+    opts.defaultPeriod = "1D";
+    opts.chartTypeID = "area";
     opts.instruments = instrument;
     opts.showVolume = true;
     opts.zoom = true;
+    opts.chartUI = {
+      advancedParameters: true,
+    };
+    console.log(opts);
     st_chartWidget2 = st_infrontUI.chartWidget2("#chartWidget2", opts);
     st_chartWidget2 = st_infrontUI.chartWidget2("#graphContainer", opts);
 
     var focusOpts = new Infront.FocusWidgetOptions();
-    focusOpts.instrument = new Infront.Instrument(18177, "EQNR");
+    focusOpts.instrument = new Infront.Instrument(feed, tickerCode);
     focusOpts.widgetTitle = "Siste";
-    focusOpts.translate = function (rowId, value) {
-      return "Siste";
-    };
-    console.log(focusOpts);
 
     st_focusWidget = st_infrontUI.focusWidget("#focusContainer", focusOpts);
     st_focusWidget = st_infrontUI.focusWidget("#siste", focusOpts);
 
     //st_focusWidget = st_infrontUI.focusWidget("#focusContainer", {
     //   "instrument": {
-    //     "feed": 18177,
-    //       "ticker": "EQNR"
+    //     "feed": feed,
+    //       "ticker": tickerCode
     //   },
     //    "layout": Infront.FocusWidgetLayout.MINI,
     //    "translate": function(rowId, value) {
@@ -176,8 +210,8 @@
     //
     //   st_focusWidget = st_infrontUI.focusWidget("#siste", {
     //     "instrument": {
-    //        "feed": 18177,
-    //       "ticker": "EQNR"
+    //        "feed": feed,
+    //       "ticker": tickerCode
     //     }
     //  });
 
@@ -185,7 +219,7 @@
 
     var singleValOpt = new Infront.InstrumentSingleValueWidgetOptions();
     singleValOpt.decimals = 2;
-    singleValOpt.instrument = new Infront.Instrument(18177, "EQNR");
+    singleValOpt.instrument = new Infront.Instrument(feed, tickerCode);
 
     singleValOpt.name = "TIME";
     st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#currentTime", singleValOpt);
@@ -240,7 +274,8 @@
 
     // Historical Overview Widget
     var historicalOpts = new Infront.HistoricalOverviewWidgetOptions();
-    historicalOpts.instrument = new Infront.Instrument(18177, "EQNR");
+    historicalOpts.widgetTitle = "HISTORISK OVERSIKT";
+    historicalOpts.instrument = new Infront.Instrument(feed, tickerCode);
     historicalOpts.barPeriod = InfrontConstants.HistoricalPeriodes.ONE_WEEK;
     historicalOpts.historicFields = [
       InfrontConstants.HistoricalPeriodes.ONE_WEEK,
@@ -253,22 +288,38 @@
     st_historicalOverview = st_infrontUI.historicalOverviewWidget("#historyContainerMobile", historicalOpts);
 
     var opts = new Infront.ValuePairWidgetOptions();
-    opts.instrument = new Infront.Instrument(18177, "EQNR");
-    opts.leftField = "BUY";
-    opts.rightField = "SELL";
-    st_vp1Widget = st_infrontUI.valuePairWidget("#valuepair1", opts);
+    opts.instrument = new Infront.Instrument(feed, tickerCode);
+    opts.leftField = "BID";
+    opts.rightField = "ASK";
+    st_vp1Widget = st_infrontUI.valuePairWidget("lastShoppingContainer", opts);
 
-    opts.instrument = new Infront.Instrument(18177, "EQNR");
+    opts.instrument = new Infront.Instrument(feed, tickerCode);
     opts.leftField = "OPEN";
     opts.rightField = "TURNOVER";
-    st_vp2Widget = st_infrontUI.valuePairWidget("#valuepair2", opts);
+    st_vp2Widget = st_infrontUI.valuePairWidget("lastShoppingContainer", opts);
 
     var nlOpts = new Infront.NewsListWidgetOptions();
-    nlOpts.instrument = new Infront.Instrument(18177, "EQNR");
+    nlOpts.widgetTitle = "Nyheter";
+    nlOpts.columns = [
+      {
+        name: "HEADLINE",
+        heading: "Overskrift",
+      },
+      {
+        name: "TIME",
+        heading: "Tidspunkt",
+      },
+      {
+        name: "SHORT_SOURCE",
+        heading: "Kilde",
+      },
+    ];
+    nlOpts.instrument = new Infront.Instrument(feed, tickerCode);
     nlOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
     nlOpts.maxItems = 100;
     nlOpts.pageItems = 5;
     nlOpts.paging = true;
+
     var fromDate = new Date();
     fromDate.setDate(fromDate.getDate() - 3 * 30);
     nlOpts.startTime = fromDate;
@@ -277,10 +328,10 @@
     st_newsNewListWidget = st_infrontUI.newsListWidget("#newsContainer", nlOpts);
     st_newsNewListWidget = st_infrontUI.newsListWidget("#newsContainerMobile", nlOpts);
 
-    var instrument = new Infront.Instrument(18177, "EQNR");
+    var instrument = new Infront.Instrument(feed, tickerCode);
 
     var opts = new Infront.FinancialCalendarWidgetOptions();
-    opts.instrument = new Infront.Instrument(18177, "EQNR");
+    opts.instrument = new Infront.Instrument(feed, tickerCode);
     opts.endDate = InfrontUtil.addMonths(new Date(), 8);
     opts.layout = Infront.FinancialCalendarLayout.EXPANDED;
     opts.paging = false;
@@ -289,31 +340,50 @@
     // ------------------------------------------------
     // SEARCH
     // ------------------------------------------------
+    /*
+      var sbOpts = new Infront.SearchBoxOptions();
+      sbOpts.placeholder = "Search";
+      sbOpts.searchThreshold = 2; //How many letters must you type before starting the search.
+      sbOpts.feeds = [feed, 17921]; //Search Oslo and Stockholm
+      sbOpts.fields = ["ticker", "feed_code", "isin"]; //Available feeds: feed, ticker, isin, currency, instrument_type, instrument_subtype, full_name, feed_code
+      sbOpts.enableMultiSelect = false;
+      sbOpts.instrumentSelected = function (instrument) {
+        //Event fires when instrument is selected from the search-result dropdown menu
+        console.log(instrument.ticker);
+      };
+      sbOpts.emptyResultSelected = function () {
+        console.log("Empty");
+      };
+      sbOpts.showAfterSelect = function (instrument) {
+        //Can also be a function for maximum flexibility
+        return instrument.full_name + " (" + instrument.currency + ")";
+      };
+      sbOpts.filter = function (resultObject) {
+        //return true or false to show or hide result from the search-results
+        return resultObject.instrument.instrument_type == "STOCK";
+      };
 
-    var sbOpts = new Infront.SearchBoxOptions();
-    sbOpts.placeholder = "Search";
-    sbOpts.searchThreshold = 2; //How many letters must you type before starting the search.
-    sbOpts.feeds = [18177, 17921]; //Search Oslo and Stockholm
-    sbOpts.fields = ["ticker", "feed_code", "isin"]; //Available feeds: feed, ticker, isin, currency, instrument_type, instrument_subtype, full_name, feed_code
-    sbOpts.enableMultiSelect = false;
-    sbOpts.instrumentSelected = function (instrument) {
-      //Event fires when instrument is selected from the search-result dropdown menu
-      console.log(instrument.ticker);
-    };
-    sbOpts.emptyResultSelected = function () {
-      console.log("Empty");
-    };
-    sbOpts.showAfterSelect = function (instrument) {
-      //Can also be a function for maximum flexibility
-      return instrument.full_name + " (" + instrument.currency + ")";
-    };
-    sbOpts.filter = function (resultObject) {
-      //return true or false to show or hide result from the search-results
-      return resultObject.instrument.instrument_type == "STOCK";
-    };
-
-    st_searchWidget = st_infrontUI.searchWidget("#search", sbOpts);
+      st_searchWidget = st_infrontUI.searchWidget("#search", sbOpts);*/
   }
+
+  //get current date
+  function getCurrentDate() {
+    const dateContainer = document.querySelector("#companyPresentationContainerTime");
+    const currentDate = new Date();
+
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const year = String(currentDate.getFullYear());
+
+    const formattedDate = day + "." + month + "." + year;
+
+    const textElement = document.createElement("span");
+    textElement.innerText = formattedDate;
+
+    dateContainer.innerText = formattedDate;
+  }
+
+  window.addEventListener("DOMContentLoaded", getCurrentDate);
 </script>
 
 <section class="single-ticker-page">
@@ -384,19 +454,25 @@
       <div class="header-nav">
         <ul class="companyTabs customTabs">
           <li data-tab="tab1" class="active"><span>Oversikt</span></li>
-          <li><a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#Research">Analyse</a></li>
+          <li><a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#Research">Analyse</a></li>
           <li>
-            <a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#FinDet">Estimater og nøkkeltall</a>
-          </li>
-          <li>
-            <a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#Brokerstats">Meglerstatistikk</a>
-          </li>
-          <li><a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#News">Nyheter</a></li>
-          <li><a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#Bonds">Obligasjoner</a></li>
-          <li>
-            <a target="_new" href="https://online.paretosec.com/Ticker/EQNR/18177/#HistoricalPrices"
-              >Historiske priser</a
+            <a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#FinDet"
+              >Estimater og nøkkeltall</a
             >
+          </li>
+          <li>
+            <a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#Brokerstats"
+              >Meglerstatistikk</a
+            >
+          </li>
+          <li><a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#News">Nyheter</a></li>
+          <li>
+            <a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#Bonds">Obligasjoner</a>
+          </li>
+          <li>
+            <a target="_new" href="https://online.paretosec.com/Ticker/{{ticker}}/{{feed}}/#HistoricalPrices">
+              Historiske priser
+            </a>
           </li>
         </ul>
       </div>
@@ -409,7 +485,7 @@
         <div class="orderbook-container container__mobile" id="orderbookContainerMobile"></div>
         <div class="history-container container__mobile" id="historyContainerMobile"></div>
         <div class="last-shopping-container" id="lastShoppingContainer">
-          <span>Siste handler</span>
+          <h3>Siste handler</h3>
         </div>
         <div class="ticker-info-container container__mobile">
           <div class="container first-row">
@@ -443,16 +519,34 @@
           </div>
         </div>
         <div class="last-analysis-container" id="lastAnalysisContainer">
-          <span>Siste analyse</span>
-          <div id="analysisWidget" style="min-height: 170px"></div>
+          <h3>Siste analyse</h3>
+          <div class="analysis-content">
+            <div class="locked">
+              <img class="icon" src="/images/18.da5e5f018bfadade6a2d784/1701418038035/lock%20icon.png" alt="locked" />
+              <h2>Bli kunde for å få analysetilgang til over 300 selskaper</h2>
+              <p>Registrering med BankID på 3 minutter.</p>
+              <a href="https://login.paretosec.com/no/Account/Login">
+                <span>Bli kunde</span>
+                <img src="/images/18.da5e5f018bfadade6a2d841/1701418358246/Vector.svg" alt="" />
+              </a>
+            </div>
+          </div>
         </div>
-        <!--        <div class="company-presentation-container container__mobile" id="companyPresentationContainer">-->
-        <!--          <span>SISTE SELSKAPSPRESENTASJON</span>-->
-        <!--        </div>-->
-        <!--        <div class="news-container container__mobile" id="newsContainerMobile"></div>-->
-        <!--        <div class="about-container container__mobile" id="aboutContainer">-->
-        <!--          <span>Om selskapet/Verdipapiret</span>-->
-        <!--        </div>-->
+        <div class="company-presentation-container container__mobile" id="companyPresentationContainer">
+          <h3>SISTE SELSKAPSPRESENTASJON</h3>
+          <a class="btn-container" href="https://login.paretosec.com/no/Account/Login" target="_blank">
+            <img src="/images/18.da5e5f018bfadade6a2cf56/1701414111777/play-circle.png" alt="play button" />
+            <span>Spill Q3 2023</span>
+          </a>
+          <div class="container-footer">
+            <img src="/images/18.da5e5f018bfadade6a2cfd1/1701414315309/quartr%20logo.png" alt="Qiartr Logo" />
+            <div id="companyPresentationContainerTime"></div>
+          </div>
+        </div>
+        <div class="news-container container__mobile" id="newsContainerMobile"></div>
+        <div class="about-container container__mobile" id="aboutContainer">
+          <h3>Om selskapet/Verdipapiret</h3>
+        </div>
       </div>
 
       <div class="container second-column container__desktop">
@@ -465,7 +559,7 @@
                 target="_new"
                 class="btn btn-primary"
                 style="width: 98%"
-                href="https://online.paretosec.com/trade/trade?isin=NO0010096985&market=18177"
+                href="https://online.paretosec.com/trade/trade?isin={{isin}}&market={{feed}}"
                 >KJØP</a
               >
             </div>
@@ -474,7 +568,7 @@
                 target="_new"
                 class="btn btn-danger"
                 style="width: 98%"
-                href="https://online.paretosec.com/trade/trade?isin=NO0010096985&market=18177"
+                href="https://online.paretosec.com/trade/trade?isin={{isin}}&market={{feed}}"
                 >SELG</a
               >
             </div>
@@ -483,151 +577,21 @@
         <div class="orderbook-container" id="orderbookContainer"></div>
         <div class="history-container" id="historyContainer"></div>
         <div class="about-container" id="aboutContainer">
-          <span>Om selskapet/Verdipapiret</span>
+          <h3>Om selskapet/Verdipapiret</h3>
         </div>
         <div class="company-presentation-container" id="companyPresentationContainer">
-          <span>SISTE SELSKAPSPRESENTASJON</span>
+          <h3>SISTE SELSKAPSPRESENTASJON</h3>
+          <a class="btn-container" href="https://login.paretosec.com/no/Account/Login" target="_blank">
+            <img src="/images/18.da5e5f018bfadade6a2cf56/1701414111777/play-circle.png" alt="play button" />
+            <span>Spill Q3 2023</span>
+          </a>
+          <div class="container-footer">
+            <img src="/images/18.da5e5f018bfadade6a2cfd1/1701414315309/quartr%20logo.png" alt="Qiartr Logo" />
+            <div id="companyPresentationContainerTime"></div>
+          </div>
         </div>
         <div class="news-container" id="newsContainer"></div>
       </div>
     </main>
   </div>
 </section>
-
-<!--<script>-->
-<!--  $(function () {-->
-<!--    $("<table/>").addClass("cell-table cell-table-news-list").appendTo("#analysisWidget");-->
-<!--    $("<thead/>").appendTo("#analysisWidget table");-->
-<!--    $("<tbody/>").appendTo("#analysisWidget table");-->
-<!--    $('<tr><th class="cell-table__txt">Title</th><th class="cell-table__num">Date</th></tr>').appendTo(-->
-<!--      "#analysisWidget table thead"-->
-<!--    );-->
-
-<!--    $.getJSON(-->
-<!--      "https://online.paretosec.com/ResearchService/reports/companyresearch/NO0010096985/headlines",-->
-<!--      function (data) {-->
-<!--        var i = 0;-->
-<!--        jQuery.each(data, function () {-->
-<!--          i++;-->
-<!--          if (i <= 5) {-->
-<!--            if (i == 1) {-->
-<!--              $(-->
-<!--                '<tr><td class="cell-table__txt  cell-table__txt&#45;&#45;news-heading"><strong data-title="' +-->
-<!--                  this.Title +-->
-<!--                  '" class="anaWidget">' +-->
-<!--                  this.Title +-->
-<!--                  '</strong></td><td class="cell-table__num  cell-table__num&#45;&#45;news-date"><strong>' +-->
-<!--                  this.Published +-->
-<!--                  "</strong></td></tr>"-->
-<!--              ).appendTo("#analysisWidget table tbody");-->
-<!--            } else {-->
-<!--              $(-->
-<!--                '<tr><td class="cell-table__txt  cell-table__txt&#45;&#45;news-heading"><span data-title="' +-->
-<!--                  this.Title +-->
-<!--                  '" class="anaWidget">' +-->
-<!--                  this.Title +-->
-<!--                  '</span></td><td class="cell-table__num  cell-table__num&#45;&#45;news-date">' +-->
-<!--                  this.Published +-->
-<!--                  "</td></tr>"-->
-<!--              ).appendTo("#analysisWidget table tbody");-->
-<!--            }-->
-<!--          }-->
-<!--        });-->
-<!--        if (i == 0) {-->
-<!--          $("#analysisWidgetContainer").hide();-->
-<!--        }-->
-<!--      }-->
-<!--    )-->
-<!--      .done(function () {})-->
-<!--      .fail(function (data) {-->
-<!--        console.log("error");-->
-<!--        console.dir(data);-->
-<!--      });-->
-
-<!--    $.getJSON("https://www.paretosec.no/Default.aspx?ID=152&q=Equinor", function (data) {-->
-<!--      var i = 0;-->
-<!--      jQuery.each(data.dataitems, function () {-->
-<!--        if (this.Id) {-->
-<!--          i++;-->
-<!--          $(-->
-<!--            '<div class="col-xs-12 col-sm-6 col-md-4 news"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"><img src="/admin/public/getimage.ashx?Image=' +-->
-<!--              this.Bilde +-->
-<!--              '&amp;Width=390&amp;Height=250&amp;Crop3&amp;Compression=85" class="img-responsive" alt=""></a><div class="newstext"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"><h2>' +-->
-<!--              this.Tittel +-->
-<!--              '</h2><p class="textwrap">' +-->
-<!--              this.Ingress +-->
-<!--              '</p></a><div class="category"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"></a><a href="/' +-->
-<!--              this.Kategori +-->
-<!--              '" class="avis hidden-print"><em>' +-->
-<!--              this.Kategori +-->
-<!--              '</em></a><div class="newsdate">' +-->
-<!--              this.Dato +-->
-<!--              " " +-->
-<!--              this.Forfatter +-->
-<!--              "</div></div></div></div>"-->
-<!--          ).prependTo("#latestTickerNews");-->
-<!--        }-->
-<!--        if (i == 0) {-->
-<!--          $("#latestTickerNewsContainer").hide();-->
-<!--        }-->
-<!--      });-->
-<!--    })-->
-<!--      .done(function () {})-->
-<!--      .fail(function (data) {-->
-<!--        console.log("error");-->
-<!--        console.dir(data);-->
-<!--      });-->
-
-<!--    $.getJSON("https://www.paretosec.no/Default.aspx?ID=153&q=Equinor", function (data) {-->
-<!--      var i = 0;-->
-<!--      jQuery.each(data.dataitems, function () {-->
-<!--        if (this.Id) {-->
-<!--          $(-->
-<!--            '<div class="col-xs-12 col-sm-6 col-md-4 news"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"><img src="/admin/public/getimage.ashx?Image=' +-->
-<!--              this.Bilde +-->
-<!--              '&amp;Width=390&amp;Height=250&amp;Crop3&amp;Compression=85" class="img-responsive" alt=""></a><div class="newstext"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"><h2>' +-->
-<!--              this.Tittel +-->
-<!--              '</h2><p class="textwrap">' +-->
-<!--              this.Ingress +-->
-<!--              '</p></a><div class="category"><a href="/visning?itemId=Aktuelt:' +-->
-<!--              this.Id +-->
-<!--              '"></a><a href="/' +-->
-<!--              this.Kategori +-->
-<!--              '" class="avis hidden-print"><em>' +-->
-<!--              this.Kategori +-->
-<!--              '</em></a><div class="newsdate">' +-->
-<!--              this.Dato +-->
-<!--              " " +-->
-<!--              this.Forfatter +-->
-<!--              "</div></div></div></div>"-->
-<!--          ).prependTo("#latestNews");-->
-<!--        }-->
-<!--      });-->
-<!--    })-->
-<!--      .done(function () {})-->
-<!--      .fail(function (data) {-->
-<!--        console.log("error");-->
-<!--        console.dir(data);-->
-<!--      });-->
-
-<!--    $("#analysisWidget").on("click", ".anaWidget", function () {-->
-<!--      var t = $(this).attr("data-title");-->
-
-<!--      $("#analyse h1").text(t);-->
-<!--      $("#paretoCategory").val(t);-->
-<!--      //$('#paretoHeadline').val(p);-->
-<!--      $(".modalWindow").hide();-->
-<!--      $("#myModal").modal("show");-->
-<!--    });-->
-<!--  });-->
-<!--</script>-->
