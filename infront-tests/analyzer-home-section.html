@@ -1,0 +1,174 @@
+<script type="text/javascript">
+  let analyze_infrontSession = {};
+  let analyze_infrontUI = null;
+
+  let analyze_news57research = null;
+  //let analyze_news57researchreader = null;
+
+  function convertDateFormat(inputDate) {
+    // Split the input date into day, month, and year
+    const [day, month, year] = inputDate.split(".");
+    // Define an array of Norwegian month names
+    const norwegianMonths = [
+      "januar",
+      "februar",
+      "mars",
+      "april",
+      "mai",
+      "juni",
+      "juli",
+      "august",
+      "september",
+      "oktober",
+      "november",
+      "desember",
+    ];
+    // Get the Norwegian month name based on the month number
+    const norwegianMonth = norwegianMonths[parseInt(month) - 1];
+    // Construct the output date in the desired format
+    return `${day} ${norwegianMonth} 20${year}`;
+  }
+
+  (function ($) {
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = data.token;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          analyze_infrontUI = new Infront.UI(opts);
+          analyze_infrontUI.registerEventObserver("onReady", analyze_infrontReady);
+          analyze_infrontUI.init();
+          // infrontSDK = new InfrontSDK.SDK({
+          //   signedToken: data.token,
+          //   onReady: infrontSDKReady,
+          // });
+        }
+      });
+    // ------ END custom data formatter
+  })(jQuery);
+
+  function analyze_infrontReady(event) {
+    // let d = new Date();
+    // d.setMonth(d.getMonth() - 1);
+
+    /*
+     *Item type   : news
+     *Report type : <!--@Item.Rapporttype-->
+     *Paragraph   : Analyser
+     */
+    let news57nlOpts = new Infront.NewsListWidgetOptions();
+    news57nlOpts.maxItems = 5;
+    news57nlOpts.pageItems = 5;
+    news57nlOpts.paging = false;
+    news57nlOpts.useLightbox = false;
+    news57nlOpts.feeds = [1433];
+    // news57nlOpts.columns = ["TIME", "HEADLINE"];
+    news57nlOpts.columns = ["TIME", "HEADLINE"];
+    news57nlOpts.onNewsItemSelected = function () {
+      window.open("https://online.paretosec.com/Research", "_blank");
+    };
+    // news57nlOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
+    // news57nlOpts.navButtonClicked = function () {
+    // window.location.assign("/Market/News/");
+    // };
+    news57nlOpts.enableSourceSelector = false;
+    news57nlOpts.widgetTitle = "";
+    analyze_news57research = analyze_infrontUI.newsListWidget("#news57research", news57nlOpts);
+    // setTimeout(function () {
+    //   analyze_news57researchreader = analyze_infrontUI.newsReaderWidget("#news57researchreader");
+    //   analyze_news57research.link(analyze_news57researchreader);
+    // }, 1000);
+  }
+</script>
+
+<style>
+  #news57research .cell-table--news-list thead,
+  #news57research .cell-h4 {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  #news57research table tr {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.88rem;
+    cursor: pointer;
+    gap: 10px;
+  }
+  #news57research .cell-table__txt--news-date {
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.675rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+  #news57research .cell-table__txt--news-heading {
+    color: #fff;
+    font-family: "Merriweather", serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+  }
+  #news57research .arrow-icon {
+    color: var(--Warm-magenta, #de0080);
+    font-family: "Merriweather", sans-serif;
+    font-size: 1.3125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+  }
+  @media screen and (min-width: 768px) {
+    #news57research .cell-table__txt--news-date {
+      font-size: 0.875rem;
+    }
+    #news57research .cell-table__txt--news-heading {
+      font-size: 1.3125rem;
+      line-height: 140%; /* 1.8375rem */
+    }
+  }
+  .newsResearchCta {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 1.88rem;
+  }
+  .newsResearchCta a {
+    color: var(--White, #fff);
+    font-family: inherit;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.625rem; /* 144.444% */
+    text-decoration: none;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .newsResearchCta .icon {
+    margin-right: 8px;
+  }
+</style>
+
+<!-- content holder for analyzer -->
+<div id="news57research"></div>
+
+<div class="newsResearchCta">
+  <a href="https://online.paretosec.com/Research">
+    <span class="icon">
+      <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M13.7459 0L12.4672 1.2973L16.1434 5.18919H0V6.81081H16.1434L12.4672 10.7027L13.7459 12L18.3811 7.2973L19.5 6L18.3811 4.86486L13.7459 0Z"
+          fill="#DE0080"
+        />
+      </svg>
+    </span>
+    Se mer aksjeanalyser
+  </a>
+</div>
+<!-- // content holder for analyzer -->
