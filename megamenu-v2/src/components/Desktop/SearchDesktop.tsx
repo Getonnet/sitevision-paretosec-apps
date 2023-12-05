@@ -1,6 +1,12 @@
-import React from "react";
+import requester from "@sitevision/api/client/requester";
+import React, { useEffect, useState } from "react";
+import { getSearchResult } from "../../actions/getSearchResult";
 
 const SearchDesktop = () => {
+  const [ query, setQuery ] = useState<string>('');
+
+  getSearchResult(query);
+  
   return (
     <form
       method="get"
@@ -23,6 +29,7 @@ const SearchDesktop = () => {
         placeholder="Søk"
         id="search"
         required
+        onChange={(e) => setQuery(e.target.value)}
       />
     </form>
   );
