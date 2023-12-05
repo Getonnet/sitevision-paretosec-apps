@@ -5,7 +5,6 @@ type ResultProps = {
 }
 
 const Result : React.FC<ResultProps> = ({name}) => {
-    const hostname = window.location.origin;
     const encodedString = encodeURIComponent(name).replace(/%20/g, '+');
     
     
@@ -15,7 +14,7 @@ const Result : React.FC<ResultProps> = ({name}) => {
 
     return (
         <li>
-            <a href={`${hostname}/ovrigt/sok?query=${encodedString}`}>
+            <a href={`/ovrigt/sok?query=${encodedString}`}>
                 {name}
             </a>
         </li>

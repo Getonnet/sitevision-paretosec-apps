@@ -1,17 +1,20 @@
 import requester from "@sitevision/api/client/requester";
 
-export const getSearchResult = (term: string) => {
-    const API_URL_PREFIX = window.location.origin;
-    const SEARCH_URL = `/4.49015fe118adb9b38ad15b6a/12.17e5c29718bfae2e60149c51.json?state=autoComplete&term={${term}`;
-    
-    requester
+export const getSearchResult = async (term: string) => {
+    const SEARCH_URL = `/2.54e1ff71188bd8464773cc67/12.4ca3d05b18bd10771975ec.json?state=autoComplete&term=${term}`;
+
+    let result: any = []
+
+    await requester
         .doGet({
-            url: API_URL_PREFIX + SEARCH_URL,
+            url:  SEARCH_URL,
         })
         .then(response => {
-            console.log(response);
+            result = response;
         })
         .catch(error => {
-            console.log(error)
+            result = ['Ingen resultater.'];
         });
+
+    return result
 } 
