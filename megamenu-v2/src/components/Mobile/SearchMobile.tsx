@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../../../header-static/search_results.module.scss";
-import requester from "@sitevision/api/client/requester";
+import { getSearchResult } from "../../actions/getSearchResult";
+import { getTickers } from "../../actions/getTickers";
+import { filterTickers } from "../../utils/filterTickers";
 import Results from "../SearchResult/results";
 
 interface SearchMobileProps {
@@ -8,29 +10,24 @@ interface SearchMobileProps {
 }
 
 const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
-  const [result, setResult] = useState<string[]>([]);
-  const [term, setTerm] = useState<string>("");
+  const [ query, setQuery ] = useState<string>('');
+  const [ results, setResults ] = useState<any>({});
 
   useEffect(() => {
-    const getResult = (term: string) => {
-      requester
-        .doGet({
-          url: `${window.location.origin}/2.54e1ff71188bd8464773cc67/12.4ca3d05b18bd10771975ec.json?state=autoComplete&term=${term}`,
-        })
-        .then((response: any) => {
-          setResult(response);
-        })
-        .catch((error: any) => {
-          if (term === "") {
-            setResult([]);
-          } else {
-            setResult(["Ingen resultater."]);
-          }
-        });
-    };
+    const fetchResults = async () => {
+      if(query !== '') {
+        const tickers = await getTickers();
 
-    getResult(term);
-  }, [term]);
+        const result = {
+          queryResult: await getSearchResult(query),
+          queryTickers: filterTickers(tickers, query),
+        }
+  
+        setResults(result);
+      }
+    } 
+    fetchResults();
+  }, [query]);
 
   return (
     <form
@@ -52,7 +49,7 @@ const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
           id="search-mob"
           required
           autoComplete="off"
-          onInput={(e: any) => setTerm(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <input
           type="submit"
@@ -61,7 +58,9 @@ const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
           style={{ fontSize: "0" }}
         />
       </div>
-      {result.length !== 0 && <Results results={result} query={term} />}
+      {
+        query !== '' && <Results results={results} query={query}/>
+      }
     </form>
   );
 };
