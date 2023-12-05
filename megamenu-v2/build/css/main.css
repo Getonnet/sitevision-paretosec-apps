@@ -7,7 +7,7 @@
   padding: 0 10px;
   margin: 0;
   top: 49px;
-  width: 80%;
+  width: 100%;
   max-width: 300px;
   box-shadow: 4px 4px 22px 3px rgba(0, 0, 0, 0.1);
 }
@@ -33,5 +33,10 @@
 @media (max-width: 1279px) {
   .bed6hkslPQdwyer2y9IQ {
     top: 70px;
+  }
+}
+@media (max-width: 686px) {
+  .bed6hkslPQdwyer2y9IQ {
+    max-width: calc(100% - 40px);
   }
 }

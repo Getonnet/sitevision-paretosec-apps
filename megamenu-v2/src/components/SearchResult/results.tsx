@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Result from './result'
 import styles from '../../../../header-static/search_results.module.scss'
-import { getTickers } from '../../actions/getTickers';
-import { filterTickers } from '../../utils/filterTickers';
 import Ticker from './ticker';
 
 interface ResultsProps {
@@ -11,12 +9,9 @@ interface ResultsProps {
   }
 
 const Results : React.FC<ResultsProps> = ({results, query}) => {
-    const API_URL_PREFIX = window.location.origin;
-    const QUERY_URL = "/ovrigt/sok?query=";
+    const {queryResult, queryTickers} = results;
 
-    const tickers = getTickers() || [];
-    const tickersProps = tickers.map((ticker: any) => ticker.properties);
-    const tickerQuery = query !== '' ? filterTickers(tickersProps, query) : [];
+    const QUERY_URL = "/ovrigt/sok?query=";
 
     const searchIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <g clip-path="url(#clip0_1336_1600)">
@@ -30,8 +25,8 @@ const Results : React.FC<ResultsProps> = ({results, query}) => {
     </svg>;
 
     const resultStyling = {
-        borderTop: tickerQuery.length !== 0 ? '1px solid #00325533' : '',
-        borderBottom: results[0] !== 'Ingen resultater.' ? '1px solid #00325533' : '',
+        borderTop: queryTickers && queryTickers.length !== 0 ? '1px solid #00325533' : '',
+        borderBottom: queryResult && queryResult[0] !== 'Ingen resultater.' ? '1px solid #00325533' : '',
     }
 
     const seeAllStyling = {
@@ -42,27 +37,27 @@ const Results : React.FC<ResultsProps> = ({results, query}) => {
 
     return (
         <div className={styles.search_result__container}>
-            <ul className='tickers__result' style={{display: tickerQuery.length !== 0 ? 'block' : 'none'}}>
+            <ul className='tickers__result' style={{display: queryTickers && queryTickers.length !== 0 ? 'block' : 'none'}}>
                 {
-                    tickerQuery.length !== 0 &&
-                    tickerQuery.map((ticker: any) => {
-                        return <Ticker name={ticker.displayName} country={ticker.countryCode} URI={ticker.URI}/>
+                    queryTickers && queryTickers.length !== 0 &&
+                    queryTickers.map((ticker: any) => {
+                        return <Ticker name={ticker.name} country={ticker.properties.countryCode} URI={ticker.properties.URI}/>
                     })
                 }
             </ul>
             <ul className='query__result' style={resultStyling}>
                 {
-                    results.length !== 0 &&
-                    results.map((result : any) => {
+                    queryResult && queryResult.length !== 0 &&
+                    queryResult.map((result : any) => {
                         return <Result name={result} />
                     })
                 }
             </ul>
-            <ul className='show-result' style={{display: results[0] !== 'Ingen resultater.' ? 'flex' : 'none'}}>
+            <ul className='show-result' style={{display: queryResult && queryResult[0] !== 'Ingen resultater.' ? 'flex' : 'none'}}>
                 {
-                    results[0] !== 'Ingen resultater.' &&
+                    queryResult && queryResult[0] !== 'Ingen resultater.' &&
                     <li>
-                        <a className='see-all-result' href={API_URL_PREFIX + QUERY_URL + query} style={seeAllStyling}>
+                        <a className='see-all-result' href={QUERY_URL + query} style={seeAllStyling}>
                             {searchIcon}
                             <span>Se fullstendig søkeresultat</span>
                         </a>
