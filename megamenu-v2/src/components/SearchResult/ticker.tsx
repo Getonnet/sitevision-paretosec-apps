@@ -1,36 +1,39 @@
 import React from "react";
-import * as CountryFlags from 'country-flag-icons/react/3x2';
+import * as CountryFlags from "country-flag-icons/react/3x2";
+import styles from "../App/App.scss";
 
 interface CountryFlagProps {
-    countryCode: string;
+  countryCode: string;
 }
-type CountryIcons = typeof CountryFlags & { [key: string]: React.ComponentType<any> };
+type CountryIcons = typeof CountryFlags & {
+  [key: string]: React.ComponentType<any>;
+};
 
-const Ticker = ({name, country, URI} : any) => {
-    const CountryFlag = ({countryCode} : CountryFlagProps) => {
-        const CountryIcon = (CountryFlags as CountryIcons)[countryCode];
+const Ticker = ({ name, country, URI }: any) => {
+  const CountryFlag = ({ countryCode }: CountryFlagProps) => {
+    const CountryIcon = (CountryFlags as CountryIcons)[countryCode];
 
-        if (!CountryIcon) {
-            return null;
-        }
-    
-        return <CountryIcon />;
+    if (!CountryIcon) {
+      return null;
     }
 
-    const tickerStyling = {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '7px'
-    }
+    return <CountryIcon />;
+  };
 
-    return (
-        <li>
-            <a className="ticker-item" href={URI} style={tickerStyling}>
-                <CountryFlag countryCode={country} />
-                <div>{name}</div>
-            </a>
-        </li>
-    )
-}
+  const tickerStyling = {
+    display: "flex",
+    alignItems: "center",
+    gap: "7px",
+  };
+
+  return (
+    <li>
+      <a className="ticker-item" href={URI} style={tickerStyling}>
+        <CountryFlag countryCode={country} />
+        <div className={styles.tickerItemText}>{name}</div>
+      </a>
+    </li>
+  );
+};
 
 export default Ticker;
