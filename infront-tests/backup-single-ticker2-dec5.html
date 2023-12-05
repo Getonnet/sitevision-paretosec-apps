@@ -109,7 +109,7 @@
         $(".about-container").append("<p>" + data.tekst + "</p>");
 
         // fetch in-front data
-        fetchTokenAndData();
+        fetckTokenAndData();
 
         // update dom links
         $(".companyTabs a, .action-btn a").each(function () {
@@ -122,7 +122,7 @@
         });
       });
 
-    function fetchTokenAndData() {
+    function fetckTokenAndData() {
       fetch("/rest-api/Infront%20token/token")
         .then((response) => response.json())
         .then((data) => {
@@ -156,8 +156,7 @@
   function st_infrontReady(event) {
     console.log("running SDK ready -----------");
     console.log(tickerData);
-    const { tickerCode } = tickerData;
-    let feed = Number(tickerData.feed);
+    const { feed, tickerCode } = tickerData;
 
     var optsYar = new Infront.OrderbookWidgetOptions();
     optsYar.instrument = {
@@ -178,7 +177,7 @@
     var instrument = new Infront.Instrument(feed, tickerCode);
     var opts = new Infront.ChartWidgetOptions2();
     /*opts.type = Infront.ChartWidgetConstants.kInteractive;
-                      opts.periodSelectorPosition = Infront.ChartWidgetConstants.kPeriodSelectorPosRight;*/
+              opts.periodSelectorPosition = Infront.ChartWidgetConstants.kPeriodSelectorPosRight;*/
     opts.defaultPeriod = "1D";
     opts.chartTypeID = "area";
     opts.instruments = instrument;
@@ -342,35 +341,34 @@
     // SEARCH
     // ------------------------------------------------
     /*
-                  var sbOpts = new Infront.SearchBoxOptions();
-                  sbOpts.placeholder = "Search";
-                  sbOpts.searchThreshold = 2; //How many letters must you type before starting the search.
-                  sbOpts.feeds = [feed, 17921]; //Search Oslo and Stockholm
-                  sbOpts.fields = ["ticker", "feed_code", "isin"]; //Available feeds: feed, ticker, isin, currency, instrument_type, instrument_subtype, full_name, feed_code
-                  sbOpts.enableMultiSelect = false;
-                  sbOpts.instrumentSelected = function (instrument) {
-                    //Event fires when instrument is selected from the search-result dropdown menu
-                    console.log(instrument.ticker);
-                  };
-                  sbOpts.emptyResultSelected = function () {
-                    console.log("Empty");
-                  };
-                  sbOpts.showAfterSelect = function (instrument) {
-                    //Can also be a function for maximum flexibility
-                    return instrument.full_name + " (" + instrument.currency + ")";
-                  };
-                  sbOpts.filter = function (resultObject) {
-                    //return true or false to show or hide result from the search-results
-                    return resultObject.instrument.instrument_type == "STOCK";
-                  };
-        
-                  st_searchWidget = st_infrontUI.searchWidget("#search", sbOpts);*/
+          var sbOpts = new Infront.SearchBoxOptions();
+          sbOpts.placeholder = "Search";
+          sbOpts.searchThreshold = 2; //How many letters must you type before starting the search.
+          sbOpts.feeds = [feed, 17921]; //Search Oslo and Stockholm
+          sbOpts.fields = ["ticker", "feed_code", "isin"]; //Available feeds: feed, ticker, isin, currency, instrument_type, instrument_subtype, full_name, feed_code
+          sbOpts.enableMultiSelect = false;
+          sbOpts.instrumentSelected = function (instrument) {
+            //Event fires when instrument is selected from the search-result dropdown menu
+            console.log(instrument.ticker);
+          };
+          sbOpts.emptyResultSelected = function () {
+            console.log("Empty");
+          };
+          sbOpts.showAfterSelect = function (instrument) {
+            //Can also be a function for maximum flexibility
+            return instrument.full_name + " (" + instrument.currency + ")";
+          };
+          sbOpts.filter = function (resultObject) {
+            //return true or false to show or hide result from the search-results
+            return resultObject.instrument.instrument_type == "STOCK";
+          };
+
+          st_searchWidget = st_infrontUI.searchWidget("#search", sbOpts);*/
   }
 
   //get current date
   function getCurrentDate() {
     const dateContainer = document.querySelector("#companyPresentationContainerTime");
-    const dateContainerMobile = document.querySelector("#companyPresentationContainerTimeMobile");
     const currentDate = new Date();
 
     const day = String(currentDate.getDate()).padStart(2, "0");
@@ -383,7 +381,6 @@
     textElement.innerText = formattedDate;
 
     dateContainer.innerText = formattedDate;
-    dateContainerMobile.innerText = formattedDate;
   }
 
   window.addEventListener("DOMContentLoaded", getCurrentDate);
@@ -481,7 +478,6 @@
       </div>
     </div>
   </div>
-
   <div class="container-full">
     <main>
       <div class="container first-column">
@@ -522,7 +518,6 @@
             </div>
           </div>
         </div>
-
         <div class="last-analysis-container" id="lastAnalysisContainer">
           <h3>Siste analyse</h3>
           <div class="analysis-content">
@@ -537,8 +532,7 @@
             </div>
           </div>
         </div>
-
-        <div class="company-presentation-container container__mobile" id="companyPresentationContainerMobile">
+        <div class="company-presentation-container container__mobile" id="companyPresentationContainer">
           <h3>SISTE SELSKAPSPRESENTASJON</h3>
           <a class="btn-container" href="https://login.paretosec.com/no/Account/Login" target="_blank">
             <img src="/images/18.da5e5f018bfadade6a2cf56/1701414111777/play-circle.png" alt="play button" />
@@ -546,12 +540,10 @@
           </a>
           <div class="container-footer">
             <img src="/images/18.da5e5f018bfadade6a2cfd1/1701414315309/quartr%20logo.png" alt="Qiartr Logo" />
-            <div id="companyPresentationContainerTimeMobile"></div>
+            <div id="companyPresentationContainerTime"></div>
           </div>
         </div>
-
         <div class="news-container container__mobile" id="newsContainerMobile"></div>
-
         <div class="about-container container__mobile" id="aboutContainer">
           <h3>Om selskapet/Verdipapiret</h3>
         </div>
@@ -582,28 +574,22 @@
             </div>
           </div>
         </div>
-
         <div class="orderbook-container" id="orderbookContainer"></div>
         <div class="history-container" id="historyContainer"></div>
-
-        <div class="about-container" id="aboutContainerDesktop">
+        <div class="about-container" id="aboutContainer">
           <h3>Om selskapet/Verdipapiret</h3>
         </div>
-
         <div class="company-presentation-container" id="companyPresentationContainer">
           <h3>SISTE SELSKAPSPRESENTASJON</h3>
-
           <a class="btn-container" href="https://login.paretosec.com/no/Account/Login" target="_blank">
             <img src="/images/18.da5e5f018bfadade6a2cf56/1701414111777/play-circle.png" alt="play button" />
             <span>Spill Q3 2023</span>
           </a>
-
           <div class="container-footer">
             <img src="/images/18.da5e5f018bfadade6a2cfd1/1701414315309/quartr%20logo.png" alt="Qiartr Logo" />
             <div id="companyPresentationContainerTime"></div>
           </div>
         </div>
-
         <div class="news-container" id="newsContainer"></div>
       </div>
     </main>
