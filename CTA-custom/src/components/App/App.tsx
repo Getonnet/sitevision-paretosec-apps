@@ -59,7 +59,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           }}
         >
           <div
-            className="sv-layout pareto-cta-image sv-skip-spacer sv-column-7 sv-template-layout c27"
+            className="sv-layout pareto-cta-image sv-skip-spacer sv-column-7 sv-template-layout"
             style={{
               backgroundImage: `url(${
                 bgImg ||
