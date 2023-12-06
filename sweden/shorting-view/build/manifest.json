@@ -1,0 +1,17 @@
+{
+  "id": "shorting-view",
+  "version": "0.0.1",
+  "name": {
+    "en": "Shorting View"
+  },
+  "author": "GetOnNet",
+  "description": {
+    "en": "Shorting View"
+  },
+  "helpUrl": "https://getonnet.no/support",
+  "type": "WebApp",
+  "bundled": true,
+  "requiredLibs": {
+    "react": "17.0.2"
+  }
+}

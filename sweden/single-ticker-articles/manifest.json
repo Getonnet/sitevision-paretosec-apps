@@ -1,0 +1,17 @@
+{
+  "id": "single-ticker-articles",
+  "version": "0.0.1",
+  "name": {
+    "en": "Articles for single ticker page"
+  },
+  "author": "GetOnNet",
+  "description": {
+    "en": "Articles for single ticker page"
+  },
+  "helpUrl": "https://getonnet.no/support",
+  "type": "WebApp",
+  "bundled": true,
+  "requiredLibs": {
+    "react": "17.0.2"
+  }
+}

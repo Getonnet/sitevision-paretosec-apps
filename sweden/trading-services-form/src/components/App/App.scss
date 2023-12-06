@@ -1,0 +1,16 @@
+.wrapper {
+  label {
+    display: none;
+  }
+
+  .sv-defaultFormTheme select {
+    padding: 20px 0;
+    height: max-content;
+    height: auto;
+    min-height: auto;
+  }
+
+  .sv-defaultFormTheme input[type="submit"]:hover {
+    background-color: #b8006b;
+  }
+}

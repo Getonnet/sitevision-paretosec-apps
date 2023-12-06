@@ -1,0 +1,40 @@
+// sta = single ticker article
+.container {
+  //  background-color: var(--env-block-background-color);
+  //  border: 1px solid var(--env-block-border-color);
+}
+
+.title {
+  color: var(--Main-blue, #003255);
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 120%; /* 2.4rem */
+}
+
+.bold {
+  color: var(--Main-blue, #003255);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.sta_grid {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.date {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+// article styles
+.article {
+  background-color: white;
+}
+.article_content {
+  padding: 27px 21px;
+}
