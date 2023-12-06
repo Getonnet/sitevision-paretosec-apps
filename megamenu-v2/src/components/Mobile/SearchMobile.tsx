@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../../header-static/search_results.module.scss";
+import styles from "../search_results.module.scss";
 import { getSearchResult } from "../../actions/getSearchResult";
 import { getTickers } from "../../actions/getTickers";
 import { filterTickers } from "../../utils/filterTickers";
@@ -10,22 +10,22 @@ interface SearchMobileProps {
 }
 
 const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
-  const [ query, setQuery ] = useState<string>('');
-  const [ results, setResults ] = useState<any>({});
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<any>({});
 
   useEffect(() => {
     const fetchResults = async () => {
-      if(query !== '') {
+      if (query !== "") {
         const tickers = await getTickers();
 
         const result = {
           queryResult: await getSearchResult(query),
           queryTickers: filterTickers(tickers, query),
-        }
-  
+        };
+
         setResults(result);
       }
-    } 
+    };
     fetchResults();
   }, [query]);
 
@@ -58,9 +58,7 @@ const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
           style={{ fontSize: "0" }}
         />
       </div>
-      {
-        query !== '' && <Results results={results} query={query}/>
-      }
+      {query !== "" && <Results results={results} query={query} />}
     </form>
   );
 };

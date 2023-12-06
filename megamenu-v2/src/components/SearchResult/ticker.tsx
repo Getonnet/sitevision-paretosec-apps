@@ -1,6 +1,6 @@
 import React from "react";
 import * as CountryFlags from "country-flag-icons/react/3x2";
-import styles from "../App/App.scss";
+import styles from "../search_results.module.scss";
 
 interface CountryFlagProps {
   countryCode: string;

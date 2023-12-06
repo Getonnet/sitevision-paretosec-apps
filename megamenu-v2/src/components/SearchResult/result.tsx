@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../App/App.scss";
+import styles from "../search_results.module.scss";
 
 type ResultProps = {
   name: string;
