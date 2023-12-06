@@ -29,32 +29,32 @@ const App: React.FunctionComponent<AppProperties> = ({
   return (
     <div className={styles.container}>
       {FacebookIconLink ? (
-        <a href={FacebookIconLink} className={styles.icon}>
+        <a href={FacebookIconLink} target="_blank" className={styles.icon}>
           <FacebookIcon />
         </a>
       ) : null}
       {TwitterIconLink ? (
-        <a href={TwitterIconLink} className={styles.icon}>
+        <a href={TwitterIconLink} target="_blank" className={styles.icon}>
           <TwitterIcon />
         </a>
       ) : null}
       {LinkedinIconLink ? (
-        <a href={LinkedinIconLink} className={styles.icon}>
+        <a href={LinkedinIconLink} target="_blank" className={styles.icon}>
           <LinkedinIcon />
         </a>
       ) : null}
       {ThreadsIconLink ? (
-        <a href={ThreadsIconLink} className={styles.icon}>
+        <a href={ThreadsIconLink} target="_blank" className={styles.icon}>
           <ThreadsIcon />
         </a>
       ) : null}
       {InstagramIconLink ? (
-        <a href={InstagramIconLink} className={styles.icon}>
+        <a href={InstagramIconLink} target="_blank" className={styles.icon}>
           <InstagramIcon />
         </a>
       ) : null}
       {YoutubeIconLink ? (
-        <a href={YoutubeIconLink} className={styles.icon}>
+        <a href={YoutubeIconLink} target="_blank" className={styles.icon}>
           <YoutubeIcon />
         </a>
       ) : null}
