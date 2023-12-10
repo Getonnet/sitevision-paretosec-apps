@@ -11,7 +11,7 @@ const Result: React.FC<ResultProps> = ({ name }) => {
   if (name === "Ingen resultater.") {
     return (
       <li>
-        <a style={{ pointerEvents: "none" }} href="#">
+        <a style={{ pointerEvents: "none" }} href="#" aria-label={name}>
           {name}
         </a>
       </li>
@@ -23,6 +23,7 @@ const Result: React.FC<ResultProps> = ({ name }) => {
       <a
         href={`/ovrigt/sok?query=${encodedString}`}
         className={styles.resultLink}
+        aria-label={name}
       >
         {name}
       </a>

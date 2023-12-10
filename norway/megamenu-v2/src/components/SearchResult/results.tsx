@@ -71,6 +71,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
               className="see-all-result"
               href={QUERY_URL + query}
               style={seeAllStyling}
+              aria-label="Se fullstendig søkeresultat"
             >
               <SearchIcon />
 

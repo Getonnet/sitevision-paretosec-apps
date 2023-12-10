@@ -19,7 +19,11 @@ const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
         if (item.type !== "sv:link") return;
 
         return item.properties.ggLinkType === "Link" ? (
-          <a href={item.properties.URL} className="mobile-nav-link w-nav-link">
+          <a
+            href={item.properties.URL}
+            className="mobile-nav-link w-nav-link"
+            aria-label={item.name}
+          >
             {item.name}
           </a>
         ) : (
@@ -39,6 +43,7 @@ const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
                   <a
                     href={di.properties.URL}
                     className="navigation-link-block-mob w-inline-block"
+                    aria-label={di.name}
                   >
                     <div className="nav-dd-link">{di.name}</div>
                   </a>
@@ -55,6 +60,7 @@ const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
                           <a
                             href={linkItem.properties.URL}
                             className="navigation-link-block-mob w-inline-block"
+                            aria-label={linkItem.name}
                           >
                             <div className="nav-dd-link">{linkItem.name}</div>
                           </a>

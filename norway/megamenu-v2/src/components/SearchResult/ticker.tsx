@@ -28,7 +28,12 @@ const Ticker = ({ name, country, URI }: any) => {
 
   return (
     <li>
-      <a className="ticker-item" href={URI} style={tickerStyling}>
+      <a
+        className="ticker-item"
+        href={URI}
+        style={tickerStyling}
+        aria-label={name}
+      >
         <CountryFlag countryCode={country} />
         <div className={styles.tickerItemText}>{name}</div>
       </a>

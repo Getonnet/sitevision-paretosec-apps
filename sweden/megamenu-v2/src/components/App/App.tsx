@@ -191,7 +191,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           data-duration={400}
           data-easing="ease-out"
           data-easing2="ease-out"
-          role="banner"
           className="navigation-mob w-nav"
         >
           <div className="navigation-container-mob">

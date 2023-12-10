@@ -5,27 +5,27 @@ import { filterTickers } from "../../utils/filterTickers";
 import Results from "../SearchResult/results";
 
 const SearchDesktop = () => {
-  const [ query, setQuery ] = useState<string>('');
-  const [ results, setResults ] = useState<any>({});
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<any>({});
 
   useEffect(() => {
     const fetchResults = async () => {
-      if(query !== '') {
+      if (query !== "") {
         const tickers = await getTickers();
 
         const result = {
           queryResult: await getSearchResult(query),
           queryTickers: filterTickers(tickers, query),
-        }
-  
+        };
+
         setResults(result);
       }
-    } 
+    };
     fetchResults();
   }, [query]);
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{ position: "relative" }}>
       <form
         method="get"
         action="/sok.4.1ec403e918a983e77b927259.html"
@@ -36,7 +36,11 @@ const SearchDesktop = () => {
           defaultValue="SearchDesktop"
           className="search-button w-button"
         />
-        <label htmlFor="search" className="field-label">
+        <label
+          htmlFor="search"
+          className="field-label"
+          style={{ display: "none" }}
+        >
           SearchDesktop
         </label>
         <input
@@ -51,11 +55,8 @@ const SearchDesktop = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </form>
-      {
-        query !== '' && <Results results={results} query={query}/>
-      }
+      {query !== "" && <Results results={results} query={query} />}
     </div>
-    
   );
 };
 

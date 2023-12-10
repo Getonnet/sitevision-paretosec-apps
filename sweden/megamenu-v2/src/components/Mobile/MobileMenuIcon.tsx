@@ -13,6 +13,7 @@ const MobileMenuIcon = () => {
           preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
           role="img"
+          aria-label="Mobile menu toggle icon"
         >
           <path d="M0 1.2041H30" stroke="currentColor" strokeWidth={2} />
           <path d="M0 8.7041H30" stroke="currentColor" strokeWidth={2} />

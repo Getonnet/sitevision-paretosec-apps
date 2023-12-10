@@ -3,7 +3,11 @@ import type { ILink } from "../App/types";
 
 const MegaMenuFirstLinkMobile = ({ link }: { link: ILink }) => {
   return (
-    <a href={link.properties.URL} className="navigation-column-title-mob">
+    <a
+      href={link.properties.URL}
+      className="navigation-column-title-mob"
+      aria-label={"Aksjehandel på nett"}
+    >
       <div className="nav-title">Aksjehandel på nett</div>
       <div className="icon-embed-custom-4 w-embed">
         <svg
@@ -15,6 +19,7 @@ const MegaMenuFirstLinkMobile = ({ link }: { link: ILink }) => {
           preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
           role="img"
+          aria-label="Menu icon"
         >
           <path
             d="M12.1216 0.5L11.0405 1.58108L14.1486 4.82432H0.5V6.17567H14.1486L11.0405 9.41892L12.1216 10.5L16.0405 6.58108L16.9865 5.5L16.0405 4.55405L12.1216 0.5Z"

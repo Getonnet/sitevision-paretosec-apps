@@ -154,7 +154,11 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           <div className="navigation-full">
             <div className="navigation-container">
               <div className="navigation-left">
-                <a href="/" className="brand w-nav-brand">
+                <a
+                  href="/"
+                  className="brand w-nav-brand"
+                  aria-label="Pareto Securities Logo"
+                >
                   <img
                     src={data.desktopLogo}
                     loading="lazy"
@@ -176,7 +180,11 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                   loginLink={data.loginBtnLink}
                 />
 
-                <a href={data.ctaLink} className="button w-button">
+                <a
+                  href={data.ctaLink}
+                  className="button w-button"
+                  aria-label={data.ctaBtnText}
+                >
                   {data.ctaBtnText}
                 </a>
               </div>
@@ -191,7 +199,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           data-duration={400}
           data-easing="ease-out"
           data-easing2="ease-out"
-          role="banner"
           className="navigation-mob w-nav"
         >
           <div className="navigation-container-mob">
@@ -199,6 +206,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               href="/"
               aria-current="page"
               className="brand-2 w-nav-brand w--current"
+              aria-label="Pareto Securities Logo"
             >
               <img
                 src={data.mobileLogo}
