@@ -1,15 +1,29 @@
-.language {
-  text-align: right;
+.sv-editor-menu-visible .lang-switch-wrap {
   display: flex;
+  visibility: visible;
+}
+
+.language {
+  display: none;
+  visibility: hidden;
+  text-align: right;
+  align-items: center;
+  @media screen and (min-width: 1001px) {
+    justify-content: flex-end;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
 
   a {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     display: inline-block;
-    background: #ddd;
-    // border-radius: 9px;
-    // margin-bottom: -5px;
-    // margin-left: 5px;
+    background: transparent;
+
+    svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
 }
 

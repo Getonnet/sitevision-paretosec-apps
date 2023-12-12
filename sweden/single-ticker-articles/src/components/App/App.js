@@ -65,7 +65,7 @@ const App = () => {
   const get20Articles = (tickerId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/3.113c8d5d18b5cf299b63922/nodes`,
+        url: `/rest-api/1/0/3.17e5c29718bfae2e6011823a/nodes`,
         data: {
           properties: [
             "ticker",
@@ -135,7 +135,7 @@ const App = () => {
                     style={{
                       backgroundImage: `url(${
                         images.current[a.id] ||
-                        "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg"
+                        "/images/18.17e5c29718bfae2e60119bd9/1697110984705/valutaveksling-169.Jpg"
                       })`,
                       height: 260,
                       minHeight: 260,
