@@ -39,7 +39,11 @@ const SearchDesktop = () => {
         <label
           htmlFor="search"
           className="field-label"
-          style={{ display: "none" }}
+          style={{
+            display: "none",
+            position: "absolute",
+            visibility: "hidden",
+          }}
         >
           SearchDesktop
         </label>

@@ -8,7 +8,11 @@ const MobileLogin = ({
   loginLink: string;
 }) => {
   return (
-    <a href={loginLink} className="button is-transparent w-inline-block">
+    <a
+      href={loginLink}
+      className="button is-transparent w-inline-block"
+      aria-label={loginText}
+    >
       <div className="icon-embed-custom-2 w-embed">
         <svg
           xmlns="http://www.w3.org/2000/svg"

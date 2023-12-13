@@ -148,7 +148,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
           style={{ backgroundColor: "rgba(255,255,255,0)" }}
           data-easing="ease"
           data-easing2="ease"
-          role="banner"
           className="navigation w-nav"
         >
           <div className="navigation-full">

@@ -1,4 +1,4 @@
-.sv-editor-menu-visible .lang-switch-wrap {
+:global(.sv-editor-menu-visible .lang-switch-wrap) {
   display: flex;
   visibility: visible;
 }

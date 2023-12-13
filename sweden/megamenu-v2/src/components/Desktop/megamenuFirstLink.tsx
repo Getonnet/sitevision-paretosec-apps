@@ -3,7 +3,11 @@ import type { ILink } from "../App/types";
 
 const MegaMenuFirstLink = ({ link }: { link: ILink }) => {
   return (
-    <a href={link.properties.URL} className="navigation-column-title">
+    <a
+      href={link.properties.URL}
+      className="navigation-column-title"
+      aria-label={link.name}
+    >
       <div className="nav-title">{link.name}</div>
       <div className="icon-embed-custom-4 w-embed">
         <svg

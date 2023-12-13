@@ -3,7 +3,11 @@ import type { ILink } from "../App/types";
 
 const MegaMenuFirstLinkMobile = ({ link }: { link: ILink }) => {
   return (
-    <a href={link.properties.URL} className="navigation-column-title-mob">
+    <a
+      href={link.properties.URL}
+      className="navigation-column-title-mob"
+      aria-label="Aksjehandel på nett"
+    >
       <div className="nav-title">Aksjehandel på nett</div>
       <div className="icon-embed-custom-4 w-embed">
         <svg
