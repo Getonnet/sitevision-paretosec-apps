@@ -1,0 +1,14 @@
+{
+  "id": "language-switcher",
+  "version": "0.0.1",
+  "name": {
+    "en": "Language switch"
+  },
+  "author": "GetOnNet As",
+  "description": {
+    "en": "Language switch"
+  },
+  "helpUrl": "https://getonnet.no/support",
+  "type": "WebApp",
+  "bundled": true
+}

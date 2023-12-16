@@ -1,0 +1,52 @@
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].oneOf[2].use[1]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/components/search_results.module.scss ***!
+  \*******************************************************************************************************************************************************************************************************************/
+.WxHuDo7a9oCpQsHJCGZ8 {
+  font-size: 12px;
+}
+
+.kHabydbiU_ChSBoL6fOc:hover,
+.gF1HrIr6eEvo6DPa8XVK:hover {
+  text-decoration: underline;
+}
+
+.h42PjeS_z2WnqphQKdCE {
+  background: white;
+  position: absolute;
+  padding: 0 10px;
+  margin: 0;
+  top: 49px;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 4px 4px 22px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+.h42PjeS_z2WnqphQKdCE ul {
+  padding: 10px 0;
+  margin: 0;
+}
+.h42PjeS_z2WnqphQKdCE ul li {
+  list-style-type: none;
+}
+.h42PjeS_z2WnqphQKdCE ul li a {
+  text-decoration: none;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 25px;
+}
+.h42PjeS_z2WnqphQKdCE ul li a svg {
+  width: 20px;
+}
+@media (max-width: 1279px) {
+  .h42PjeS_z2WnqphQKdCE {
+    top: 70px;
+  }
+}
+@media (max-width: 686px) {
+  .h42PjeS_z2WnqphQKdCE {
+    max-width: calc(100% - 40px);
+  }
+}

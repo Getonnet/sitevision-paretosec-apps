@@ -109,7 +109,7 @@
             $(".about-container").append("<p>" + data.tekst + "</p>");
          	$(".about-container").append("<a href='" + data.website + "' target='_new'><span>Selskapets nettside</span><img src='/images/18.17e5c29718bfae2e6014f3f8/1701829084709/external-link.svg' alt='' /></a>");
          	//$("#siste .cell-w-focus__main-num").append(data.currency);
-	
+
             // fetch in-front data
             fetchTokenAndData();
 
@@ -175,10 +175,10 @@
 
       st_infrontUI.orderbookWidget("#orderbookContainer", optsYar);
       st_infrontUI.orderbookWidget("#orderbookContainerMobile", optsYar);
-      
-      
+
+
       //Siste Handler Widget Start
-      
+
       var sisteHandler = new Infront.IntradayTradesWidgetOptions();
       sisteHandler.instrument = new Infront.Instrument(feed, tickerCode);
       sisteHandler.pageItems = 5;
@@ -206,15 +206,15 @@
             heading: "Limit",
          },
       ];
-      
+
       console.log(sisteHandler);
-      
+
       var widget = st_infrontUI.intradayTradesWidget("#lastShoppingContainer", sisteHandler);
-      
-      
+
+
       //Siste Handler Widget END
-      
-      
+
+
       st_InitCharts();
 
       //var instrument = new Infront.Instrument(feed, tickerCode);
@@ -241,7 +241,7 @@
       var singleValOpt = new Infront.InstrumentSingleValueWidgetOptions();
       singleValOpt.decimals = 2;
       singleValOpt.instrument = new Infront.Instrument(feed, tickerCode);
-      
+
       singleValOpt.name = "LAST";
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#tickerSluttkurs", singleValOpt);
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#tickerSluttkursMobile", singleValOpt);
@@ -249,7 +249,7 @@
 
       singleValOpt.name = "TIME";
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#currentTime", singleValOpt);
-      st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#currentTimeMobile", singleValOpt); 
+      st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#currentTimeMobile", singleValOpt);
 
       singleValOpt.name = "BID";
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#tickerKjop", singleValOpt);
@@ -292,21 +292,21 @@
          return "<h1>" + tickerFlag + tickerName + tickerAb + "</h1>";
       };
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#tickerTitle", singleValOpt);
-      
+
       singleValOpt.name = "LAST";
       singleValOpt.translate = (rowId, value) => {
          return `<div class="ticker-value">${value} ${tickerData.currency}</div>`;
       }
-      
+
       st_singleValWidget = st_infrontUI.instrumentSingleValueWidget("#siste", singleValOpt);
-      
-      
+
+
       // Focus Widget
       var focusOpts = new Infront.FocusWidgetOptions();
       focusOpts.instrument = new Infront.Instrument(feed, tickerCode);
-      
+
       focusOpts.widgetTitle = "Siste";
-      
+
       st_focusWidget = st_infrontUI.focusWidget("#focusContainer", focusOpts);
       st_focusWidget = st_infrontUI.focusWidget("#siste", focusOpts);
 
@@ -314,7 +314,7 @@
       var historicalOpts = new Infront.HistoricalOverviewWidgetOptions();
       historicalOpts.widgetTitle = "HISTORISK OVERSIKT";
       historicalOpts.instrument = new Infront.Instrument(feed, tickerCode);
-      
+
       historicalOpts.barPeriod = InfrontConstants.HistoricalPeriodes.ONE_WEEK;
       historicalOpts.historicFields = [
          InfrontConstants.HistoricalPeriodes.ONE_WEEK,
@@ -367,7 +367,7 @@
       st_newsNewListWidget = st_infrontUI.newsListWidget("#newsContainerMobile", nlOpts);
 
       var instrument = new Infront.Instrument(feed, tickerCode);
-		
+
       var opts = new Infront.FinancialCalendarWidgetOptions();
       opts.instrument = new Infront.Instrument(feed, tickerCode);
 
@@ -375,9 +375,9 @@
       opts.layout = Infront.FinancialCalendarLayout.EXPANDED;
       opts.paging = false;
       newsFinCalWidget = st_infrontUI.financialCalendarWidget("#fincal", opts);
-     
-      
-      
+
+
+
       // ------------------------------------------------
       // SEARCH
       // ------------------------------------------------
@@ -403,7 +403,7 @@
                       //return true or false to show or hide result from the search-results
                       return resultObject.instrument.instrument_type == "STOCK";
                     };
-          
+
                     st_searchWidget = st_infrontUI.searchWidget("#search", sbOpts);*/
    }
 
@@ -425,83 +425,83 @@
       dateContainer.innerText = formattedDate;
       dateContainerMobile.innerText = formattedDate;
    }
-   
+
    window.addEventListener("DOMContentLoaded", getCurrentDate);
-   
-   
-   
+
+
+
    // Custom bid/ask bar on orderbook section
    let orderbookChecking = null;
-   
+
    function isOrderdookTableExist() {
       const orderbookTable = document.querySelector('.cell-w-order-book');
-      
+
       return !!orderbookTable;
    }
-   
+
    function getBarWidthPercentage(barWidth) {
       const values = barWidth.split(' ');
-      
+
       let percentage = 'auto';
-      
+
       for(const value of values) {
          if(value.includes('%')) {
             percentage = value;
             break;
          }
       }
-      
+
       return percentage;
    }
-   
+
    function getBarElements() {
       const isOrderbookExist = isOrderdookTableExist();
-      
+
       if(isOrderbookExist) {
          clearInterval(orderbookChecking);
-         
+
          const tdElementBidBar = document.querySelector('.cell-w-order-book--bid-bar-size');
          const tdElementAskBar = document.querySelector('.cell-w-order-book--ask-bar-size');
-         
+
          const customBidBar = document.querySelector('#bidBar');
          const customAskBar = document.querySelector('#askBar');
          const customBidBarMobile = document.querySelector('#bidBarMobile');
          const customAskBarMobile = document.querySelector('#askBarMobile');
-         
+
          function applyWidthStyle() {
             const tdElementBidBarWidth = window.getComputedStyle(tdElementBidBar).backgroundSize;
             const tdElementAskBarWidth = window.getComputedStyle(tdElementAskBar).backgroundSize;
-            
+
             customBidBar.style.width = getBarWidthPercentage(tdElementBidBarWidth);
             customAskBar.style.width = getBarWidthPercentage(tdElementAskBarWidth);
             customBidBarMobile.style.width = getBarWidthPercentage(tdElementBidBarWidth);
          	customAskBarMobile.style.width = getBarWidthPercentage(tdElementAskBarWidth);
          }
-         
+
          applyWidthStyle();
-         
+
          const bidBarObserver = new MutationObserver(() => {
             applyWidthStyle();
          });
-         
+
          const askBarObserver = new MutationObserver(() => {
             applyWidthStyle();
          });
-         
+
          const bidObserverConfig = { attributes: true, attributeFilter: ['style']};
          const askObserverConfig = { attributes: true, attributeFilter: ['style']};
-         
+
          bidBarObserver.observe(tdElementBidBar, bidObserverConfig);
          askBarObserver.observe(tdElementBidBar, askObserverConfig);
-         
+
       } else {
          orderbookChecking = setInterval(getBarElements, 1000);
       }
    }
-   
-   
+
+
    getBarElements();
-   
+
 </script>
 
 <section class="single-ticker-page">
@@ -715,7 +715,7 @@
         </div>
 
         <div class="orderbook-container" >
-        		<div id="orderbookContainer"></div>    
+        		<div id="orderbookContainer"></div>
            <div class="orderbook-bars">
               <div class="bid">
               	<div id="bidBar"></div>
@@ -726,8 +726,7 @@
            </div>
         </div>
         <div class="history-container" id="historyContainer"></div>
-
-        <div class="about-container" id="aboutContainerDesktop">
+        <div class="about-container" id="aboutContainer">
           <h3>Om selskapet/Verdipapiret</h3>
         </div>
 
