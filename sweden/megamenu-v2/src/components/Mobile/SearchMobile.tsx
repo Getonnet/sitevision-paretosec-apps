@@ -36,7 +36,11 @@ const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
       style={{ display: isOpen ? "flex" : "none" }}
       className={`search-mob w-form ${styles.mobile_search}`}
     >
-      <label htmlFor="search-mob" className="field-label">
+      <label
+        htmlFor="search-mob"
+        className="field-label"
+        style={{ display: "none", visibility: "hidden", opacity: 0 }}
+      >
         Search
       </label>
       <div className="search-box-mobile-wrapper">
