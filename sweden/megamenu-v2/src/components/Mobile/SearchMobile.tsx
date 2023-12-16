@@ -45,7 +45,7 @@ const SearchMobile: React.FC<SearchMobileProps> = ({ isOpen }) => {
           className="search-input is-mobile w-input"
           maxLength={256}
           name="query"
-          placeholder="Søk"
+          placeholder="Sök"
           id="search-mob"
           required
           autoComplete="off"

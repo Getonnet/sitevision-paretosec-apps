@@ -52,7 +52,7 @@ const SearchDesktop = () => {
           className="search-input w-input"
           maxLength={256}
           name="query"
-          placeholder="Søk"
+          placeholder="Sök"
           id="search"
           autoComplete="off"
           required

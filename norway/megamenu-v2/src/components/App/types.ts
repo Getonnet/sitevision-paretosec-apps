@@ -1,5 +1,3 @@
-import appData from "@sitevision/api/server/appData";
-
 export type LinkType = "Megamenu" | "Dropdown" | "Link";
 
 export interface AppProperties {
