@@ -114,7 +114,7 @@ db.put("token", {
  */
 router.get("/maanedsportefolje", (req, res) => {
   requester
-    .get("https://online.paretosec.com/api/ModelPortfolio/no")
+    .get("https://online.paretosec.com/api/ModelPortfolio/se")
     .done((data: any) => {
       res.json(data);
     })

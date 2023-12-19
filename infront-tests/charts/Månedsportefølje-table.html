@@ -9,7 +9,7 @@
 
   // include InfrontSessionInclude
   $(document).ready(function () {
-    fetch("https://use-pareto.sitevision-cloud.se/rest-api/Infront%20token/token")
+    fetch("/rest-api/Infront%20token/token")
       .then((response) => response.json())
       .then((data) => {
         if (data.token) {
