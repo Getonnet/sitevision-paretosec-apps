@@ -10,30 +10,26 @@ export interface AppProperties {
 const APIurl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const MobileDefaults = {
-  ReferrerPage: "Pareto-appen til iPhone/iPad/Android",
-  ProviderDir: "PARL",
-  OwnerBroker: "PARB",
-  BrokerCountry: "47",
+  ReferrerPage: "Infront Mobile",
+  ProviderDir: "PARMSE",
+  OwnerBroker: "PAR",
+  BrokerCountry: "46",
   Professional: "1",
 };
-// const MobileApiUrl =
-//   "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const WebDefaults = {
-  ReferrerPage: "Web Trader",
-  ProviderDir: "PARL",
-  OwnerBroker: "PARB",
-  BrokerCountry: "47",
+  ReferrerPage: "Infront Web Trader",
+  ProviderDir: "PARLSE",
+  OwnerBroker: "PAR",
+  BrokerCountry: "46",
   Professional: "1",
 };
-// const WebApiUrl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
-// const activeUrl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const ActiveDefaults = {
   ReferrerPage: "Infront Active Trader",
-  ProviderDir: "PAR",
+  ProviderDir: "PARSE",
   OwnerBroker: "PAR",
-  BrokerCountry: "47",
+  BrokerCountry: "46",
   Professional: "1",
 };
 
@@ -41,8 +37,6 @@ const App: React.FunctionComponent<AppProperties> = ({
   formType,
   redirectPageUrl,
 }) => {
-  console.log(redirectPageUrl);
-
   const [formData, setFormData] = React.useState({
     firstname: "",
     lastname: "",
@@ -70,8 +64,6 @@ const App: React.FunctionComponent<AppProperties> = ({
         ? WebDefaults
         : ActiveDefaults),
     };
-
-    console.log(payload);
 
     try {
       const response = await fetch(APIurl, {
@@ -102,7 +94,7 @@ const App: React.FunctionComponent<AppProperties> = ({
       <form onSubmit={handleSubmit} className={"sv-defaultFormTheme"}>
         <div className="form-group">
           <label htmlFor="firstname" className="control-label">
-            Fornavn
+            Förnamn
           </label>
           <input
             type="text"
@@ -117,7 +109,7 @@ const App: React.FunctionComponent<AppProperties> = ({
 
         <div className="form-group">
           <label htmlFor="lastname" className="control-label">
-            Etternavn
+            Efternamn
           </label>
           <input
             type="text"
@@ -132,7 +124,7 @@ const App: React.FunctionComponent<AppProperties> = ({
 
         <div className="form-group">
           <label htmlFor="address" className="control-label">
-            Adresse
+            Adress
           </label>
           <input
             type="text"
