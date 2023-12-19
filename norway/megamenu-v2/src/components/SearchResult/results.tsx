@@ -42,7 +42,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
           queryTickers.map((ticker: any) => {
             return (
               <Ticker
-                name={ticker.name}
+                name={ticker.properties.fullName}
                 country={ticker.properties.countryCode}
                 URI={ticker.properties.URI}
               />
