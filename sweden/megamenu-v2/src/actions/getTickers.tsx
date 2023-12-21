@@ -9,6 +9,7 @@ export const getTickers = async () => {
   await requester
     .doGet({
       url: TICKER_ENDPOINT,
+      data: PAYLOAD,
     })
     .then((response) => {
       result = response;
