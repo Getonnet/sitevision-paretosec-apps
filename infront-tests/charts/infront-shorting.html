@@ -8,23 +8,23 @@
   var infrontSDK = null;
   var token;
 
-  /**
-   * ---------------------------------------------
-   * Fond pagination start
-   */
-  const shortViewAllBtn = $("#short_viewAll");
-  const listWrapper = $("#norwayLists");
-
-  shortViewAllBtn.click(function () {
-    listWrapper.toggleClass("show-all");
-    $(this).text(function (i, text) {
-      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
-    });
-  });
-  // ---------------------------------------------
-
   //include InfrontSessionInclude
   function updateShowAllButtonVisibility() {
+    /**
+     * ---------------------------------------------
+     * Fond pagination start
+     */
+    const shortViewAllBtn = $("#short_viewAll");
+    const listWrapper = $("#norwayLists");
+
+    shortViewAllBtn.click(function() {
+      listWrapper.toggleClass("show-all");
+      $(this).text(function(i, text) {
+        return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
+      });
+    });
+    // ---------------------------------------------
+
     if (listWrapper.height() < 860) {
       shortViewAllBtn.prop("disabled", true);
       listWrapper.addClass("show-all");
@@ -59,31 +59,31 @@
     return url;
   }
 
-  $(document).ready(function () {
+  $(document).ready(function() {
     var infrontSession = null;
 
     fetch("/rest-api/Infront%20token/token")
-      .then((response) => response.json())
-      .then((data) => {
-        token = data.token;
+    .then((response) => response.json())
+    .then((data) => {
+      token = data.token;
 
-        if (token) {
-          let opts = new Infront.InfrontUIOptions();
-          opts.language = "no";
-          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
-          opts.streaming = true;
-          opts.signed_token = token;
-          opts.token_type = "JWT";
-          opts.client_application = "WEB";
-          infrontUI = new Infront.UI(opts);
-          infrontUI.registerEventObserver("onReady", infrontReady);
-          infrontUI.init();
-          infrontSDK = new InfrontSDK.SDK({
-            signedToken: token,
-            onReady: infrontSDKReady,
-          });
-        }
-      });
+      if (token) {
+        let opts = new Infront.InfrontUIOptions();
+        opts.language = "no";
+        opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+        opts.streaming = true;
+        opts.signed_token = token;
+        opts.token_type = "JWT";
+        opts.client_application = "WEB";
+        infrontUI = new Infront.UI(opts);
+        infrontUI.registerEventObserver("onReady", infrontReady);
+        infrontUI.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: token,
+          onReady: infrontSDKReady
+        });
+      }
+    });
   });
 
   //End Include
@@ -92,8 +92,8 @@
     chartWidgetOptions.instruments = [
       {
         feed: feed,
-        ticker: ticker,
-      },
+        ticker: ticker
+      }
     ];
     chartWidget.modify(chartWidgetOptions);
   }
@@ -117,22 +117,22 @@
       {
         name: "TICKER",
         hover: "FULL_NAME",
-        flag: true,
+        flag: true
       },
       {
-        name: "FULL_NAME",
+        name: "FULL_NAME"
       },
       {
-        name: "LAST_VALID",
+        name: "LAST_VALID"
       },
       {
-        name: "CHANGE",
+        name: "CHANGE"
       },
       {
-        name: "PCT_CHANGE",
+        name: "PCT_CHANGE"
       },
       {
-        name: "TURNOVER",
+        name: "TURNOVER"
       },
       {
         name: "MCAP",
@@ -141,12 +141,12 @@
         type: Infront.FieldType.Computed,
         dataType: Infront.DataType.Integer,
         computeFields: ["NUM_SHARES", "LAST_VALID"],
-        compute: function (rowId, args) {
+        compute: function(rowId, args) {
           return args[0] * args[1];
-        },
+        }
       },
       {
-        name: "BROKER_IS_SHORTABLE",
+        name: "BROKER_IS_SHORTABLE"
       },
       "S_DATETIME",
 
@@ -159,14 +159,14 @@
         compute: (rowId, args) => {
           return args[0];
         },
-        translate: function (rowId, isin) {
+        translate: function(rowId, isin) {
           var result =
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
             "'><img title='Trade this' alt='H' src='https://www.paretosec.no/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
-        },
-      },
+        }
+      }
     ];
     if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed) || Array.isArray(currentFeed)) {
       cvOpts.columns = cvOpts.columns.filter(
@@ -183,7 +183,8 @@
     return cvOpts;
   }
 
-  function infrontReady(event) {}
+  function infrontReady(event) {
+  }
 
   var instruments = [];
   var timeout;
@@ -217,35 +218,35 @@
         subscribe: false,
         limit: -1,
         fields: ["Ticker", "ISIN"],
-        onData: function (results) {
+        onData: function(results) {
           listeners = results.map((id) => {
             return infrontSDK.get(
               InfrontSDK.symbolData({
                 subscribe: false,
                 content: {
                   AdditionalData: true,
-                  Basic: true,
+                  Basic: true
                 },
                 fields: ["Ticker", "IsShortable"],
                 id,
 
-                onData: function (item) {
+                onData: function(item) {
                   if (item.get("IsShortable") === 1) {
                     update({
                       feed: item.get("Feed"),
-                      ticker: item.get("Ticker"),
+                      ticker: item.get("Ticker")
                     });
                   } else {
                     update();
                   }
                 },
-                onStatus: function (requestName, status) {
+                onStatus: function(requestName, status) {
                   //console.log(requestName, " : ", status);
-                },
+                }
               })
             );
           });
-        },
+        }
       })
     );
     // updateShowAllButtonVisibility();
@@ -289,9 +290,11 @@
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
-  // on change of table data, runupdateShowAllButtonVisibility
-  const observer = new MutationObserver(() => updateShowAllButtonVisibility());
-  observer.observe(document.getElementById("norwayLists"), { attributes: true, childList: true, subtree: true });
+  document.addEventListener("DOMContentLoaded", function() {
+    // on change of table data, runupdateShowAllButtonVisibility
+    const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+    observer.observe(document.getElementById("norwayLists"), { attributes: true, childList: true, subtree: true });
+  });
 </script>
 
 <style>
@@ -359,9 +362,11 @@
     overflow: hidden;
     position: relative;
   }
+
   #shorting #norwayLists.show-all {
     max-height: 5000px;
   }
+
   #shorting #norwayLists:after {
     content: "";
     position: absolute;
@@ -373,6 +378,7 @@
     background: linear-gradient(180deg, transparent, #ffffff);
     z-index: 5;
   }
+
   #shorting #norwayLists.show-all:after {
     content: none;
   }

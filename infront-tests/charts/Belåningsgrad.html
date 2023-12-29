@@ -1,0 +1,268 @@
+<script type="text/javascript">
+  var infrontSession = null;
+  var infrontUI = null;
+  var quoteListWidget = null;
+  var marketFeed = 18177;
+  var chartWidget = null;
+  var chartWidgetOptions = null;
+
+  $(document).ready(function() {
+    var infrontSession = null;
+
+    fetch("https://online.paretosec.com/api/Infront/anonymous").then(response => response.text()).then(data => {
+      if (data) {
+        let opts = new Infront.InfrontUIOptions();
+        opts.language = "no";
+        opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+        opts.streaming = true;
+        opts.signed_token = data;
+        opts.token_type = "JWT";
+        opts.client_application = "WEB";
+        infrontUI = new Infront.UI(opts);
+        infrontUI.registerEventObserver("onReady", infrontReady);
+        infrontUI.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: data,
+          onReady: infrontSDKReady
+        });
+      }
+    });
+  });
+
+  //End Include
+
+  function setChart(feed, ticker) {
+    chartWidgetOptions.instruments = [{
+      "feed": feed,
+      "ticker": ticker
+    }];
+    chartWidget.modify(chartWidgetOptions);
+  }
+
+  var widget;
+  var currentFeed;
+
+  function instrumentLink(ticker, feed) {
+    var baseUrl = "https://online.paretosec.com/Ticker/";
+    var result = baseUrl + ticker + "/" + feed;
+    return result;
+  }
+
+  function instrumentTradeLink(isin, feed) {
+    return (
+      "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed
+    );
+  }
+
+  function createBaseListOptions(instruments, feed) {
+    var cvOpts = new Infront.QuoteListWidgetOptions();
+    cvOpts.maxItems = instruments.length;
+    cvOpts.columns = [
+      {
+        name: "TICKER",
+        flag: true,
+        hover: "FULL_NAME"
+      },
+      {
+        name: "FULL_NAME"
+
+      },
+
+      { name: "LAST_VALID" },
+      { name: "CHANGE" },
+      { name: "PCT_CHANGE" },
+      { name: "TURNOVER" },
+      {
+        name: "MCAP",
+        heading: "MCap",
+        shorten: true,
+        type: Infront.FieldType.Computed,
+        dataType: Infront.DataType.Integer,
+        computeFields: ["NUM_SHARES", "LAST_VALID"],
+        compute: function(rowId, args) {
+          return args[0] * args[1];
+        }
+      },
+      {
+        name: "BROKER_COLLATERAL_PCT",
+        translate: function(c, v, i) {
+          return "<strong>" + InfrontUtil.formatPercent(v, 0) + "</strong>";
+        }
+      },
+      {
+        name: "S_DATETIME"
+      },
+
+      {
+        name: "",
+        type: Infront.FieldType.Computed,
+        sortable: false,
+        className: "cell-text-right",
+        computeFields: ["ISIN"],
+        compute: (rowId, args) => {
+          return args[0];
+        },
+        translate: function(rowId, isin) {
+          var result =
+            "<a href='" +
+            instrumentTradeLink(isin, rowId.feed) +
+            "'><img title='Trade this' alt='H' src='/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>";
+          return result;
+        }
+      }
+    ];
+
+    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed) || Array.isArray(currentFeed)) {
+      cvOpts.columns = cvOpts.columns.filter(x => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
+    }
+    cvOpts.instruments = instruments;
+    cvOpts.sortable = true;
+    cvOpts.enableChangeStatusColors = true;
+    cvOpts.defaultSortedColumn = "TICKER";
+    cvOpts.defaultSortOrder = 0;
+    cvOpts.useChains = false;
+    cvOpts.interactionHighlight = true;
+    return cvOpts;
+  }
+
+  function infrontReady(event) {
+
+  }
+
+  var instruments = [];
+  var timeout;
+
+  function changeFeed(feed) {
+    if (currentFeed == feed) {
+      return;
+    }
+    currentFeed = feed;
+    if (widget) {
+      widget.destroy();
+    }
+    $("#loader").show();
+    clearTimeout(timeout);
+    instruments = [];
+    if (Array.isArray(feed)) {
+      feed.reduce((seq, f) => {
+        return seq.then(() => loadFeed(f));
+      }, Promise.resolve());
+    } else {
+      loadFeed(feed);
+    }
+
+  }
+
+  function loadFeed(feed) {
+    return new Promise((res, rej) => {
+      res();
+      infrontSDK.get(
+        InfrontSDK.feedContents({
+          contentType: InfrontSDK.FeedContentType.SymbolIds,
+          feed: feed,
+          subscribe: false,
+          limit: -1,
+          fields: ["Ticker", "ISIN"],
+          onData: function(results) {
+
+            results.map((id) => {
+              return infrontSDK.get(
+                InfrontSDK.symbolData({
+                  subscribe: false,
+                  content: {
+                    AdditionalData: true,
+                    Basic: true
+                  },
+                  fields: ["Ticker", "CollateralPct"],
+                  id,
+
+                  onData: function(item) {
+
+                    if ((Array.isArray(currentFeed) && currentFeed.includes(feed)) || currentFeed === feed) {
+                      if (item.get("CollateralPct") !== null) {
+                        update({
+                          feed: item.get("Feed"),
+                          ticker: item.get("Ticker")
+                        });
+
+                      } else {
+                        update();
+                      }
+                    }
+
+                  },
+                  onStatus: function(requestName, status) {
+                    console.log(requestName, " : ", status);
+                  }
+                })
+              );
+            });
+
+          }
+        })
+      );
+    });
+
+  }
+
+
+  function update(instrument) {
+    if (instrument) {
+      instruments.push(instrument);
+    }
+    clearTimeout(timeout);
+    timeout = setTimeout(initWidget, 500);
+
+
+  }
+
+  function initWidget() {
+    $("#loader").hide();
+    if (widget) {
+      widget.destroy();
+    }
+    var opts = createBaseListOptions(instruments);
+    widget = infrontUI.quoteList("norwayLists", opts);
+  }
+
+  function infrontSDKReady(event) {
+    changeFeed(18177);
+  }
+
+  function throttle(func, wait = 100) {
+    let timer = null;
+    return function(...args) {
+      if (timer === null) {
+        timer = setTimeout(() => {
+          func.apply(this, args);
+          timer = null;
+        }, wait);
+      }
+    };
+  }
+</script>
+
+<div class="col-md-12">
+  <p>Belåningsgrad</p>
+
+  <ul class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
+    <li class="active"><a onclick="changeFeed(18177)">Norge</a></li>
+    <li><a onclick="changeFeed(17921)">Sverige</a></li>
+    <li><a onclick="changeFeed(17665)">Danmark</a></li>
+    <li><a onclick="changeFeed(100)">Finland</a></li>
+    <li><a onclick="changeFeed(26)">Tyskland</a></li>
+    <li><a onclick="changeFeed(19)">UK</a></li>
+    <li><a onclick="changeFeed(2008)">Frankrike</a></li>
+    <li><a onclick="changeFeed(2012 )">Spania</a></li>
+    <li><a onclick="changeFeed(2047)">Italia</a></li>
+    <li><a onclick="changeFeed(14)">USA - NYSE</a></li>
+    <li><a onclick="changeFeed(15)">USA - NASDAQ</a></li>
+  </ul>
+</div>
+
+<div class="col-md-12">
+  <div id="loader" style="display:flex;justify-content:center;">
+    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+  </div>
+  <div id="norwayLists" class="col-md-12"></div>
+</div>
