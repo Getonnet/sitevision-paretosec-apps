@@ -22,7 +22,7 @@
       var token = data.token;
       if (token) {
         let opts = new Infront.InfrontUIOptions();
-        opts.language = "no";
+        opts.language = "sv";
         opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
         opts.streaming = true;
         opts.signed_token = token;
@@ -101,7 +101,7 @@
           var result =
             "<a href='" +
             instrumentTradeLink_bela(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='/images/18.2c2f7afa18c8abb97cf4d9c/1703832132295/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
         }
       }
@@ -221,7 +221,7 @@
   }
 
   function infrontSDKReady_bela(event) {
-    changeFeed_bela(18177);
+    changeFeed_bela(17921);
   }
 
   function toggleActiveTab(element) {
@@ -234,8 +234,8 @@
 </script>
 
 <ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
-  <li><a class="activeTab" onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
-  <li><a onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
+  <li><a class="activeTab" onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
+  <li><a onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
   <li><a onclick="changeFeed_bela(17665);toggleActiveTab(this);">Danmark</a></li>
   <li><a onclick="changeFeed_bela(100);toggleActiveTab(this);">Finland</a></li>
   <li><a onclick="changeFeed_bela(26);toggleActiveTab(this);">Tyskland</a></li>

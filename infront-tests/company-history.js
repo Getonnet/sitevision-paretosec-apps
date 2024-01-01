@@ -35,7 +35,7 @@ function getCompanyHistory(id, from, to) {
 
           addEntry(trade, "trade");
         }
-      },
+      }
     })
   );
 }
