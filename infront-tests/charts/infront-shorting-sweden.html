@@ -66,6 +66,9 @@
     return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
   }
 
+  var widget;
+  var currentFeed;
+
   function createBaseListOptions(instruments) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
     cvOpts.columns = [{

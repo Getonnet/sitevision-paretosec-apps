@@ -1,11 +1,106 @@
 <style>
-  #norwayLists_belaning {
+  #belaningsgrad .companyTabs {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  #belaningsgrad .companyTabs li {
+    list-style: none;
+    padding: 0;
+  }
+
+  #belaningsgrad .companyTabs a {
+    display: block;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.1s ease-in-out;
+    background: #ffffff80;
+    color: #544952;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  #belaningsgrad .companyTabs a:hover {
+    color: #214d8e;
+    font-weight: 500;
+    background: #ffffff;
+  }
+
+  #belaningsgrad .activeTab {
+    color: #214d8e !important;
+    font-weight: 500 !important;
+    background: #ffffff !important;
+  }
+
+  #belaningsgrad  #norwayLists_belaning {
     padding: 16px;
     background: #ffffff;
     color: #544952;
-    /*max-height: 864px;*/
-    /*overflow: hidden;*/
-    /*position: relative;*/
+    max-height: 864px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #belaningsgrad #norwayLists_belaning.show-all {
+    max-height: 5000px;
+  }
+
+  #belaningsgrad #norwayLists_belaning:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, #ffffff);
+    z-index: 5;
+  }
+
+  #belaningsgrad #norwayLists_belaning.show-all:after {
+    content: none;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper thead th {
+    padding: 0 0 13px 0 !important;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper thead .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody {
+    font-size: 15px;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-positive {
+    color: #527db3;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-negative {
+    color: #d96967;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr {
+    border-top: 1px solid #d7d7d7;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr td {
+    padding: 12px 0;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  @media (max-width: 1185px) {
+    #belaningsgrad .companyTabs {
+      display: none;
+    }
   }
 </style>
 
@@ -233,21 +328,23 @@
   }
 </script>
 
-<ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
-  <li><a class="activeTab" onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
-  <li><a onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
-  <li><a onclick="changeFeed_bela(17665);toggleActiveTab(this);">Danmark</a></li>
-  <li><a onclick="changeFeed_bela(100);toggleActiveTab(this);">Finland</a></li>
-  <li><a onclick="changeFeed_bela(26);toggleActiveTab(this);">Tyskland</a></li>
-  <li><a onclick="changeFeed_bela(19);toggleActiveTab(this);">UK</a></li>
-  <li><a onclick="changeFeed_bela(2008);toggleActiveTab(this);">Frankrike</a></li>
-  <li><a onclick="changeFeed_bela(2012);toggleActiveTab(this);">Spania</a></li>
-  <li><a onclick="changeFeed_bela(2047);toggleActiveTab(this);">Italia</a></li>
-  <li><a onclick="changeFeed_bela(14);toggleActiveTab(this);">USA - NYSE</a></li>
-  <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
-</ul>
+<div id="belaningsgrad">
+  <ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
+    <li><a class="activeTab" onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
+    <li><a onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
+    <li><a onclick="changeFeed_bela(17665);toggleActiveTab(this);">Danmark</a></li>
+    <li><a onclick="changeFeed_bela(100);toggleActiveTab(this);">Finland</a></li>
+    <li><a onclick="changeFeed_bela(26);toggleActiveTab(this);">Tyskland</a></li>
+    <li><a onclick="changeFeed_bela(19);toggleActiveTab(this);">UK</a></li>
+    <li><a onclick="changeFeed_bela(2008);toggleActiveTab(this);">Frankrike</a></li>
+    <li><a onclick="changeFeed_bela(2012);toggleActiveTab(this);">Spania</a></li>
+    <li><a onclick="changeFeed_bela(2047);toggleActiveTab(this);">Italia</a></li>
+    <li><a onclick="changeFeed_bela(14);toggleActiveTab(this);">USA - NYSE</a></li>
+    <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
+  </ul>
 
-<div id="loader" style="display:flex;justify-content:center;">
-  <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+  <div id="loader" style="display:flex;justify-content:center;">
+    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+  </div>
+  <div id="norwayLists_belaning" class="col-md-12"></div>
 </div>
-<div id="norwayLists_belaning" class="col-md-12"></div>

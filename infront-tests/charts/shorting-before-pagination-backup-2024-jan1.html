@@ -1,11 +1,12 @@
 <script type="text/javascript">
-  var infrontUI_shorting = null;
+  var infrontSession = null;
+  var infrontUI = null;
   var quoteListWidget = null;
   var marketFeed = 18177;
   var chartWidget = null;
   var chartWidgetOptions = null;
-  var infrontSDK_shorting = null;
-  var token_shorting;
+  var infrontSDK = null;
+  var token;
 
   /**
    * ---------------------------------------------
@@ -14,12 +15,8 @@
   const shortViewAllBtn = $("#short_viewAll");
   const listWrapper = $("#norwayLists");
 
-  $(document).on("click", "#short_viewAll", function() {
-    if (listWrapper) {
-      listWrapper.toggleClass("show-all");
-    } else {
-      $("#norwayLists").toggleClass("show-all");
-    }
+  shortViewAllBtn.click(function() {
+    listWrapper.toggleClass("show-all");
     $(this).text(function(i, text) {
       return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
     });
@@ -37,60 +34,102 @@
     }
   }
 
+  function CompanyPageLink(companyName) {
+    if (companyName) {
+      var slug = companyName.replace(/ /g, "-");
+      return "/selskap/" + slug;
+    }
+  }
+
+  function GetCountryFlagImageUrl(feed) {
+    var url = "";
+    switch (feed) {
+      case 18199:
+      case 18122:
+      case 18177:
+        url = "/Files/Templates/Designs/Pareto/images/flag-nor.png";
+        break;
+      case 17921:
+        url = "/Files/Templates/Designs/Pareto/images/flag-swe.png";
+        break;
+      default:
+        break;
+    }
+
+    return url;
+  }
+
   $(document).ready(function() {
+    var infrontSession = null;
+
     fetch("/rest-api/Infront%20token/token")
     .then((response) => response.json())
     .then((data) => {
-      token_shorting = data.token;
+      token = data.token;
 
-      if (token_shorting) {
+      if (token) {
         let opts = new Infront.InfrontUIOptions();
         opts.language = "no";
         opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
         opts.streaming = true;
-        opts.signed_token = token_shorting;
+        opts.signed_token = token;
         opts.token_type = "JWT";
         opts.client_application = "WEB";
-        infrontUI_shorting = new Infront.UI(opts);
-        infrontUI_shorting.registerEventObserver("onReady", infrontReady);
-        infrontUI_shorting.init();
-        infrontSDK_shorting = new InfrontSDK.SDK({
-          signedToken: token_shorting,
-          onReady: infrontSDKReady
+        infrontUI = new Infront.UI(opts);
+        infrontUI.registerEventObserver("onReady", infrontReady);
+        infrontUI.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: token,
+          onReady: infrontSDKReady,
         });
       }
     });
   });
 
   //End Include
+
+  function setChart(feed, ticker) {
+    chartWidgetOptions.instruments = [{
+      feed: feed,
+      ticker: ticker,
+    }, ];
+    chartWidget.modify(chartWidgetOptions);
+  }
+
+  var widget;
+  var currentFeed;
+
+  function instrumentLink(ticker, feed) {
+    var baseUrl = "https://online.paretosec.com/Ticker/";
+    var result = baseUrl + ticker + "/" + feed;
+    return result;
+  }
+
   function instrumentTradeLink(isin, feed) {
     return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
   }
-
-  var widget_shorting;
-  var currentFeed_shorting;
 
   function createBaseListOptions(instruments) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
     cvOpts.columns = [{
       name: "TICKER",
       hover: "FULL_NAME",
-      flag: true
+      flag: true,
     },
       {
-        name: "FULL_NAME"
+        name: "FULL_NAME",
       },
       {
-        name: "LAST_VALID"
+        name: "LAST_VALID",
       },
       {
-        name: "CHANGE"
+        name: "CHANGE",
       },
       {
-        name: "PCT_CHANGE"
+        name: "PCT_CHANGE",
       },
       {
-        name: "TURNOVER"
+        name: "TURNOVER",
       },
       {
         name: "MCAP",
@@ -101,10 +140,10 @@
         computeFields: ["NUM_SHARES", "LAST_VALID"],
         compute: function(rowId, args) {
           return args[0] * args[1];
-        }
+        },
       },
       {
-        name: "BROKER_IS_SHORTABLE"
+        name: "BROKER_IS_SHORTABLE",
       },
       "S_DATETIME",
 
@@ -121,12 +160,12 @@
           var result =
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='https://www.paretosec.no/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
-        }
-      }
+        },
+      },
     ];
-    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_shorting) || Array.isArray(currentFeed_shorting)) {
+    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed) || Array.isArray(currentFeed)) {
       cvOpts.columns = cvOpts.columns.filter(
         (x) => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name)
       );
@@ -141,19 +180,18 @@
     return cvOpts;
   }
 
-  function infrontReady(event) {
-  }
+  function infrontReady(event) {}
 
   var instruments = [];
   var timeout;
 
   function changeFeed(feed) {
-    if (currentFeed_shorting == feed) {
+    if (currentFeed == feed) {
       return;
     }
-    currentFeed_shorting = feed;
-    if (widget_shorting) {
-      widget_shorting.destroy();
+    currentFeed = feed;
+    if (widget) {
+      widget.destroy();
     }
     $("#loader").show();
 
@@ -169,7 +207,7 @@
   var listeners = [];
 
   function loadFeed(feed) {
-    infrontSDK_shorting.get(
+    infrontSDK.get(
       InfrontSDK.feedContents({
         contentType: InfrontSDK.FeedContentType.SymbolIds,
         feed: feed,
@@ -178,12 +216,12 @@
         fields: ["Ticker", "ISIN"],
         onData: function(results) {
           listeners = results.map((id) => {
-            return infrontSDK_shorting.get(
+            return infrontSDK.get(
               InfrontSDK.symbolData({
                 subscribe: false,
                 content: {
                   AdditionalData: true,
-                  Basic: true
+                  Basic: true,
                 },
                 fields: ["Ticker", "IsShortable"],
                 id,
@@ -192,7 +230,7 @@
                   if (item.get("IsShortable") === 1) {
                     update({
                       feed: item.get("Feed"),
-                      ticker: item.get("Ticker")
+                      ticker: item.get("Ticker"),
                     });
                   } else {
                     update();
@@ -200,11 +238,11 @@
                 },
                 onStatus: function(requestName, status) {
                   //console.log(requestName, " : ", status);
-                }
+                },
               })
             );
           });
-        }
+        },
       })
     );
     // updateShowAllButtonVisibility();
@@ -220,11 +258,11 @@
 
   function initWidget() {
     $("#loader").hide();
-    if (widget_shorting) {
-      widget_shorting.destroy();
+    if (widget) {
+      widget.destroy();
     }
     var opts = createBaseListOptions(instruments);
-    widget_shorting = infrontUI_shorting.quoteList("norwayLists", opts);
+    widget = infrontUI.quoteList("norwayLists", opts);
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
@@ -238,6 +276,8 @@
       tab.classList.remove("activeTab");
     });
     element.classList.add("activeTab");
+
+    // setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function handleMobileSorting(element) {
@@ -247,7 +287,7 @@
   }
 
   // on change of table data, runupdateShowAllButtonVisibility
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const observer = new MutationObserver(() => updateShowAllButtonVisibility());
     observer.observe(document.getElementById("norwayLists"), {
       attributes: true,
@@ -400,7 +440,6 @@
     #mobileSorting {
       display: block;
     }
-
     .companyTabs {
       display: none;
     }
@@ -411,12 +450,10 @@
   <div class="shorting__heading">
     <h4>Shorting</h4>
     <p>
-      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på listen kan
-      shortes
+      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på listen kan shortes
       til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
     </p>
   </div>
-
   <div id="mobileSorting">
     <select onchange="handleMobileSorting(this)">
       <option value="18177">Norge</option>
