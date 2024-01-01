@@ -1,0 +1,246 @@
+<style>
+  #fondLists {
+    background: transparent;
+    color: #544952;
+    padding: 0;
+  }
+
+  #fondLists .cell-h4 {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #544952;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  #fondLists .cell-tabs__horizontal {
+    padding: 0;
+    margin: 0;
+  }
+
+  #fondLists .cell-tabs__horizontal .cell-flex-row {
+    gap: 10px;
+  }
+
+  #fondLists .cell-tabs__horizontal__tab {
+    margin: 0;
+    background: #ffffff80;
+    text-align: center;
+    padding: 15px;
+  }
+
+  #fondLists .cell-tabs__horizontal__tab--selected {
+    background: #ffffff;
+    color: #214d8e;
+    font-weight: 500;
+  }
+
+  #fondLists .cell-table-wrapper {
+    background: #ffffff;
+    padding: 16px;
+  }
+
+  #fondLists .cell-table-wrapper thead th {
+    padding: 0 0 12px 0 !important;
+  }
+
+  #fondLists .cell-table-wrapper thead .cell-table__txt--currency {
+    text-align: right;
+  }
+
+  #fondLists .cell-table-wrapper tbody {
+    border-bottom: 1px solid #d7d7d7;
+    font-size: 15px;
+  }
+
+  #fondLists .cell-table-wrapper tbody tr {
+    border-top: 1px solid #d7d7d7;
+  }
+
+  #fondLists .cell-table-wrapper tbody tr td {
+    padding: 12px 0;
+  }
+
+  #fondLists .cell-table-wrapper tbody tr .cell-table__txt--currency {
+    text-align: right;
+  }
+
+  #fondLists .cell-table-wrapper .cell-status-positive {
+    color: #527db3;
+  }
+
+  #fondLists .cell-table-wrapper .cell-status-negative {
+    color: #d96967;
+  }
+  /* pagination related css was moved to style.css for global use */
+</style>
+
+<script type="text/javascript">
+  var infrontUI_fond = null;
+  let fond_pagination_numberOfPages = 0;
+  let fond_items = [];
+  let fond_pagination_currentPage = 1;
+  let fond_pagination_itemsPerPage = 20;
+  // var infrontSDK_fond = null;
+
+  $(document).ready(function () {
+    // var infrontSession_fond = null;
+
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        var token_fond = data.token;
+
+        if (token_fond) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "sv";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token_fond;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_fond = new Infront.UI(opts);
+          infrontUI_fond.registerEventObserver("onReady", infrontReady_fond);
+          infrontUI_fond.init();
+          // infrontSDK_fond = new InfrontSDK.SDK({
+          //   signedToken: token_fond,
+          //   onReady: infrontSDKReady,
+          // });
+        }
+
+        /**
+         * ---------------------------------------------
+         * Fond pagination start
+         */
+        const fondPrevBtn = $("#prevBtn");
+        const fondNextBtn = $("#nextBtn");
+
+        fondPrevBtn.click(function (e) {
+          e.preventDefault();
+          fond_changePage(-1);
+        });
+        fondNextBtn.click(function (e) {
+          e.preventDefault();
+          fond_changePage(1);
+        });
+
+        function fond_updateButtonVisibility() {
+          console.log("fond_updateButtonVisibility");
+          fondPrevBtn.prop("disabled", fond_pagination_currentPage === 1);
+          fondNextBtn.prop("disabled", fond_pagination_currentPage === fond_pagination_numberOfPages);
+        }
+
+        function fond_changePage(offset) {
+          console.log("fond_changePage");
+          let newPage = Number(fond_pagination_currentPage) + Number(offset);
+          if (newPage >= 1 && newPage <= fond_pagination_numberOfPages) {
+            fond_showPage(newPage);
+          }
+        }
+
+        function fond_showPage(page) {
+          console.log("fond fond_showPage");
+          // Hide all items
+          fond_items.hide();
+          // Calculate the start and end index of the items to be displayed on the current page
+          let startIndex = (page - 1) * fond_pagination_itemsPerPage;
+          let endIndex = startIndex + fond_pagination_itemsPerPage;
+          // Show the items for the current page
+          fond_items.slice(startIndex, endIndex).show();
+          // Update current page
+          fond_pagination_currentPage = page;
+          // Update button visibility
+          fond_updateButtonVisibility();
+        }
+
+        let fond_run_count = 0;
+        function fond_initPagination() {
+          console.log("fond_initPagination");
+          fond_pagination_currentPage = 1;
+          fond_items = $("#fondLists tr.cell-table__item");
+
+          if (fond_items.length > 0) {
+            fond_pagination_numberOfPages = Math.ceil(fond_items.length / fond_pagination_itemsPerPage);
+            console.log(fond_pagination_numberOfPages);
+            // hide elements after index of ${fond_pagination_itemsPerPage}
+            $(`#fondLists tr.cell-table__item:gt(${fond_pagination_itemsPerPage})`).hide();
+          } else {
+            if (fond_run_count > 20) return;
+            setTimeout(() => {
+              fond_initPagination();
+            }, 3000);
+          }
+        }
+
+        // start pagination
+        fond_initPagination();
+        // ---- Fond pagination end
+        // ---------------------------------------------
+      });
+  });
+
+  function createBaseListOptions_fond() {
+    var cvOpts = new Infront.QuoteListWidgetOptions();
+
+    overviewColumns = [
+      "FULL_NAME",
+      "FUND_TYPE",
+      "ONE_Y_PCT_CHANGE",
+      "CURRENCY",
+      "RISK_LEVEL",
+      "STAR_RATING_3Y",
+
+      "FUND_TOTAL_ASSETS",
+    ];
+    performanceColumns = [
+      "FULL_NAME",
+      "FUND_TYPE",
+      "ONE_Y_PCT_CHANGE",
+      "THREE_Y_PCT_CHANGE",
+      "FIVE_Y_PCT_CHANGE",
+      "FUND_STD_DEV_1Y",
+      "FUND_SHARPE_RATIO_1Y",
+      "PROSPECTIVE_EARNINGS_YIELD",
+      "FUND_PROSPECTIVE_BOOK_VALUE_YIELD",
+    ];
+    cvOpts.sortable = true;
+    cvOpts.defaultSortedColumn = 1;
+    cvOpts.defaultSortOrder = 0;
+    cvOpts.feed = 4523;
+    cvOpts.showFilters = false;
+    cvOpts.enableChangeStatusColors = true;
+    cvOpts.tabs = [
+      {
+        id: "overview",
+        label: "Overview",
+        columns: overviewColumns,
+      },
+      {
+        id: "performance",
+        label: "Performance",
+        columns: performanceColumns,
+      },
+    ];
+    cvOpts.interactionHighlight = true;
+    //cvOpts.maxItems = 20;
+    cvOpts.onInstrumentSelected = function (instrument) {
+      window.open("https://online.paretosec.com/fund/" + instrument.isin);
+    };
+    return cvOpts;
+  }
+
+  function infrontReady_fond() {
+    var norwayListOpts = createBaseListOptions_fond();
+    norwayListWidget = infrontUI_fond.quoteList("fondLists", norwayListOpts);
+  }
+</script>
+
+<div class="col-md-12">
+  <div id="fondLists" class="col-md-12 data-table"></div>
+
+  <div class="pagination">
+    <button id="prevBtn" type="button">Forrige side</button>
+    <button id="nextBtn" type="button">Neste side</button>
+  </div>
+</div>
