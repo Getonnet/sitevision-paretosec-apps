@@ -1,30 +1,30 @@
 <script type="text/javascript">
-  var infrontSession = null;
-  var shorting_infrontUI = null;
-  var quoteListWidget = null;
-  var marketFeed = 18177;
-  var chartWidget = null;
-  var chartWidgetOptions = null;
+  // var infrontSession = null;
+  var infrontUI = null;
+  // var quoteListWidget = null;
+  // var marketFeed = 18177;
+  // var chartWidget = null;
+  // var chartWidgetOptions = null;
   var infrontSDK = null;
   var token;
 
+  /**
+   * ---------------------------------------------
+   * Fond pagination start
+   */
+  const shortViewAllBtn = $("#short_viewAll");
+  const listWrapper = $("#norwayLists");
+
+  shortViewAllBtn.click(function() {
+    listWrapper.toggleClass("show-all");
+    $(this).text(function(i, text) {
+      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
+    });
+  });
+  // ---------------------------------------------
+
   //include InfrontSessionInclude
   function updateShowAllButtonVisibility() {
-    /**
-     * ---------------------------------------------
-     * Fond pagination start
-     */
-    const shortViewAllBtn = $("#short_viewAll");
-    const listWrapper = $("#norwayLists");
-
-    shortViewAllBtn.click(function() {
-      listWrapper.toggleClass("show-all");
-      $(this).text(function(i, text) {
-        return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
-      });
-    });
-    // ---------------------------------------------
-
     if (listWrapper.height() < 860) {
       shortViewAllBtn.prop("disabled", true);
       listWrapper.addClass("show-all");
@@ -32,31 +32,6 @@
       listWrapper.removeClass("show-all");
       shortViewAllBtn.removeAttr("disabled");
     }
-  }
-
-  function CompanyPageLink(companyName) {
-    if (companyName) {
-      var slug = companyName.replace(/ /g, "-");
-      return "/selskap/" + slug;
-    }
-  }
-
-  function GetCountryFlagImageUrl(feed) {
-    var url = "";
-    switch (feed) {
-      case 18199:
-      case 18122:
-      case 18177:
-        url = "/Files/Templates/Designs/Pareto/images/flag-nor.png";
-        break;
-      case 17921:
-        url = "/Files/Templates/Designs/Pareto/images/flag-swe.png";
-        break;
-      default:
-        break;
-    }
-
-    return url;
   }
 
   $(document).ready(function() {
@@ -75,9 +50,9 @@
         opts.signed_token = token;
         opts.token_type = "JWT";
         opts.client_application = "WEB";
-        shorting_infrontUI = new Infront.UI(opts);
-        shorting_infrontUI.registerEventObserver("onReady", infrontReady);
-        shorting_infrontUI.init();
+        infrontUI = new Infront.UI(opts);
+        infrontUI.registerEventObserver("onReady", infrontReady);
+        infrontUI.init();
         infrontSDK = new InfrontSDK.SDK({
           signedToken: token,
           onReady: infrontSDKReady
@@ -87,38 +62,17 @@
   });
 
   //End Include
-
-  function shorting_setChart(feed, ticker) {
-    chartWidgetOptions.instruments = [
-      {
-        feed: feed,
-        ticker: ticker
-      }
-    ];
-    chartWidget.modify(chartWidgetOptions);
-  }
-
-  var widget;
-  var currentFeed;
-
-  function instrumentLink(ticker, feed) {
-    var baseUrl = "https://online.paretosec.com/Ticker/";
-    var result = baseUrl + ticker + "/" + feed;
-    return result;
-  }
-
   function instrumentTradeLink(isin, feed) {
     return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
   }
 
   function createBaseListOptions(instruments) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
-    cvOpts.columns = [
-      {
-        name: "TICKER",
-        hover: "FULL_NAME",
-        flag: true
-      },
+    cvOpts.columns = [{
+      name: "TICKER",
+      hover: "FULL_NAME",
+      flag: true
+    },
       {
         name: "FULL_NAME"
       },
@@ -163,7 +117,7 @@
           var result =
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='https://www.paretosec.no/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
         }
       }
@@ -266,7 +220,7 @@
       widget.destroy();
     }
     var opts = createBaseListOptions(instruments);
-    widget = shorting_infrontUI.quoteList("norwayLists", opts);
+    widget = infrontUI.quoteList("norwayLists", opts);
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
@@ -275,7 +229,7 @@
   }
 
   function toggleActiveTab(element) {
-    const tabs = document.querySelectorAll(".companyTabs a");
+    const tabs = document.querySelectorAll("#shorting .companyTabs a");
     tabs.forEach((tab) => {
       tab.classList.remove("activeTab");
     });
@@ -290,10 +244,14 @@
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
+  // on change of table data, runupdateShowAllButtonVisibility
   document.addEventListener("DOMContentLoaded", function() {
-    // on change of table data, runupdateShowAllButtonVisibility
     const observer = new MutationObserver(() => updateShowAllButtonVisibility());
-    observer.observe(document.getElementById("norwayLists"), { attributes: true, childList: true, subtree: true });
+    observer.observe(document.getElementById("norwayLists"), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
   });
 </script>
 
@@ -451,9 +409,9 @@
   <div class="shorting__heading">
     <h4>Shorting</h4>
     <p>
-      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen
-      kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på
-      listen kan shortes til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
+      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på listen kan
+      shortes
+      til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
     </p>
   </div>
   <div id="mobileSorting">

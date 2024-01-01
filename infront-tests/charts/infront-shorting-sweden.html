@@ -1,114 +1,92 @@
 <script type="text/javascript">
-  var infrontSession = null;
+  // var infrontSession = null;
   var infrontUI = null;
-  var quoteListWidget = null;
-  var marketFeed = 18177;
-  var chartWidget = null;
-  var chartWidgetOptions = null;
+  // var quoteListWidget = null;
+  // var marketFeed = 17921;
+  // var chartWidget = null;
+  // var chartWidgetOptions = null;
   var infrontSDK = null;
   var token;
 
+  /**
+   * ---------------------------------------------
+   * Fond pagination start
+   */
+  const shortViewAllBtn = $("#short_viewAll");
+  const listWrapper = $("#norwayLists");
+
+  shortViewAllBtn.click(function() {
+    listWrapper.toggleClass("show-all");
+    $(this).text(function(i, text) {
+      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
+    });
+  });
+  // ---------------------------------------------
+
   //include InfrontSessionInclude
-
-  function CompanyPageLink(companyName) {
-    if (companyName) {
-      var slug = companyName.replace(/ /g, "-");
-      return "/selskap/" + slug;
+  function updateShowAllButtonVisibility() {
+    if (listWrapper.height() < 860) {
+      shortViewAllBtn.prop("disabled", true);
+      listWrapper.addClass("show-all");
+    } else {
+      listWrapper.removeClass("show-all");
+      shortViewAllBtn.removeAttr("disabled");
     }
   }
 
-  function GetCountryFlagImageUrl(feed) {
-    var url = "";
-    switch (feed) {
-      case 18199:
-      case 18122:
-      case 18177:
-        url = "/Files/Templates/Designs/Pareto/images/flag-nor.png";
-        break;
-      case 17921:
-        url = "/Files/Templates/Designs/Pareto/images/flag-swe.png";
-        break;
-      default:
-        break;
-    }
-
-    return url;
-  }
-
-  $(document).ready(function () {
+  $(document).ready(function() {
     var infrontSession = null;
 
     fetch("/rest-api/Infront%20token/token")
-      .then((response) => response.json())
-      .then((data) => {
-        token = data.token;
+    .then((response) => response.json())
+    .then((data) => {
+      token = data.token;
 
-        if (token) {
-          let opts = new Infront.InfrontUIOptions();
-          opts.language = "no";
-          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
-          opts.streaming = true;
-          opts.signed_token = token;
-          opts.token_type = "JWT";
-          opts.client_application = "WEB";
-          infrontUI = new Infront.UI(opts);
-          infrontUI.registerEventObserver("onReady", infrontReady);
-          infrontUI.init();
-          infrontSDK = new InfrontSDK.SDK({
-            signedToken: token,
-            onReady: infrontSDKReady,
-          });
-        }
-      });
+      if (token) {
+        let opts = new Infront.InfrontUIOptions();
+        opts.language = "sv";
+        opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+        opts.streaming = true;
+        opts.signed_token = token;
+        opts.token_type = "JWT";
+        opts.client_application = "WEB";
+        infrontUI = new Infront.UI(opts);
+        infrontUI.registerEventObserver("onReady", infrontReady);
+        infrontUI.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: token,
+          onReady: infrontSDKReady
+        });
+      }
+    });
   });
 
   //End Include
-
-  function setChart(feed, ticker) {
-    chartWidgetOptions.instruments = [
-      {
-        feed: feed,
-        ticker: ticker,
-      },
-    ];
-    chartWidget.modify(chartWidgetOptions);
-  }
-
-  var widget;
-  var currentFeed;
-
-  function instrumentLink(ticker, feed) {
-    var baseUrl = "https://online.paretosec.com/Ticker/";
-    var result = baseUrl + ticker + "/" + feed;
-    return result;
-  }
-
   function instrumentTradeLink(isin, feed) {
     return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
   }
 
   function createBaseListOptions(instruments) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
-    cvOpts.columns = [
+    cvOpts.columns = [{
+      name: "TICKER",
+      hover: "FULL_NAME",
+      flag: true
+    },
       {
-        name: "TICKER",
-        hover: "FULL_NAME",
-        flag: true,
+        name: "FULL_NAME"
       },
       {
-        name: "FULL_NAME",
+        name: "LAST_VALID"
       },
       {
-        name: "LAST_VALID",
+        name: "CHANGE"
       },
       {
-        name: "CHANGE",
+        name: "PCT_CHANGE"
       },
       {
-        name: "PCT_CHANGE",
-      },
-      {
-        name: "TURNOVER",
+        name: "TURNOVER"
       },
       {
         name: "MCAP",
@@ -117,12 +95,12 @@
         type: Infront.FieldType.Computed,
         dataType: Infront.DataType.Integer,
         computeFields: ["NUM_SHARES", "LAST_VALID"],
-        compute: function (rowId, args) {
+        compute: function(rowId, args) {
           return args[0] * args[1];
-        },
+        }
       },
       {
-        name: "BROKER_IS_SHORTABLE",
+        name: "BROKER_IS_SHORTABLE"
       },
       "S_DATETIME",
 
@@ -135,14 +113,14 @@
         compute: (rowId, args) => {
           return args[0];
         },
-        translate: function (rowId, isin) {
+        translate: function(rowId, isin) {
           var result =
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='/images/18.2c2f7afa18c8abb97cf4d9c/1703832132295/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
-        },
-      },
+        }
+      }
     ];
     if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed) || Array.isArray(currentFeed)) {
       cvOpts.columns = cvOpts.columns.filter(
@@ -159,7 +137,8 @@
     return cvOpts;
   }
 
-  function infrontReady(event) {}
+  function infrontReady(event) {
+  }
 
   var instruments = [];
   var timeout;
@@ -182,6 +161,7 @@
       loadFeed(feed);
     }
   }
+
   var listeners = [];
 
   function loadFeed(feed) {
@@ -192,37 +172,38 @@
         subscribe: false,
         limit: -1,
         fields: ["Ticker", "ISIN"],
-        onData: function (results) {
+        onData: function(results) {
           listeners = results.map((id) => {
             return infrontSDK.get(
               InfrontSDK.symbolData({
                 subscribe: false,
                 content: {
                   AdditionalData: true,
-                  Basic: true,
+                  Basic: true
                 },
                 fields: ["Ticker", "IsShortable"],
                 id,
 
-                onData: function (item) {
+                onData: function(item) {
                   if (item.get("IsShortable") === 1) {
                     update({
                       feed: item.get("Feed"),
-                      ticker: item.get("Ticker"),
+                      ticker: item.get("Ticker")
                     });
                   } else {
                     update();
                   }
                 },
-                onStatus: function (requestName, status) {
+                onStatus: function(requestName, status) {
                   //console.log(requestName, " : ", status);
-                },
+                }
               })
             );
           });
-        },
+        }
       })
     );
+    // updateShowAllButtonVisibility();
   }
 
   function update(instrument) {
@@ -240,28 +221,38 @@
     }
     var opts = createBaseListOptions(instruments);
     widget = infrontUI.quoteList("norwayLists", opts);
+    setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function infrontSDKReady(event) {
-    changeFeed(18177);
+    changeFeed(17921);
   }
 
   function toggleActiveTab(element) {
-    const tabs = document.querySelectorAll(".companyTabs a");
-    console.log("clicked");
-
+    const tabs = document.querySelectorAll("#shorting .companyTabs a");
     tabs.forEach((tab) => {
       tab.classList.remove("activeTab");
     });
-
     element.classList.add("activeTab");
+
+    // setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function handleMobileSorting(element) {
     const selected = element.value;
-
     changeFeed(parseInt(selected));
+    setTimeout(updateShowAllButtonVisibility, 2000);
   }
+
+  // on change of table data, runupdateShowAllButtonVisibility
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+    observer.observe(document.getElementById("norwayLists"), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  });
 </script>
 
 <style>
@@ -306,7 +297,7 @@
     background: #ffffff80;
     color: #544952;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   .companyTabs a:hover {
@@ -325,6 +316,29 @@
     padding: 16px;
     background: #ffffff;
     color: #544952;
+    max-height: 864px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #shorting #norwayLists.show-all {
+    max-height: 5000px;
+  }
+
+  #shorting #norwayLists:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, #ffffff);
+    z-index: 5;
+  }
+
+  #shorting #norwayLists.show-all:after {
+    content: none;
   }
 
   #shorting #norwayLists .cell-table-wrapper thead th {
@@ -395,15 +409,15 @@
   <div class="shorting__heading">
     <h4>Shorting</h4>
     <p>
-      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen
-      kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på
-      listen kan shortes til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
+      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det er ingen garanti for at aksjer på listen kan
+      shortes
+      til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
     </p>
   </div>
   <div id="mobileSorting">
     <select onchange="handleMobileSorting(this)">
-      <option value="18177">Norge</option>
       <option value="17921">Sverige</option>
+      <option value="18177">Norge</option>
       <option value="17665">Danmark</option>
       <option value="100">Finland</option>
       <option value="26">Tyskland</option>
@@ -417,8 +431,8 @@
   </div>
 
   <ul class="companyTabs customTabs" style="border-top: 0; border-left: 0; border-right: 0">
-    <li><a class="activeTab" onclick="changeFeed(18177); toggleActiveTab(this);">Norge</a></li>
-    <li><a onclick="changeFeed(17921); toggleActiveTab(this);">Sverige</a></li>
+    <li><a class="activeTab" onclick="changeFeed(17921); toggleActiveTab(this);">Sverige</a></li>
+    <li><a onclick="changeFeed(18177); toggleActiveTab(this);">Norge</a></li>
     <li><a onclick="changeFeed(17665); toggleActiveTab(this);">Danmark</a></li>
     <li><a onclick="changeFeed(100); toggleActiveTab(this);">Finland</a></li>
     <li><a onclick="changeFeed(26); toggleActiveTab(this);">Tyskland</a></li>
@@ -432,5 +446,9 @@
 
   <div id="norwayLists">
     <div id="loader">Loading...</div>
+  </div>
+
+  <div class="pagination">
+    <button id="short_viewAll" type="button">Vis alt</button>
   </div>
 </div>

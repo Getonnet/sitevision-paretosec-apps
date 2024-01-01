@@ -112,7 +112,7 @@ const CompanyTabs = ({ token }: { token: string }) => {
           return (
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='https://www.paretosec.no/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>"
+            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>"
           );
         },
       },
