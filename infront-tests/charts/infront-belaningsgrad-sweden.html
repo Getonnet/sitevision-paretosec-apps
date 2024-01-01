@@ -35,7 +35,7 @@
     background: #ffffff !important;
   }
 
-  #belaningsgrad  #norwayLists_belaning {
+  #belaningsgrad #norwayLists_belaning {
     padding: 16px;
     background: #ffffff;
     color: #544952;
@@ -107,7 +107,46 @@
 <script type="text/javascript">
   var infrontUI_bela = null;
 
+  /**
+   * ---------------------------------------------
+   * belaningsgard pagination start
+   */
+  const belaningViewAllBtn = $("#belaning_viewAll");
+  const belaningListWrapper = $("#belaningsgrad #norwayLists_belaning");
+
+  function scrollToTopOfWidget() {
+    $("html, body").animate({
+      scrollTop: $("#belaningsgrad #norwayLists_belaning").offset().top - 150
+    }, 1000); // Adjust the duration as needed (in milliseconds)
+  }
+
+  $(document).on("click", "#belaning_viewAll", function() {
+    if (belaningListWrapper.length) {
+      belaningListWrapper.toggleClass("show-all");
+    } else {
+      $("#belaningsgrad #norwayLists_belaning").toggleClass("show-all");
+    }
+
+    $(this).text(function(i, text) {
+      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
+    });
+
+    // go to top of data table
+    scrollToTopOfWidget();
+  });
+  // ---------------------------------------------
+
   //include InfrontSessionInclude
+  function updateShowAllButtonVisibility() {
+    if (belaningListWrapper.height() < 860) {
+      belaningViewAllBtn.prop("disabled", true);
+      belaningListWrapper.addClass("show-all");
+    } else {
+      belaningListWrapper.removeClass("show-all");
+      belaningViewAllBtn.removeAttr("disabled");
+    }
+  }
+
   $(document).ready(function() {
     var infrontSession_bela = null;
 
@@ -230,7 +269,7 @@
     if (widget_bela) {
       widget_bela.destroy();
     }
-    $("#loader").show();
+    $("#loader_belaning").show();
     clearTimeout(timeout_bela);
     instruments_bela = [];
     if (Array.isArray(feed)) {
@@ -307,12 +346,13 @@
   }
 
   function initWidget_bela() {
-    $("#loader").hide();
+    $("#loader_belaning").hide();
     if (widget_bela) {
       widget_bela.destroy();
     }
     var opts = createBaseListOptions_bela(instruments_bela);
     widget_bela = infrontUI_bela.quoteList("norwayLists_belaning", opts);
+    setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function infrontSDKReady_bela(event) {
@@ -326,6 +366,16 @@
     });
     element.classList.add("activeTab");
   }
+
+  // on change of table data, run updateShowAllButtonVisibility
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+    observer.observe(document.getElementById("norwayLists_belaning"), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  });
 </script>
 
 <div id="belaningsgrad">
@@ -343,8 +393,11 @@
     <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
   </ul>
 
-  <div id="loader" style="display:flex;justify-content:center;">
-    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+  <div id="norwayLists_belaning" class="col-md-12">
+    <div id="loader_belaning">Loading...</div>
   </div>
-  <div id="norwayLists_belaning" class="col-md-12"></div>
+
+  <div class="pagination">
+    <button id="belaning_viewAll" type="button">Vis alt</button>
+  </div>
 </div>

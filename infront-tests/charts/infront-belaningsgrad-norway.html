@@ -35,7 +35,7 @@
     background: #ffffff !important;
   }
 
-  #belaningsgrad  #norwayLists_belaning {
+  #belaningsgrad #norwayLists_belaning {
     padding: 16px;
     background: #ffffff;
     color: #544952;
@@ -146,7 +146,7 @@
       belaningViewAllBtn.removeAttr("disabled");
     }
   }
-  
+
   $(document).ready(function() {
     var infrontSession_bela = null;
 
@@ -269,7 +269,7 @@
     if (widget_bela) {
       widget_bela.destroy();
     }
-    $("#loader").show();
+    $("#loader_belaning").show();
     clearTimeout(timeout_bela);
     instruments_bela = [];
     if (Array.isArray(feed)) {
@@ -346,7 +346,7 @@
   }
 
   function initWidget_bela() {
-    $("#loader").hide();
+    $("#loader_belaning").hide();
     if (widget_bela) {
       widget_bela.destroy();
     }
@@ -393,8 +393,9 @@
     <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
   </ul>
 
-  <div id="loader">Loading...</div>
-  <div id="norwayLists_belaning" class="col-md-12"></div>
+  <div id="norwayLists_belaning" class="col-md-12">
+    <div id="loader_belaning">Loading...</div>
+  </div>
 
   <div class="pagination">
     <button id="belaning_viewAll" type="button">Vis alt</button>
