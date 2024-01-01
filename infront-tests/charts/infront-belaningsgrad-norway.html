@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collateral | Pareto Securities</title>
+  <base href="https://www.paretosec.no/">
+  <meta name="generator" content="Dynamicweb 9">
+
+  <link href="/Files/Templates/Designs/Pareto/css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="/Files/Templates/Designs/Pareto/shared/css/infront.customizations.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="//wtk.infrontservices.com/css/InfrontFramework-3.10.5.css">
+  <link type="text/css" rel="stylesheet" href="//wtk.infrontservices.com/beta/themes/light-3.7.5/theme.css">
+  <script src="//code.highcharts.com/stock/5.0.7/highstock.js"></script>
+  <script src="//code.highcharts.com/stock/5.0.7/highcharts-more.js"></script>
+
+  <script type="text/javascript" src="//wtk.infrontservices.com/js/CommonFramework-2.10.5.min.js"></script>
+  <script type="text/javascript" src="//wtk.infrontservices.com/js/InfrontUI-3.10.5.min.js"></script>
+
+  <script type="text/javascript">
+    var infrontUI_bela = null;
+
+    //include InfrontSessionInclude
+    $(document).ready(function() {
+      var infrontSession_bela = null;
+
+      fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        var token = data.token;
+        if (token) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_bela = new Infront.UI(opts);
+          infrontUI_bela.registerEventObserver("onReady", infrontReady_bela);
+          infrontUI_bela.init();
+          infrontSDK = new InfrontSDK.SDK({
+            signedToken: token,
+            onReady: infrontSDKReady_bela
+          });
+        }
+      });
+    });
+
+    //End Include
+
+    var widget_bela;
+    var currentFeed_bela;
+
+    function instrumentTradeLink_bela(isin, feed) {
+      return (
+        "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed
+      );
+    }
+
+    function createBaseListOptions_bela(instruments, feed) {
+      var cvOpts = new Infront.QuoteListWidgetOptions();
+      cvOpts.maxItems = instruments.length;
+      cvOpts.columns = [
+        {
+          name: "TICKER",
+          flag: true,
+          hover: "FULL_NAME"
+        },
+        {
+          name: "FULL_NAME"
+
+        },
+
+        { name: "LAST_VALID" },
+        { name: "CHANGE" },
+        { name: "PCT_CHANGE" },
+        { name: "TURNOVER" },
+        {
+          name: "MCAP",
+          heading: "MCap",
+          shorten: true,
+          type: Infront.FieldType.Computed,
+          dataType: Infront.DataType.Integer,
+          computeFields: ["NUM_SHARES", "LAST_VALID"],
+          compute: function(rowId, args) {
+            return args[0] * args[1];
+          }
+        },
+        {
+          name: "BROKER_COLLATERAL_PCT",
+          translate: function(c, v, i) {
+            return "<strong>" + InfrontUtil.formatPercent(v, 0) + "</strong>";
+          }
+        },
+        {
+          name: "S_DATETIME"
+        },
+
+        {
+          name: "",
+          type: Infront.FieldType.Computed,
+          sortable: false,
+          className: "cell-text-right",
+          computeFields: ["ISIN"],
+          compute: (rowId, args) => {
+            return args[0];
+          },
+          translate: function(rowId, isin) {
+            var result =
+              "<a href='" +
+              instrumentTradeLink_bela(isin, rowId.feed) +
+              "'><img title='Trade this' alt='H' src='/Files/Templates/Designs/Pareto/images/tradebtn_mini_no.png' class='btnTrade'></a>"; // TODO: Update URL
+            return result;
+          }
+        }
+      ];
+
+      if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_bela) || Array.isArray(currentFeed_bela)) {
+        cvOpts.columns = cvOpts.columns.filter(x => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
+      }
+      cvOpts.instruments = instruments;
+      cvOpts.sortable = true;
+      cvOpts.enableChangeStatusColors = true;
+      cvOpts.defaultSortedColumn = "TICKER";
+      cvOpts.defaultSortOrder = 0;
+      cvOpts.useChains = false;
+      cvOpts.interactionHighlight = true;
+      return cvOpts;
+    }
+
+    function infrontReady_bela(event) {
+
+    }
+
+    var instruments_bela = [];
+    var timeout_bela;
+
+    function changeFeed_bela(feed) {
+      if (currentFeed_bela == feed) {
+        return;
+      }
+      currentFeed_bela = feed;
+      if (widget_bela) {
+        widget_bela.destroy();
+      }
+      $("#loader").show();
+      clearTimeout(timeout_bela);
+      instruments_bela = [];
+      if (Array.isArray(feed)) {
+        feed.reduce((seq, f) => {
+          return seq.then(() => loadFeed_bela(f));
+        }, Promise.resolve());
+      } else {
+        loadFeed_bela(feed);
+      }
+
+    }
+
+    function loadFeed_bela(feed) {
+      return new Promise((res, rej) => {
+        res();
+        infrontSDK.get(
+          InfrontSDK.feedContents({
+            contentType: InfrontSDK.FeedContentType.SymbolIds,
+            feed: feed,
+            subscribe: false,
+            limit: -1,
+            fields: ["Ticker", "ISIN"],
+            onData: function(results) {
+
+              results.map((id) => {
+                return infrontSDK.get(
+                  InfrontSDK.symbolData({
+                    subscribe: false,
+                    content: {
+                      AdditionalData: true,
+                      Basic: true
+                    },
+                    fields: ["Ticker", "CollateralPct"],
+                    id,
+
+                    onData: function(item) {
+
+                      if ((Array.isArray(currentFeed_bela) && currentFeed_bela.includes(feed)) || currentFeed_bela === feed) {
+                        if (item.get("CollateralPct") !== null) {
+                          update_bela({
+                            feed: item.get("Feed"),
+                            ticker: item.get("Ticker")
+                          });
+
+                        } else {
+                          update_bela();
+                        }
+                      }
+
+                    },
+                    onStatus: function(requestName, status) {
+                      console.log(requestName, " : ", status);
+                    }
+                  })
+                );
+              });
+
+            }
+          })
+        );
+      });
+
+    }
+
+
+    function update_bela(instrument) {
+      if (instrument) {
+        instruments_bela.push(instrument);
+      }
+      clearTimeout(timeout_bela);
+      timeout_bela = setTimeout(initWidget_bela, 500);
+
+
+    }
+
+    function initWidget_bela() {
+      $("#loader").hide();
+      if (widget_bela) {
+        widget_bela.destroy();
+      }
+      var opts = createBaseListOptions_bela(instruments_bela);
+      widget_bela = infrontUI_bela.quoteList("norwayLists", opts);
+    }
+
+    function infrontSDKReady_bela(event) {
+      changeFeed_bela(18177);
+    }
+  </script>
+</head>
+
+<body>
+
+<div class="col-md-12">
+  <ul class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
+    <li class="active"><a onclick="changeFeed_bela(18177)">Norge</a></li>
+    <li><a onclick="changeFeed_bela(17921)">Sverige</a></li>
+    <li><a onclick="changeFeed_bela(17665)">Danmark</a></li>
+    <li><a onclick="changeFeed_bela(100)">Finland</a></li>
+    <li><a onclick="changeFeed_bela(26)">Tyskland</a></li>
+    <li><a onclick="changeFeed_bela(19)">UK</a></li>
+    <li><a onclick="changeFeed_bela(2008)">Frankrike</a></li>
+    <li><a onclick="changeFeed_bela(2012 )">Spania</a></li>
+    <li><a onclick="changeFeed_bela(2047)">Italia</a></li>
+    <li><a onclick="changeFeed_bela(14)">USA - NYSE</a></li>
+    <li><a onclick="changeFeed_bela(15)">USA - NASDAQ</a></li>
+  </ul>
+</div>
+
+<div class="col-md-12">
+  <div id="loader" style="display:flex;justify-content:center;">
+    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+  </div>
+  <div id="norwayLists" class="col-md-12"></div>
+</div>
+
+</body>
+</html>

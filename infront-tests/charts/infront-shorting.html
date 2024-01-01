@@ -1,6 +1,6 @@
 <script type="text/javascript">
   var infrontSession = null;
-  var infrontUI = null;
+  var shorting_infrontUI = null;
   var quoteListWidget = null;
   var marketFeed = 18177;
   var chartWidget = null;
@@ -75,9 +75,9 @@
         opts.signed_token = token;
         opts.token_type = "JWT";
         opts.client_application = "WEB";
-        infrontUI = new Infront.UI(opts);
-        infrontUI.registerEventObserver("onReady", infrontReady);
-        infrontUI.init();
+        shorting_infrontUI = new Infront.UI(opts);
+        shorting_infrontUI.registerEventObserver("onReady", infrontReady);
+        shorting_infrontUI.init();
         infrontSDK = new InfrontSDK.SDK({
           signedToken: token,
           onReady: infrontSDKReady
@@ -88,7 +88,7 @@
 
   //End Include
 
-  function setChart(feed, ticker) {
+  function shorting_setChart(feed, ticker) {
     chartWidgetOptions.instruments = [
       {
         feed: feed,
@@ -266,7 +266,7 @@
       widget.destroy();
     }
     var opts = createBaseListOptions(instruments);
-    widget = infrontUI.quoteList("norwayLists", opts);
+    widget = shorting_infrontUI.quoteList("norwayLists", opts);
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
