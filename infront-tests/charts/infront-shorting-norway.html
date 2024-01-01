@@ -12,17 +12,27 @@
    * Fond pagination start
    */
   const shortViewAllBtn = $("#short_viewAll");
-  const listWrapper = $("#norwayLists");
+  const listWrapper = $("#shorting #norwayLists");
+
+  function scrollToTopOfWidget() {
+    $("html, body").animate({
+      scrollTop: $("#shorting #norwayLists").offset().top - 150
+    }, 1000); // Adjust the duration as needed (in milliseconds)
+  }
 
   $(document).on("click", "#short_viewAll", function() {
-    if (listWrapper) {
+    if (listWrapper.length) {
       listWrapper.toggleClass("show-all");
     } else {
-      $("#norwayLists").toggleClass("show-all");
+      $("#shorting #norwayLists").toggleClass("show-all");
     }
+
     $(this).text(function(i, text) {
       return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
     });
+
+    // go to top of data table
+    scrollToTopOfWidget();
   });
   // ---------------------------------------------
 

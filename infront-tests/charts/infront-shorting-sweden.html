@@ -1,25 +1,38 @@
 <script type="text/javascript">
-  // var infrontSession = null;
-  var infrontUI = null;
-  // var quoteListWidget = null;
-  // var marketFeed = 17921;
-  // var chartWidget = null;
-  // var chartWidgetOptions = null;
-  var infrontSDK = null;
-  var token;
+  var infrontUI_shorting = null;
+  var quoteListWidget = null;
+  var marketFeed = 17921;
+  var chartWidget = null;
+  var chartWidgetOptions = null;
+  var infrontSDK_shorting = null;
+  var token_shorting;
 
   /**
    * ---------------------------------------------
    * Fond pagination start
    */
   const shortViewAllBtn = $("#short_viewAll");
-  const listWrapper = $("#norwayLists");
+  const listWrapper = $("#shorting #norwayLists");
 
-  shortViewAllBtn.click(function() {
-    listWrapper.toggleClass("show-all");
+  function scrollToTopOfWidget() {
+    $("html, body").animate({
+      scrollTop: $("#shorting #norwayLists").offset().top - 150
+    }, 1000); // Adjust the duration as needed (in milliseconds)
+  }
+
+  $(document).on("click", "#short_viewAll", function() {
+    if (listWrapper.length) {
+      listWrapper.toggleClass("show-all");
+    } else {
+      $("#shorting #norwayLists").toggleClass("show-all");
+    }
+
     $(this).text(function(i, text) {
       return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
     });
+
+    // go to top of data table
+    scrollToTopOfWidget();
   });
   // ---------------------------------------------
 
@@ -35,26 +48,24 @@
   }
 
   $(document).ready(function() {
-    var infrontSession = null;
-
     fetch("/rest-api/Infront%20token/token")
     .then((response) => response.json())
     .then((data) => {
-      token = data.token;
+      token_shorting = data.token;
 
-      if (token) {
+      if (token_shorting) {
         let opts = new Infront.InfrontUIOptions();
         opts.language = "sv";
         opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
         opts.streaming = true;
-        opts.signed_token = token;
+        opts.signed_token = token_shorting;
         opts.token_type = "JWT";
         opts.client_application = "WEB";
-        infrontUI = new Infront.UI(opts);
-        infrontUI.registerEventObserver("onReady", infrontReady);
-        infrontUI.init();
-        infrontSDK = new InfrontSDK.SDK({
-          signedToken: token,
+        infrontUI_shorting = new Infront.UI(opts);
+        infrontUI_shorting.registerEventObserver("onReady", infrontReady);
+        infrontUI_shorting.init();
+        infrontSDK_shorting = new InfrontSDK.SDK({
+          signedToken: token_shorting,
           onReady: infrontSDKReady
         });
       }
@@ -66,8 +77,8 @@
     return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
   }
 
-  var widget;
-  var currentFeed;
+  var widget_shorting;
+  var currentFeed_shorting;
 
   function createBaseListOptions(instruments) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
@@ -120,12 +131,12 @@
           var result =
             "<a href='" +
             instrumentTradeLink(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='/images/18.2c2f7afa18c8abb97cf4d9c/1703832132295/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
         }
       }
     ];
-    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed) || Array.isArray(currentFeed)) {
+    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_shorting) || Array.isArray(currentFeed_shorting)) {
       cvOpts.columns = cvOpts.columns.filter(
         (x) => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name)
       );
@@ -147,12 +158,12 @@
   var timeout;
 
   function changeFeed(feed) {
-    if (currentFeed == feed) {
+    if (currentFeed_shorting == feed) {
       return;
     }
-    currentFeed = feed;
-    if (widget) {
-      widget.destroy();
+    currentFeed_shorting = feed;
+    if (widget_shorting) {
+      widget_shorting.destroy();
     }
     $("#loader").show();
 
@@ -168,7 +179,7 @@
   var listeners = [];
 
   function loadFeed(feed) {
-    infrontSDK.get(
+    infrontSDK_shorting.get(
       InfrontSDK.feedContents({
         contentType: InfrontSDK.FeedContentType.SymbolIds,
         feed: feed,
@@ -177,7 +188,7 @@
         fields: ["Ticker", "ISIN"],
         onData: function(results) {
           listeners = results.map((id) => {
-            return infrontSDK.get(
+            return infrontSDK_shorting.get(
               InfrontSDK.symbolData({
                 subscribe: false,
                 content: {
@@ -219,11 +230,11 @@
 
   function initWidget() {
     $("#loader").hide();
-    if (widget) {
-      widget.destroy();
+    if (widget_shorting) {
+      widget_shorting.destroy();
     }
     var opts = createBaseListOptions(instruments);
-    widget = infrontUI.quoteList("norwayLists", opts);
+    widget_shorting = infrontUI_shorting.quoteList("norwayLists", opts);
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
@@ -237,8 +248,6 @@
       tab.classList.remove("activeTab");
     });
     element.classList.add("activeTab");
-
-    // setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
   function handleMobileSorting(element) {
@@ -417,6 +426,7 @@
       til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
     </p>
   </div>
+
   <div id="mobileSorting">
     <select onchange="handleMobileSorting(this)">
       <option value="17921">Sverige</option>
