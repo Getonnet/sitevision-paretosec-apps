@@ -256,7 +256,7 @@
     setTimeout(updateShowAllButtonVisibility, 2000);
   }
 
-  // on change of table data, runupdateShowAllButtonVisibility
+  // on change of table data, run updateShowAllButtonVisibility
   document.addEventListener("DOMContentLoaded", function() {
     const observer = new MutationObserver(() => updateShowAllButtonVisibility());
     observer.observe(document.getElementById("norwayLists"), {
