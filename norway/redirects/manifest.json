@@ -2,13 +2,17 @@
   "id": "redirects",
   "version": "0.0.1",
   "name": {
-    "en": "WebApp boilerplate"
+    "en": "redirects app"
   },
-  "author": "My Company",
+  "author": "Getonnet As",
   "description": {
-    "en": "A WebApp boilerplate"
+    "en": "redirects app"
   },
-  "helpUrl": "https://example.com/webapps",
+  "helpUrl": "https://getonnet.no/support",
   "type": "WebApp",
-  "bundled": true
+  "bundled": true,
+  "storage": {
+    "collectionDataStore": "paretosec-dev",
+    "keyValueDataStore": "paretosec-dev"
+  }
 }
