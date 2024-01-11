@@ -10,7 +10,8 @@
   const storage = require("Storage");
 
   // const mainPageNode = resourceLocatorUtil.getSitePage();
-  const db = storage.getKeyValueDataStore("paretosec-dev");
+  console.log(storage);
+  const db = storage && storage.getKeyValueDataStore("paretosec-dev");
 
   router.get("/", (req, res) => {
     res.render({});
