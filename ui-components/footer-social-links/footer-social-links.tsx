@@ -34,6 +34,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"FacebookIcon"}
+          rel={"noreferrer"}
         >
           <FacebookIcon />
         </a>
@@ -44,6 +45,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"TwitterIcon"}
+          rel={"noreferrer"}
         >
           <TwitterIcon />
         </a>
@@ -54,6 +56,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"LinkedinIcon"}
+          rel={"noreferrer"}
         >
           <LinkedinIcon />
         </a>
@@ -64,6 +67,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"ThreadsIcon"}
+          rel={"noreferrer"}
         >
           <ThreadsIcon />
         </a>
@@ -74,6 +78,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"InstagramIcon"}
+          rel={"noreferrer"}
         >
           <InstagramIcon />
         </a>
@@ -84,6 +89,7 @@ export const FooterSocialLinks = ({
           target="_blank"
           className={styles.icon}
           aria-label={"YoutubeIcon"}
+          rel={"noreferrer"}
         >
           <YoutubeIcon />
         </a>

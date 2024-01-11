@@ -2,7 +2,6 @@ import router from "@sitevision/api/common/router";
 import redirectUtil from "@sitevision/api/server/RedirectUtil";
 import storage from "@sitevision/api/server/storage";
 import resourceLocatorUtil from "@sitevision/api/server/ResourceLocatorUtil";
-// import { getFormattedValues } from "./util";
 
 type UrlsObject = {
   [key: string]: string | string[];
@@ -15,12 +14,27 @@ type Nodes = {
 const db = storage.getKeyValueDataStore("paretosec-dev");
 
 router.get("/all", (req, res) => {
-  const rs = redirectUtil.getRedirectURIs(
-    resourceLocatorUtil.getNodeByUrl(
-      "https://use-temp-pareto.sitevision-cloud.se/omoss"
-    )
-  );
-  res.json({ redirects: rs });
+  const redirects: any = {};
+  let existingNodes: Nodes = {
+    nodes: [],
+  };
+
+  try {
+    existingNodes = db.get("redirectNodes") as Nodes;
+  } catch (e) {
+    res.json({ redirects: "No redirects found" });
+  }
+
+  if (existingNodes.nodes.length) {
+    existingNodes.nodes.map((n) => {
+      redirects[n] = redirectUtil.getRedirectURIs(
+        resourceLocatorUtil.getNodeByUrl(n)
+      );
+    });
+    res.json({ redirects });
+  } else {
+    res.json({ redirects: "No redirects found" });
+  }
 });
 
 router.get("/add-redirects", (req, res) => {
@@ -81,17 +95,27 @@ router.get("/add-redirects", (req, res) => {
   res.json({ message: "Success", errors: log, newNodes, mergedNodes });
 });
 
-// router.post("/add", (req, res) => {
-//   const node = resourceLocatorUtil.getNodeByUrl(req.params.path);
-//   if (node && node.isNode()) {
-//     redirectUtil.addRedirectURI(node, req.params.target);
-//     res.json("Success");
-//   } else {
-//     res.send("Not a node");
-//     res.json(req.params);
-//   }
-// });
+router.get("/delete-one-redirect", (req, res) => {
+  const node = resourceLocatorUtil.getNodeByUrl(req.params.url);
+  const uri = req.params.path;
+  redirectUtil.removeRedirectURI(node, uri);
+  res.json({ message: `${uri} was deleted from ${node}` });
+});
 
-// router.put("/update", (req, res) => {
-//   res.json({ message: "Hello from PUT" });
+router.get("/delete-all-redirects-for-one-page-url", (req, res) => {
+  const url = req.params.url;
+  const node = resourceLocatorUtil.getNodeByUrl(url);
+  redirectUtil.removeAllRedirectURIs(node);
+
+  // update nodes
+  const currentNodes = db.get("redirectNodes") as Nodes;
+  const newNodes = currentNodes.nodes;
+  delete newNodes[newNodes.indexOf(url)];
+  db.put("redirectNodes", { nodes: newNodes });
+
+  res.json({ message: `All redirects was deleted for: '${node}' ` });
+});
+
+// router.get("/delete-all-for-all-pages", (req, res) => {
+// TODO: implement
 // });
