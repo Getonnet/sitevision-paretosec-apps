@@ -8,6 +8,7 @@ import Navbar from "../Desktop/Navbar";
 import SearchDesktop from "../Desktop/SearchDesktop";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
+
 import useState from "react-usestateref";
 import type {
   AppProperties,
@@ -18,11 +19,8 @@ import type {
 } from "./types";
 
 const URL_PREFIX = "/rest-api/1/0";
-const MAIN_URL =
-  URL_PREFIX +
-  "/19.162ad65718a92ee55e3282e0/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
-const URL_SUFFIX =
-  "/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
+const MAIN_URL = URL_PREFIX + "/19.162ad65718a92ee55e3282e0/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
+const URL_SUFFIX = "/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
 
 const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setTopMenuItems, topMenuItems] = useState<ILink[]>([]);
