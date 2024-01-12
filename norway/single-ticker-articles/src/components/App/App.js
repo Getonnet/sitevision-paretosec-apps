@@ -144,9 +144,8 @@ const App = () => {
                       )}{" "}
                       av Pareto Securities | Aktuelt
                     </small>
-                    <h3 className="subheading3">
+                    <h3 className="subheading3 subheading3">
                       <a href={a.properties.URL}>
-                        // {filterNonASCIICharacters(a.name)}
                         {a.name}
                       </a>
                     </h3>
