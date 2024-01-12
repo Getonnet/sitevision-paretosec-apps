@@ -104,7 +104,6 @@
       .then((data) => {
         /* fullName, tekst, website, altName, feed, isin, currency, instrumentType, exchangeInstrumentId,tickerCode */
         tickerData = data;
-        console.log(data);
 
         $(".about-container").append("<p>" + data.tekst + "</p>");
 
@@ -154,8 +153,6 @@
   }
 
   function st_infrontReady(event) {
-    console.log("running SDK ready -----------");
-    console.log(tickerData);
     const { feed, tickerCode } = tickerData;
 
     var optsYar = new Infront.OrderbookWidgetOptions();
@@ -186,7 +183,7 @@
     opts.chartUI = {
       advancedParameters: true,
     };
-    console.log(opts);
+
     st_chartWidget2 = st_infrontUI.chartWidget2("#chartWidget2", opts);
     st_chartWidget2 = st_infrontUI.chartWidget2("#graphContainer", opts);
 
@@ -204,7 +201,6 @@
     //   },
     //    "layout": Infront.FocusWidgetLayout.MINI,
     //    "translate": function(rowId, value) {
-    //       console.log(value);
     //      },
     //   });
     //
@@ -349,10 +345,10 @@
           sbOpts.enableMultiSelect = false;
           sbOpts.instrumentSelected = function (instrument) {
             //Event fires when instrument is selected from the search-result dropdown menu
-            console.log(instrument.ticker);
+
           };
           sbOpts.emptyResultSelected = function () {
-            console.log("Empty");
+
           };
           sbOpts.showAfterSelect = function (instrument) {
             //Can also be a function for maximum flexibility

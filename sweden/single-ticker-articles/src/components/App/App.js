@@ -30,7 +30,6 @@ const App = () => {
         },
       })
       .then((response) => {
-        console.log("Ticker properties: ", response);
         setPageTickerCode(response.tickerCode);
         get20Articles(response.tickerCode);
       })

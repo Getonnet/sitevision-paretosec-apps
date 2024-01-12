@@ -24,8 +24,6 @@ const SearchDesktop = () => {
     fetchResults();
   }, [query]);
 
-  console.log(results);
-
   return (
     <div style={{ position: "relative" }}>
       <form

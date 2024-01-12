@@ -29,8 +29,6 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
   const [mobileSearchToggle, setMobileSearchToggle] = useState(false);
 
-  // console.log(data);
-
   const fetchData = (url: string, type: LinkType, parentID?: string) => {
     return requester
       .doGet({
