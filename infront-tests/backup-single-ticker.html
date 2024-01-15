@@ -233,10 +233,10 @@
         sbOpts.fields = ["ticker", "feed_code", "isin"]; //Available feeds: feed, ticker, isin, currency, instrument_type, instrument_subtype, full_name, feed_code
         sbOpts.enableMultiSelect = false;
         sbOpts.instrumentSelected = function (instrument) { //Event fires when instrument is selected from the search-result dropdown menu
-            console.log(instrument.ticker);
+            
         };
         sbOpts.emptyResultSelected = function () {
-            console.log("Empty");
+            
         };
         sbOpts.showAfterSelect = function (instrument) { //Can also be a function for maximum flexibility
             return instrument.full_name + " (" + instrument.currency + ")";
@@ -360,8 +360,7 @@
             }
         }).done(function () {
         }).fail(function (data) {
-            console.log("error");
-            console.dir(data);
+            
         });
 
         $.getJSON("https://www.paretosec.no/Default.aspx?ID=152&q=Equinor", function (data) {

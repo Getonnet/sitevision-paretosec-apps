@@ -30,7 +30,6 @@ const App = () => {
         },
       })
       .then((response) => {
-        console.log("Ticker properties: ", response);
         setPageTickerCode(response.tickerCode);
         get20Articles(response.tickerCode);
       })
@@ -82,7 +81,6 @@ const App = () => {
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
-        // console.log("Articles ---------", res);
 
         // filter data
         res.map((article) => {
@@ -98,13 +96,11 @@ const App = () => {
             // console.count("no match");
           }
         });
-        // console.log("mapping is done - - - - xx");
 
         if (
           first3Articles.current.length < 3 &&
           !paginationIsInLastPage.current
         ) {
-          console.log(first3Articles.current);
           get20Articles(pageTickerCode.current);
         }
       })
@@ -112,10 +108,6 @@ const App = () => {
         console.log(e);
       });
   };
-
-  // console.log(currentPage.current);
-  // console.log(images.current);
-  // console.log(first3Articles.current);
 
   return (
     <>
@@ -144,34 +136,36 @@ const App = () => {
                 />
               </a>
 
-              <div className={styles.article_content}>
-                <header>
-                  <small className={styles.date}>
-                    {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
-                    av Pareto Securities | Aktuelt
-                  </small>
-                  <h3 className="subheading3">
-                    <a href={a.properties.URL}>
-                      {filterNonASCIICharacters(a.name)}
-                    </a>
-                  </h3>
-                  <p className="normal">
-                    {limitSentenceTo15Words(a.properties.article_summary)}
-                    {"..."}
-                  </p>
-                </header>
-              </div>
-            </article>
-          ))
-        ) : (
-          <>
-            {paginationIsInLastPage ? (
-              <div>Ingen artikler funnet.</div>
-            ) : (
-              <div>Laster inn...</div>
-            )}
-          </>
-        )}
+                <div className={styles.article_content}>
+                  <header>
+                    <small className={styles.date}>
+                      {formatTimestampToNorwegianDate(
+                        a.properties.creationDate
+                      )}{" "}
+                      av Pareto Securities | Aktuelt
+                    </small>
+                    <h3 className="subheading3">
+                      <a href={a.properties.URL}>
+                        {a.name}
+                      </a>
+                    </h3>
+                    <p className="normal">
+                      {limitSentenceTo15Words(a.properties.article_summary)}
+                      {"..."}
+                    </p>
+                  </header>
+                </div>
+              </article>
+            ))
+          : (
+            <>
+              {paginationIsInLastPage ? (
+                <div>Ingen artikler funnet.</div>
+              ) : (
+                <div>Laster inn...</div>
+              )}
+            </>
+          )}
       </div>
     </>
   );

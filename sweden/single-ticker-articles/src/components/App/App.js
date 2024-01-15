@@ -4,7 +4,6 @@ import styles from "./App.scss";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
 import {
-  filterNonASCIICharacters,
   formatTimestampToNorwegianDate,
   limitSentenceTo15Words,
 } from "../util";
@@ -30,7 +29,6 @@ const App = () => {
         },
       })
       .then((response) => {
-        console.log("Ticker properties: ", response);
         setPageTickerCode(response.tickerCode);
         get20Articles(response.tickerCode);
       })
@@ -82,7 +80,6 @@ const App = () => {
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
-        // console.log("Articles ---------", res);
 
         // filter data
         res.map((article) => {
@@ -98,13 +95,11 @@ const App = () => {
             // console.count("no match");
           }
         });
-        // console.log("mapping is done - - - - xx");
 
         if (
           first3Articles.current.length < 3 &&
           !paginationIsInLastPage.current
         ) {
-          console.log(first3Articles.current);
           get20Articles(pageTickerCode.current);
         }
       })
@@ -113,10 +108,6 @@ const App = () => {
       });
   };
 
-  // console.log(currentPage.current);
-  // console.log(images.current);
-  // console.log(first3Articles.current);
-
   return (
     <>
       <h2 className={styles.title}>
@@ -124,54 +115,54 @@ const App = () => {
         <span className={styles.bold}>{pageTickerCode.current}</span>
       </h2>
       <div className={styles.sta_grid}>
-        {first3Articles.current.length ? (
-          first3Articles.current.slice(0, 3).map((a) => (
-            <article className={styles.article} key={a.id} id={a.id}>
-              <a href={a.properties.URL} title={a.name}>
-                <div
-                  role="img"
-                  aria-label={pageTickerCode.current}
-                  // className="sv-newslist__gallery-item__image"
-                  style={{
-                    backgroundImage: `url(${
-                      images.current[a.id] ||
-                      "/images/18.17e5c29718bfae2e60119bd9/1697110984705/valutaveksling-169.Jpg"
-                    })`,
-                    height: 260,
-                    minHeight: 260,
-                    backgroundSize: "cover",
-                  }}
-                />
-              </a>
+        {first3Articles.current.length
+          ? first3Articles.current.slice(0, 3).map((a) => (
+              <article className={styles.article} key={a.id} id={a.id}>
+                <a href={a.properties.URL} title={a.name}>
+                  <div
+                    role="img"
+                    aria-label={pageTickerCode.current}
+                    // className="sv-newslist__gallery-item__image"
+                    style={{
+                      backgroundImage: `url(${
+                        images.current[a.id] ||
+                        "/images/18.17e5c29718bfae2e60119bd9/1697110984705/valutaveksling-169.Jpg"
+                      })`,
+                      height: 260,
+                      minHeight: 260,
+                      backgroundSize: "cover",
+                    }}
+                  />
+                </a>
 
-              <div className={styles.article_content}>
-                <header>
-                  <small className={styles.date}>
-                    {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
-                    av Pareto Securities | Aktuelt
-                  </small>
-                  <h3 className="subheading3">
-                    <a href={a.properties.URL}>
-                      {filterNonASCIICharacters(a.name)}
-                    </a>
-                  </h3>
-                  <p className="normal">
-                    {limitSentenceTo15Words(a.properties.article_summary)}
-                    {"..."}
-                  </p>
-                </header>
-              </div>
-            </article>
-          ))
-        ) : (
-          <>
+                <div className={styles.article_content}>
+                  <header>
+                    <small className={styles.date}>
+                      {formatTimestampToNorwegianDate(
+                        a.properties.creationDate
+                      )}{" "}
+                      av Pareto Securities | Aktuelt
+                    </small>
+                    <h3 className="subheading3">
+                      <a href={a.properties.URL}>
+                        {a.name}
+                      </a>
+                    </h3>
+                    <p className="normal">
+                      {limitSentenceTo15Words(a.properties.article_summary)}
+                      {"..."}
+                    </p>
+                  </header>
+                </div>
+              </article>
+            ))
+          :<>
             {paginationIsInLastPage ? (
               <div>Inga artiklar hittades.</div>
             ) : (
               <div>Läser in...</div>
             )}
-          </>
-        )}
+          </>}
       </div>
     </>
   );

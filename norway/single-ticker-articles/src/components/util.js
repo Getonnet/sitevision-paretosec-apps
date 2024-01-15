@@ -37,6 +37,7 @@ export function formatTimestampToNorwegianDate(timestamp) {
 // };
 
 export function filterNonASCIICharacters(str) {
+  console.log('article title: '  + str);
   return str.replace(/[^\x00-\x7F]/g, "");
 }
 

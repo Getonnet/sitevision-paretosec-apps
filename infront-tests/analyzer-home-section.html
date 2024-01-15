@@ -7,8 +7,6 @@
   //let analyze_news57researchreader = null;
 
   function convertDateFormat(inputDate) {
-    console.log(inputDate);
-
     if (!inputDate) return;
 
     const dateObj = new Date(inputDate);
@@ -32,7 +30,6 @@
     const month = norwegianMonths[dateObj.getMonth()];
     const year = dateObj.getFullYear().toString().slice(-2);
 
-    console.log(`${day} ${month} 20${year}`);
     return `${day} ${month} 20${year}`;
   }
 

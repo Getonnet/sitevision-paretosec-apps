@@ -2,7 +2,6 @@ jQuery(document).ready(function ($) {
   // faq accordion scroll fix
   $("a.env-collapse-header").attr("href", "");
   $(".sv-font-h4-accordion").on("click", "a.env-collapse-header", function (e) {
-    console.log("clicked");
     e.preventDefault();
   });
 
