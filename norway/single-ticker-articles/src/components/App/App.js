@@ -4,7 +4,6 @@ import styles from "./App.scss";
 import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
 import {
-  filterNonASCIICharacters,
   formatTimestampToNorwegianDate,
   limitSentenceTo15Words,
 } from "../util";
@@ -136,36 +135,32 @@ const App = () => {
                 />
               </a>
 
-                <div className={styles.article_content}>
-                  <header>
-                    <small className={styles.date}>
-                      {formatTimestampToNorwegianDate(
-                        a.properties.creationDate
-                      )}{" "}
-                      av Pareto Securities | Aktuelt
-                    </small>
-                    <h3 className="subheading3">
-                      <a href={a.properties.URL}>
-                        {a.name}
-                      </a>
-                    </h3>
-                    <p className="normal">
-                      {limitSentenceTo15Words(a.properties.article_summary)}
-                      {"..."}
-                    </p>
-                  </header>
-                </div>
-              </article>
-            ))
-          : (
-            <>
-              {paginationIsInLastPage ? (
-                <div>Ingen artikler funnet.</div>
-              ) : (
-                <div>Laster inn...</div>
-              )}
-            </>
-          )}
+              <div className={styles.article_content}>
+                <header>
+                  <small className={styles.date}>
+                    {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
+                    av Pareto Securities | Aktuelt
+                  </small>
+                  <h3 className="subheading3">
+                    <a href={a.properties.URL}>{a.name}</a>
+                  </h3>
+                  <p className="normal">
+                    {limitSentenceTo15Words(a.properties.article_summary)}
+                    {"..."}
+                  </p>
+                </header>
+              </div>
+            </article>
+          ))
+        ) : (
+          <>
+            {paginationIsInLastPage ? (
+              <div>Ingen artikler funnet.</div>
+            ) : (
+              <div>Laster inn...</div>
+            )}
+          </>
+        )}
       </div>
     </>
   );

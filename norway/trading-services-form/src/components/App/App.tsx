@@ -16,8 +16,6 @@ const MobileDefaults = {
   BrokerCountry: "47",
   Professional: "1",
 };
-// const MobileApiUrl =
-//   "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const WebDefaults = {
   ReferrerPage: "Web Trader",
@@ -26,8 +24,6 @@ const WebDefaults = {
   BrokerCountry: "47",
   Professional: "1",
 };
-// const WebApiUrl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
-// const activeUrl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const ActiveDefaults = {
   ReferrerPage: "Infront Active Trader",
@@ -41,8 +37,6 @@ const App: React.FunctionComponent<AppProperties> = ({
   formType,
   redirectPageUrl,
 }) => {
-  console.log(redirectPageUrl);
-
   const [formData, setFormData] = React.useState({
     firstname: "",
     lastname: "",
@@ -70,8 +64,6 @@ const App: React.FunctionComponent<AppProperties> = ({
         ? WebDefaults
         : ActiveDefaults),
     };
-
-    console.log(payload);
 
     try {
       const response = await fetch(APIurl, {
