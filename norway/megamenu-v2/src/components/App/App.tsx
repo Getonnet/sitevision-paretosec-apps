@@ -19,7 +19,7 @@ import type {
   LinkType,
 } from "./types";
 
-const URL_PREFIX = "/rest-api/1/0";
+const URL_PREFIX = "/rest-api/1/1";
 const MAIN_URL =
   URL_PREFIX +
   "/19.162ad65718a92ee55e3282e0/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
