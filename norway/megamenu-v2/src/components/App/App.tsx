@@ -8,7 +8,6 @@ import Navbar from "../Desktop/Navbar";
 import SearchDesktop from "../Desktop/SearchDesktop";
 import Login from "../Desktop/Login";
 import requester from "@sitevision/api/client/requester";
-import properties from "@sitevision/api/server/Properties";
 
 import useState from "react-usestateref";
 import type {
