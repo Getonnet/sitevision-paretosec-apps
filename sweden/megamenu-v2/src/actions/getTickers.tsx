@@ -1,7 +1,7 @@
 import requester from "@sitevision/api/client/requester";
 
 export const getTickers = async () => {
-  const TICKER_ENDPOINT = "/rest-api/1/0/19.17e5c29718bfae2e60117c93/nodes";
+  const TICKER_ENDPOINT = "/rest-api/1/1/19.17e5c29718bfae2e60117c93/nodes";
   const PAYLOAD = { properties: ["*"] };
 
   let result: any = [];

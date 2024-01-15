@@ -97,7 +97,7 @@ const App: React.FunctionComponent<AppProperties> = () => {
     requester
       .doGet({
         url:
-          "/rest-api/1/0/" +
+          "/rest-api/1/1/" +
           //@ts-ignore
           window.sv.PageContext.pageId +
           "/properties" +

@@ -30,7 +30,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
   const getFeaturedImageFromId = (aId: string, imgId: string) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${imgId}/properties`,
+        url: `/rest-api/1/1/${imgId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -45,7 +45,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
   const fetchArticle = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${articleId}/properties`,
+        url: `/rest-api/1/1/${articleId}/properties`,
         data: {
           properties: ["shortId", "SV.Title", "SV.Image", "URL"],
         },
