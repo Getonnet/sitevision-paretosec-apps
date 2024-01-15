@@ -124,48 +124,54 @@ const App = () => {
         <span className={styles.bold}>{pageTickerCode.current}</span>
       </h2>
       <div className={styles.sta_grid}>
-        {first3Articles.current.length
-          ? first3Articles.current.slice(0, 3).map((a) => (
-              <article className={styles.article} key={a.id} id={a.id}>
-                <a href={a.properties.URL} title={a.name}>
-                  <div
-                    role="img"
-                    aria-label={pageTickerCode.current}
-                    // className="sv-newslist__gallery-item__image"
-                    style={{
-                      backgroundImage: `url(${
-                        images.current[a.id] ||
-                        "/images/18.17e5c29718bfae2e60119bd9/1697110984705/valutaveksling-169.Jpg"
-                      })`,
-                      height: 260,
-                      minHeight: 260,
-                      backgroundSize: "cover",
-                    }}
-                  />
-                </a>
+        {first3Articles.current.length ? (
+          first3Articles.current.slice(0, 3).map((a) => (
+            <article className={styles.article} key={a.id} id={a.id}>
+              <a href={a.properties.URL} title={a.name}>
+                <div
+                  role="img"
+                  aria-label={pageTickerCode.current}
+                  // className="sv-newslist__gallery-item__image"
+                  style={{
+                    backgroundImage: `url(${
+                      images.current[a.id] ||
+                      "/images/18.17e5c29718bfae2e60119bd9/1697110984705/valutaveksling-169.Jpg"
+                    })`,
+                    height: 260,
+                    minHeight: 260,
+                    backgroundSize: "cover",
+                  }}
+                />
+              </a>
 
-                <div className={styles.article_content}>
-                  <header>
-                    <small className={styles.date}>
-                      {formatTimestampToNorwegianDate(
-                        a.properties.creationDate
-                      )}{" "}
-                      av Pareto Securities | Aktuelt
-                    </small>
-                    <h3 className="subheading3">
-                      <a href={a.properties.URL}>
-                        {filterNonASCIICharacters(a.name)}
-                      </a>
-                    </h3>
-                    <p className="normal">
-                      {limitSentenceTo15Words(a.properties.article_summary)}
-                      {"..."}
-                    </p>
-                  </header>
-                </div>
-              </article>
-            ))
-          : "Laster inn..."}
+              <div className={styles.article_content}>
+                <header>
+                  <small className={styles.date}>
+                    {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
+                    av Pareto Securities | Aktuelt
+                  </small>
+                  <h3 className="subheading3">
+                    <a href={a.properties.URL}>
+                      {filterNonASCIICharacters(a.name)}
+                    </a>
+                  </h3>
+                  <p className="normal">
+                    {limitSentenceTo15Words(a.properties.article_summary)}
+                    {"..."}
+                  </p>
+                </header>
+              </div>
+            </article>
+          ))
+        ) : (
+          <>
+            {paginationIsInLastPage ? (
+              <div>Inga artiklar hittades.</div>
+            ) : (
+              <div>Läser in...</div>
+            )}
+          </>
+        )}
       </div>
     </>
   );
