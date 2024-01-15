@@ -23,7 +23,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${window.sv.PageContext.pageId}/properties`,
+        url: `/rest-api/1/1/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },

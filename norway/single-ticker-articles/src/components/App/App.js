@@ -9,8 +9,6 @@ import {
 } from "../util";
 
 const articlePerRequest = 20;
-// const thumbnailPlaceholder =
-//   "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg";
 
 const App = () => {
   const [, setImages, images] = useState({});
@@ -23,7 +21,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${window.sv.PageContext.pageId}/properties`,
+        url: `/rest-api/1/1/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },
@@ -44,7 +42,7 @@ const App = () => {
   const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${imageId}/properties`,
+        url: `/rest-api/1/1/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -63,7 +61,7 @@ const App = () => {
   const get20Articles = (tickerId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/3.113c8d5d18b5cf299b63922/nodes`,
+        url: `/rest-api/1/1/3.113c8d5d18b5cf299b63922/nodes`,
         data: {
           properties: [
             "ticker",
