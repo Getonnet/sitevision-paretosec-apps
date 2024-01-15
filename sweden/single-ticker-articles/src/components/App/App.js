@@ -23,7 +23,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${window.sv.PageContext.pageId}/properties`,
+        url: `/rest-api/1/1/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },
@@ -44,7 +44,7 @@ const App = () => {
   const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${imageId}/properties`,
+        url: `/rest-api/1/1/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -63,7 +63,7 @@ const App = () => {
   const get20Articles = (tickerId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/3.17e5c29718bfae2e6011823a/nodes`,
+        url: `/rest-api/1/1/3.17e5c29718bfae2e6011823a/nodes`,
         data: {
           properties: [
             "ticker",
