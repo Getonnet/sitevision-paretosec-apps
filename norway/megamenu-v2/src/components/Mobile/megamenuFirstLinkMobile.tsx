@@ -6,9 +6,9 @@ const MegaMenuFirstLinkMobile = ({ link }: { link: ILink }) => {
     <a
       href={link.properties.URL}
       className="navigation-column-title-mob"
-      aria-label={"Aksjehandel på nett"}
+      aria-label={link.name}
     >
-      <div className="nav-title">Aksjehandel på nett</div>
+      <div className="nav-title">{link.name}</div>
       <div className="icon-embed-custom-4 w-embed">
         <svg
           xmlns="http://www.w3.org/2000/svg"
