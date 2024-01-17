@@ -1,0 +1,14 @@
+{
+  "id": "simple-redirects",
+  "version": "0.0.5",
+  "name": "RESTApp boilerplate",
+  "author": "My Company",
+  "description": "A RESTApp boilerplate",
+  "helpUrl": "https://example.com/restapps",
+  "type": "RESTApp",
+  "bundled": true,
+  "storage": {
+    "collectionDataStore": "paretosec-dev",
+    "keyValueDataStore": "paretosec-dev"
+  }
+}

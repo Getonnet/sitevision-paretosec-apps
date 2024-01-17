@@ -9,8 +9,6 @@ import {
 } from "../util";
 
 const articlePerRequest = 20;
-// const thumbnailPlaceholder =
-//   "https://use-pareto.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg";
 
 const App = () => {
   const [, setImages, images] = useState({});
