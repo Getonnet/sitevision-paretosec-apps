@@ -75,9 +75,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
             >
               <SearchIcon />
 
-              <span className={styles.seeAllText}>
-                Se fullstendig søkeresultat
-              </span>
+              <span className={styles.seeAllText}>Se alla resultat</span>
             </a>
           </li>
         )}

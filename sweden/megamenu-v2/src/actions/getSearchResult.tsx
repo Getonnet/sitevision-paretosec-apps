@@ -1,7 +1,7 @@
 import requester from "@sitevision/api/client/requester";
 
 export const getSearchResult = async (term: string) => {
-  const SEARCH_URL = `/4.17e5c29718bfae2e601180d2/12.6e3d8d3718c8ad1173747564.json?state=autoComplete&term=${term}`;
+  const SEARCH_URL = `/4.1ec403e918a983e77b927259/12.1ec403e918a983e77b927739.json?state=autoComplete&term=${term}&svAjaxReqParam=ajax`;
 
   let result: any = [];
 
