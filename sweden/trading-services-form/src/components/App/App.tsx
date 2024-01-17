@@ -41,7 +41,7 @@ const App: React.FunctionComponent<AppProperties> = ({
     firstname: "",
     lastname: "",
     address: "",
-    country: "Norway",
+    country: "Sweden",
     phone: "",
     submit_by: "",
     addinfo: "",
@@ -103,7 +103,7 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.firstname}
-            placeholder="Fornavn"
+            placeholder="Förnamn"
           />
         </div>
 
@@ -118,7 +118,7 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.lastname}
-            placeholder={"Etternavn"}
+            placeholder={"Efternamn"}
           />
         </div>
 
@@ -133,7 +133,7 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.address}
-            placeholder={"Adresse"}
+            placeholder={"Adress"}
           />
         </div>
 
