@@ -15,7 +15,7 @@ const Login = () => {
   return (
     <a
       // href={loginLink}
-      href="https://login.paretosec.com/no/Account/Login"
+      href="https://login.paretosec.com/se/Account/Login"
       target={"_blank"}
       rel={"nofollow"}
       className="button is-transparent w-inline-block"

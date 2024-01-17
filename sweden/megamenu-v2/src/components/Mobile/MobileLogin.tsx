@@ -11,7 +11,7 @@ import React from "react";
 const MobileLogin = () => {
   return (
     <a
-      href="https://login.paretosec.com/no/Account/Login"
+      href="https://login.paretosec.com/se/Account/Login"
       className="button is-transparent w-inline-block"
       target={"_blank"}
       rel={"nofollow"}

@@ -1,17 +1,23 @@
 import React from "react";
 
-const MobileLogin = ({
+/*
+{
   loginText,
   loginLink,
 }: {
   loginText: string;
   loginLink: string;
-}) => {
+}
+ */
+const MobileLogin = () => {
   return (
     <a
-      href={loginLink}
+      href="https://login.paretosec.com/no/Account/Login"
       className="button is-transparent w-inline-block"
-      aria-label={loginText}
+      target={"_blank"}
+      rel={"nofollow"}
+      // aria-label={loginText}
+      aria-label="Logg inn"
     >
       <div className="icon-embed-custom-2 w-embed">
         <svg
@@ -31,7 +37,8 @@ const MobileLogin = ({
           />
         </svg>
       </div>
-      <div>{loginText}</div>
+      {/*<div>{loginText}</div>*/}
+      <div>Logg inn</div>
     </a>
   );
 };
