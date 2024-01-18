@@ -174,8 +174,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                 <SearchDesktop />
 
                 <Login
-                  loginText={data.loginBtnText}
-                  loginLink={data.loginBtnLink}
+                // loginText={data.loginBtnText}
+                // loginLink={data.loginBtnLink}
                 />
 
                 <a
@@ -221,8 +221,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
             <div className="spacer-h" />
 
             <MobileLogin
-              loginLink={data.loginBtnLink}
-              loginText={data.loginBtnText}
+            // loginLink={data.loginBtnLink}
+            // loginText={data.loginBtnText}
             />
 
             <MobileSearchFieldVisibilityTrigger
