@@ -12,26 +12,26 @@ export interface AppProperties {
 const APIurl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const MobileDefaults = {
-  ReferrerPage: "Infront Mobile",
-  ProviderDir: "PARMSE",
-  OwnerBroker: "PAR",
-  BrokerCountry: "46",
+  ReferrerPage: "Pareto-appen til iPhone/iPad/Android",
+  ProviderDir: "PARL",
+  OwnerBroker: "PARB",
+  BrokerCountry: "47",
   Professional: "1",
 };
 
 const WebDefaults = {
-  ReferrerPage: "Infront Web Trader",
-  ProviderDir: "PARLSE",
-  OwnerBroker: "PAR",
-  BrokerCountry: "46",
+  ReferrerPage: "Web Trader",
+  ProviderDir: "PARL",
+  OwnerBroker: "PARB",
+  BrokerCountry: "47",
   Professional: "1",
 };
 
 const ActiveDefaults = {
   ReferrerPage: "Infront Active Trader",
-  ProviderDir: "PARSE",
+  ProviderDir: "PAR",
   OwnerBroker: "PAR",
-  BrokerCountry: "46",
+  BrokerCountry: "47",
   Professional: "1",
 };
 
@@ -65,7 +65,7 @@ const App: React.FunctionComponent<AppProperties> = ({
     firstname: "",
     lastname: "",
     address: "",
-    country: "Sweden",
+    country: "Norway",
     phone: "",
     submit_by: "",
     addinfo: "",
@@ -90,7 +90,6 @@ const App: React.FunctionComponent<AppProperties> = ({
     };
 
     try {
-      setLoading(true);
       const response = await fetch(APIurl, {
         method: "POST",
         headers: {
@@ -102,7 +101,9 @@ const App: React.FunctionComponent<AppProperties> = ({
       if (response.ok) {
         console.log("OK!");
         if (typeof window !== "undefined") {
-          resetForm();
+          redirectPageUrl === "#"
+            ? window.location.reload()
+            : (window.location.href = redirectPageUrl);
         }
       } else {
         console.log("Network response was not ok.");
@@ -128,7 +129,7 @@ const App: React.FunctionComponent<AppProperties> = ({
       >
         <div className="form-group">
           <label htmlFor="firstname" className="control-label">
-            Förnamn
+            Fornavn
           </label>
           <input
             type="text"
@@ -137,13 +138,13 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.firstname}
-            placeholder="Förnamn"
+            placeholder="Fornavn"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="lastname" className="control-label">
-            Efternamn
+            Etternavn
           </label>
           <input
             type="text"
@@ -152,13 +153,13 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.lastname}
-            placeholder={"Efternamn"}
+            placeholder={"Etternavn"}
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="address" className="control-label">
-            Adress
+            Adresse
           </label>
           <input
             type="text"
@@ -167,7 +168,7 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.address}
-            placeholder={"Adress"}
+            placeholder={"Adresse"}
           />
         </div>
 
@@ -411,7 +412,6 @@ const App: React.FunctionComponent<AppProperties> = ({
           </button>
         </div>
       </form>
-
       {message ? <div style={{ paddingTop: "40px" }}>{message}</div> : ""}
     </div>
   );
