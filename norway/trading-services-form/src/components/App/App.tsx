@@ -52,7 +52,7 @@ const App: React.FunctionComponent<AppProperties> = ({
     }
 
     if (redirectPageUrl === "#") {
-      setMessage("Meddelandet skickades.");
+      setMessage("Meldingen ble sendt.");
     } else {
       window.location.href = redirectPageUrl;
     }
