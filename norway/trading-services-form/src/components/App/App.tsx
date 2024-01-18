@@ -1,6 +1,8 @@
 import * as React from "react";
 import styles from "./App.scss";
 import { FormType } from "../../index";
+import { useRef, useState } from "react";
+import { Oval } from "react-loader-spinner";
 
 export interface AppProperties {
   formType: FormType;
@@ -10,26 +12,26 @@ export interface AppProperties {
 const APIurl = "https://secure.infrontservices.com/cgi/IFMail.dll/DemoReg";
 
 const MobileDefaults = {
-  ReferrerPage: "Pareto-appen til iPhone/iPad/Android",
-  ProviderDir: "PARL",
-  OwnerBroker: "PARB",
-  BrokerCountry: "47",
+  ReferrerPage: "Infront Mobile",
+  ProviderDir: "PARMSE",
+  OwnerBroker: "PAR",
+  BrokerCountry: "46",
   Professional: "1",
 };
 
 const WebDefaults = {
-  ReferrerPage: "Web Trader",
-  ProviderDir: "PARL",
-  OwnerBroker: "PARB",
-  BrokerCountry: "47",
+  ReferrerPage: "Infront Web Trader",
+  ProviderDir: "PARLSE",
+  OwnerBroker: "PAR",
+  BrokerCountry: "46",
   Professional: "1",
 };
 
 const ActiveDefaults = {
   ReferrerPage: "Infront Active Trader",
-  ProviderDir: "PAR",
+  ProviderDir: "PARSE",
   OwnerBroker: "PAR",
-  BrokerCountry: "47",
+  BrokerCountry: "46",
   Professional: "1",
 };
 
@@ -37,11 +39,33 @@ const App: React.FunctionComponent<AppProperties> = ({
   formType,
   redirectPageUrl,
 }) => {
+  // Create a ref for the form
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Method to reset the form
+  const resetForm = () => {
+    const formElement = formRef.current;
+    if (formElement) {
+      formElement.reset();
+    }
+
+    if (redirectPageUrl === "#") {
+      setMessage("Meddelandet skickades.");
+    } else {
+      window.location.href = redirectPageUrl;
+    }
+
+    // remove loader
+    setLoading(false);
+  };
+
   const [formData, setFormData] = React.useState({
     firstname: "",
     lastname: "",
     address: "",
-    country: "Norway",
+    country: "Sweden",
     phone: "",
     submit_by: "",
     addinfo: "",
@@ -66,6 +90,7 @@ const App: React.FunctionComponent<AppProperties> = ({
     };
 
     try {
+      setLoading(true);
       const response = await fetch(APIurl, {
         method: "POST",
         headers: {
@@ -77,24 +102,33 @@ const App: React.FunctionComponent<AppProperties> = ({
       if (response.ok) {
         console.log("OK!");
         if (typeof window !== "undefined") {
-          redirectPageUrl === "#"
-            ? window.location.reload()
-            : (window.location.href = redirectPageUrl);
+          resetForm();
         }
       } else {
         console.log("Network response was not ok.");
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
+    } finally {
+      // the api request is not working due to cors, but the form submission is working
+      // and submitter is also getting a response back from infront trading
+      // so, we are skipping the response status check
+      setTimeout(() => {
+        resetForm();
+      }, 2500);
     }
   };
 
   return (
     <div className={`${styles.wrapper} form-wrapper`}>
-      <form onSubmit={handleSubmit} className={"sv-defaultFormTheme"}>
+      <form
+        onSubmit={handleSubmit}
+        className={"sv-defaultFormTheme"}
+        ref={formRef}
+      >
         <div className="form-group">
           <label htmlFor="firstname" className="control-label">
-            Fornavn
+            Förnamn
           </label>
           <input
             type="text"
@@ -103,13 +137,13 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.firstname}
-            placeholder="Fornavn"
+            placeholder="Förnamn"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="lastname" className="control-label">
-            Etternavn
+            Efternamn
           </label>
           <input
             type="text"
@@ -118,13 +152,13 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.lastname}
-            placeholder={"Etternavn"}
+            placeholder={"Efternamn"}
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="address" className="control-label">
-            Adresse
+            Adress
           </label>
           <input
             type="text"
@@ -133,7 +167,7 @@ const App: React.FunctionComponent<AppProperties> = ({
             required
             onChange={handleChange}
             value={formData.address}
-            placeholder={"Adresse"}
+            placeholder={"Adress"}
           />
         </div>
 
@@ -346,15 +380,39 @@ const App: React.FunctionComponent<AppProperties> = ({
           />
         </div>
 
-        <div className="form-group">
-          <input
+        <div className="form-group" style={{ paddingTop: "35px" }}>
+          <button
             id="btnSubmit"
-            className="btn btn-info"
+            className="button w-button"
             type="submit"
-            value="Submit"
-          />
+            style={{
+              position: "relative",
+              minHeight: "42px",
+              minWidth: "125px",
+            }}
+          >
+            {loading ? (
+              <Oval
+                visible={true}
+                height="20"
+                width="20"
+                color="#ffffff"
+                secondaryColor="rgba(255,255,255,0.4)"
+                ariaLabel="oval-loading"
+                wrapperStyle={{
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+              />
+            ) : (
+              "Submit"
+            )}
+          </button>
         </div>
       </form>
+
+      {message ? <div style={{ paddingTop: "40px" }}>{message}</div> : ""}
     </div>
   );
 };
