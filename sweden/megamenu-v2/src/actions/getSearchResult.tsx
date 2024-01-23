@@ -13,7 +13,7 @@ export const getSearchResult = async (term: string) => {
       result = response;
     })
     .catch((error) => {
-      result = ["Ingen resultater."];
+      result = ["Inga resultat."];
     });
 
   return result;

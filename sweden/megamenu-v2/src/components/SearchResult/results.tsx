@@ -18,7 +18,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
     borderTop:
       queryTickers && queryTickers.length !== 0 ? "1px solid #00325533" : "",
     borderBottom:
-      queryResult && queryResult[0] !== "Ingen resultater."
+      queryResult && queryResult[0] !== "Inga resultat."
         ? "1px solid #00325533"
         : "",
   };
@@ -60,12 +60,12 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
         className="show-result"
         style={{
           display:
-            queryResult && queryResult[0] !== "Ingen resultater."
+            queryResult && queryResult[0] !== "Inga resultat."
               ? "flex"
               : "none",
         }}
       >
-        {queryResult && queryResult[0] !== "Ingen resultater." && (
+        {queryResult && queryResult[0] !== "Inga resultat." && (
           <li>
             <a
               className="see-all-result"
