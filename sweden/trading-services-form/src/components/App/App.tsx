@@ -406,7 +406,7 @@ const App: React.FunctionComponent<AppProperties> = ({
                 }}
               />
             ) : (
-              "Submit"
+              "Skicka in"
             )}
           </button>
         </div>
