@@ -1,0 +1,110 @@
+<script type="text/javascript">
+  let analyze_infrontSession = {};
+  let analyze_infrontUI = null;
+
+  let analyze_news57research = null;
+
+  //let analyze_news57researchreader = null;
+
+  function convertDateFormat(inputDate) {
+    console.log(inputDate);
+
+    if (!inputDate) return;
+
+    const dateObj = new Date(inputDate);
+
+    const day = dateObj.getDate();
+    const norwegianMonths = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"];
+
+    const month = norwegianMonths[dateObj.getMonth()];
+    const year = dateObj.getFullYear().toString().slice(-2);
+
+    console.log(`${day} ${month} 20${year}`);
+    return `${day} ${month} 20${year}`;
+  }
+
+  (function ($) {
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = data.token;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          analyze_infrontUI = new Infront.UI(opts);
+          analyze_infrontUI.registerEventObserver("onReady", analyze_infrontReady);
+          analyze_infrontUI.init();
+          // infrontSDK = new InfrontSDK.SDK({
+          //   signedToken: data.token,
+          //   onReady: infrontSDKReady,
+          // });
+        }
+      });
+    // ------ END custom data formatter
+  })(jQuery);
+
+  function analyze_infrontReady(event) {
+    // let d = new Date();
+    // d.setMonth(d.getMonth() - 1);
+
+    /*
+     *Item type   : news
+     *Report type : @Item.Rapporttype
+     *Paragraph   : Analyser
+     */
+    let news57nlOpts = new Infront.NewsListWidgetOptions();
+    news57nlOpts.maxItems = 5;
+    news57nlOpts.pageItems = 5;
+    news57nlOpts.paging = false;
+    news57nlOpts.useLightbox = false;
+    news57nlOpts.feeds = [1433];
+    // news57nlOpts.columns = ["TIME", "HEADLINE"];
+    news57nlOpts.columns = [
+      {
+        name: "TIME",
+        translate: (value) => {
+          return convertDateFormat(value.time);
+        }
+      },
+      {
+        name: "HEADLINE",
+        translate: (value) => {
+          return value.headline.split(" - ")[0] + " - " + value.category + " <span class='arrow-icon'>→</span>";
+        }
+      }
+    ];
+    news57nlOpts.onNewsItemSelected = function () {
+      window.open("https://online.paretosec.com/Research", "_blank");
+    };
+    // news57nlOpts.navButton = Infront.WidgetNavButtonType.NAVIGATE;
+    // news57nlOpts.navButtonClicked = function () {
+    // window.location.assign("/Market/News/");
+    // };
+    news57nlOpts.enableSourceSelector = false;
+    news57nlOpts.widgetTitle = "";
+    analyze_news57research = analyze_infrontUI.newsListWidget("#news57research", news57nlOpts);
+    // setTimeout(function () {
+    //   analyze_news57researchreader = analyze_infrontUI.newsReaderWidget("#news57researchreader");
+    //   analyze_news57research.link(analyze_news57researchreader);
+    // }, 1000);
+  }
+</script>
+
+<!-- content holder for analyzer -->
+<div id="news57research"></div>
+
+<div class="newsResearchCta">
+  <a href="https://online.paretosec.com/Research" target="_blank">
+    <span class="icon">
+      <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.7459 0L12.4672 1.2973L16.1434 5.18919H0V6.81081H16.1434L12.4672 10.7027L13.7459 12L18.3811 7.2973L19.5 6L18.3811 4.86486L13.7459 0Z" fill="#DE0080" />
+      </svg>
+    </span>
+    Läs mer om analys
+  </a>
+</div>
+<!-- // content holder for analyzer -->

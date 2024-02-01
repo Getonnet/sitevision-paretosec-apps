@@ -16,6 +16,7 @@ export const LanguageSwitcher = ({
         href={norwaySiteLink || "//www.paretosec.no"}
         title="Norsk"
         target="_blank"
+        rel="noreferrer"
       >
         <span className={styles.srOnly}>Norsk</span>
         <NorwayFlagIcon />
@@ -26,6 +27,7 @@ export const LanguageSwitcher = ({
         href={swedenSiteLink || "//www.paretosec.se"}
         title="Svensk"
         target="_blank"
+        rel="noreferrer"
       >
         <span className={styles.srOnly}>Svensk</span>
         <SwedenFlagIcon />

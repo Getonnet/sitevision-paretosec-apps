@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Result from "./result";
 import styles from "../search_results.module.scss";
 import Ticker from "./ticker";
@@ -45,6 +45,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
                 name={ticker.properties.fullName}
                 country={ticker.properties.countryCode}
                 URI={ticker.properties.URI}
+                key={ticker.properties.URI}
               />
             );
           })}
@@ -52,8 +53,8 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
       <ul className="query__result" style={resultStyling}>
         {queryResult &&
           queryResult.length !== 0 &&
-          queryResult.map((result: any) => {
-            return <Result name={result} />;
+          queryResult.map((result: string) => {
+            return <Result name={result} key={result} />;
           })}
       </ul>
       <ul
@@ -75,9 +76,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
             >
               <SearchIcon />
 
-              <span className={styles.seeAllText}>
-                Se fullstendig søkeresultat
-              </span>
+              <span className={styles.seeAllText}>Se alla resultat</span>
             </a>
           </li>
         )}

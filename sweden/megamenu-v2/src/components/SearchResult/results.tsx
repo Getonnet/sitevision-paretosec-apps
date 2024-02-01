@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Result from "./result";
 import styles from "../search_results.module.scss";
 import Ticker from "./ticker";
@@ -18,7 +18,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
     borderTop:
       queryTickers && queryTickers.length !== 0 ? "1px solid #00325533" : "",
     borderBottom:
-      queryResult && queryResult[0] !== "Ingen resultater."
+      queryResult && queryResult[0] !== "Inga resultat."
         ? "1px solid #00325533"
         : "",
   };
@@ -45,6 +45,7 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
                 name={ticker.properties.fullName}
                 country={ticker.properties.countryCode}
                 URI={ticker.properties.URI}
+                key={ticker.properties.URI}
               />
             );
           })}
@@ -52,20 +53,20 @@ const Results: React.FC<ResultsProps> = ({ results, query }) => {
       <ul className="query__result" style={resultStyling}>
         {queryResult &&
           queryResult.length !== 0 &&
-          queryResult.map((result: any) => {
-            return <Result name={result} />;
+          queryResult.map((result: string) => {
+            return <Result name={result} key={result} />;
           })}
       </ul>
       <ul
         className="show-result"
         style={{
           display:
-            queryResult && queryResult[0] !== "Ingen resultater."
+            queryResult && queryResult[0] !== "Inga resultat."
               ? "flex"
               : "none",
         }}
       >
-        {queryResult && queryResult[0] !== "Ingen resultater." && (
+        {queryResult && queryResult[0] !== "Inga resultat." && (
           <li>
             <a
               className="see-all-result"

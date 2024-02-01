@@ -1,6 +1,8 @@
 import * as React from "react";
 import styles from "./App.scss";
 import { FormType } from "../../index";
+import { useRef, useState } from "react";
+import { Oval } from "react-loader-spinner";
 
 export interface AppProperties {
   formType: FormType;
@@ -37,6 +39,28 @@ const App: React.FunctionComponent<AppProperties> = ({
   formType,
   redirectPageUrl,
 }) => {
+  // Create a ref for the form
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Method to reset the form
+  const resetForm = () => {
+    const formElement = formRef.current;
+    if (formElement) {
+      formElement.reset();
+    }
+
+    if (redirectPageUrl === "#") {
+      setMessage("Meldingen ble sendt.");
+    } else {
+      window.location.href = redirectPageUrl;
+    }
+
+    // remove loader
+    setLoading(false);
+  };
+
   const [formData, setFormData] = React.useState({
     firstname: "",
     lastname: "",
@@ -86,12 +110,23 @@ const App: React.FunctionComponent<AppProperties> = ({
       }
     } catch (error) {
       console.error("There was a problem with your fetch operation:", error);
+    } finally {
+      // the api request is not working due to cors, but the form submission is working
+      // and submitter is also getting a response back from infront trading
+      // so, we are skipping the response status check
+      setTimeout(() => {
+        resetForm();
+      }, 2500);
     }
   };
 
   return (
     <div className={`${styles.wrapper} form-wrapper`}>
-      <form onSubmit={handleSubmit} className={"sv-defaultFormTheme"}>
+      <form
+        onSubmit={handleSubmit}
+        className={"sv-defaultFormTheme"}
+        ref={formRef}
+      >
         <div className="form-group">
           <label htmlFor="firstname" className="control-label">
             Fornavn
@@ -346,15 +381,38 @@ const App: React.FunctionComponent<AppProperties> = ({
           />
         </div>
 
-        <div className="form-group">
-          <input
+        <div className="form-group" style={{ paddingTop: "35px" }}>
+          <button
             id="btnSubmit"
-            className="btn btn-info"
+            className="button w-button"
             type="submit"
-            value="Submit"
-          />
+            style={{
+              position: "relative",
+              minHeight: "42px",
+              minWidth: "125px",
+            }}
+          >
+            {loading ? (
+              <Oval
+                visible={true}
+                height="20"
+                width="20"
+                color="#ffffff"
+                secondaryColor="rgba(255,255,255,0.4)"
+                ariaLabel="oval-loading"
+                wrapperStyle={{
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+              />
+            ) : (
+              "Submit"
+            )}
+          </button>
         </div>
       </form>
+      {message ? <div style={{ paddingTop: "40px" }}>{message}</div> : ""}
     </div>
   );
 };

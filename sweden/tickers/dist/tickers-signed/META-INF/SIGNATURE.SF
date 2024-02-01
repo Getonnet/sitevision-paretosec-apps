@@ -1,0 +1,39 @@
+Signature-Version: 1.0
+SHA-256-Digest-Manifest-Main-Attributes: 9pKLrJD0Pqz88Bdl7J83A0uERUHbM
+ n8kmMikhujTabY=
+SHA-256-Digest-Manifest: 9x/LVTxfg54MYPPcQWOUZd2uB3U8xrAzC4Rw90y2XVU=
+Created-By: Sitevision AB
+
+Name: index.js
+SHA-256-Digest: eWLIUzIn2sfO/4UV2dPYgfubOYmDYWWXXFHdJAm7hBk=
+
+Name: css/main.css
+SHA-256-Digest: 7JKp2ZWPelu0MYJ2SVUh1e+iFah9Qd8c6fcWpN0CYSE=
+
+Name: config/index.js
+SHA-256-Digest: KOIVgg+KuylVV3Xt/vQ1/3m1zKxCTymVO/eamC9u+EM=
+
+Name: manifest.json
+SHA-256-Digest: vdBbq0RXXglZD7v0hL0D9i9HpPk9JS75GnwJuyqgphQ=
+
+Name: index.js.LICENSE.txt
+SHA-256-Digest: aLOYl4DtDLOSIVUF0+ELZPU4ergJZd3fYjjdQb38oMs=
+
+Name: i18n/sv.json
+SHA-256-Digest: zWUR8PFWUPCO+kYtMs47veDMyum+S6BnNKSlz9wNIqY=
+
+Name: appDataDefaults.json
+SHA-256-Digest: BrivbikRJPMwZzceWX+51/GBhlpomHy4fCGZcYz3wKw=
+
+Name: main.js
+SHA-256-Digest: LPYtvIKRur0bBZbdpg1ZLAfSS4XJhRVA2Zvtw9aFGyM=
+
+Name: i18n/en.json
+SHA-256-Digest: t4fHXFLQRoTh9clfiJ+jaYv4awL+PB3cx6ovvR2dpoc=
+
+Name: config/config.js
+SHA-256-Digest: ESTDL2ST8r5Sly5qUisiN+4Sq9FB5r3LLp7n8hC4VfM=
+
+Name: config/index.html
+SHA-256-Digest: N9YLsIvtnv5IOwXgCXCoHhiBH+Gk+qsL8OlBsP+8MvI=
+

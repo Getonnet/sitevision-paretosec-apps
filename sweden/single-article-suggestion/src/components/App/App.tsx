@@ -30,7 +30,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
   const getFeaturedImageFromId = (aId: string, imgId: string) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${imgId}/properties`,
+        url: `/rest-api/1/1/${imgId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -45,7 +45,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
   const fetchArticle = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${articleId}/properties`,
+        url: `/rest-api/1/1/${articleId}/properties`,
         data: {
           properties: ["shortId", "SV.Title", "SV.Image", "URL"],
         },
@@ -73,7 +73,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
             style={{
               backgroundImage: `url(${
                 articleImg.current ||
-                "https://use-pareto-vs.sitevision-cloud.se/images/18.4857b8d018b84b042083f70c/1699347304043/Valutarisiko-169.jpg"
+                "/images/18.17e5c29718bfae2e6011c8d7/1699347304043/Valutarisiko-169.jpg"
               })`,
               backgroundSize: "cover",
             }}

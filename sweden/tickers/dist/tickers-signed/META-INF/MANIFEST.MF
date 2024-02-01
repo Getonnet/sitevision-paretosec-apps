@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Created-By: Sitevision AB
+
+Name: index.js
+SHA-256-Digest: vxXexh7U1jEaXGq/ngQOW963G92SlqUR8gbY0smAtnQ=
+
+Name: css/main.css
+SHA-256-Digest: S8xNYmYAvOA56MUINSPN0DrgWTJcrzqzPMYTtTGHrSo=
+
+Name: config/index.js
+SHA-256-Digest: 9ZMiSEyw1qK6sEoTBjRYkRoqhBV9rx6SYspDFtgBxQ4=
+
+Name: manifest.json
+SHA-256-Digest: hbceVappgauD8ymwk4rWH7TksFMzJ59TeENlZeb2/78=
+
+Name: index.js.LICENSE.txt
+SHA-256-Digest: G3NMRcCDQLP77xBbtX4EqVinmqQs/CByTDvSGEyoRwo=
+
+Name: i18n/sv.json
+SHA-256-Digest: 2cGzeWHgjWjZjLRE1ektMXKrfSnTwUyRtA2ObPlXmG4=
+
+Name: appDataDefaults.json
+SHA-256-Digest: Em4v9gfrW3LqgxWg38plvlWwRRVwIqXy6sDDR1FU3TQ=
+
+Name: main.js
+SHA-256-Digest: sSjzDTd3xd0dDqh3rXiNHEU5ED3/8AseY6mfatyD8ck=
+
+Name: i18n/en.json
+SHA-256-Digest: Y0peBahKV+XYHpFGJ6kYK2Ze0ncrCNcMqOUEU9l2+Sg=
+
+Name: config/config.js
+SHA-256-Digest: PyqfZ1K3pjURDCPjUuw5yst9VCHCGPm/FhB50sTLfqo=
+
+Name: config/index.html
+SHA-256-Digest: MTMGgIUPsWCJQOSJT6DtfzSSsOoNTjFvSZegVaIeIFY=
+

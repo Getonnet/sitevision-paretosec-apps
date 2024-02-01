@@ -8,7 +8,7 @@ type ResultProps = {
 const Result: React.FC<ResultProps> = ({ name }) => {
   const encodedString = encodeURIComponent(name).replace(/%20/g, "+");
 
-  if (name === "Ingen resultater.") {
+  if (name === "Inga resultat.") {
     return (
       <li>
         <a style={{ pointerEvents: "none" }} href="#">

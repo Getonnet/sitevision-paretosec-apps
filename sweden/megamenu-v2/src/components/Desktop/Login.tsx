@@ -1,18 +1,26 @@
 import React from "react";
 
-// TODO: settings
-const Login = ({
+/*
+props
+{
   loginText,
-  loginLink,
+    loginLink,
 }: {
   loginText: string;
   loginLink: string;
-}) => {
+}
+*/
+
+const Login = () => {
   return (
     <a
-      href={loginLink}
+      // href={loginLink}
+      href="https://login.paretosec.com/se/Account/Login"
+      target={"_blank"}
+      rel={"nofollow"}
       className="button is-transparent w-inline-block"
-      aria-label={loginText}
+      // aria-label={loginText}
+      aria-label="Logga in"
     >
       <div className="icon-embed-custom-2 w-embed">
         <svg
@@ -32,7 +40,8 @@ const Login = ({
           />
         </svg>
       </div>
-      <div>{loginText}</div>
+      {/*<div>{loginText}</div>*/}
+      <div>Logga in</div>
     </a>
   );
 };

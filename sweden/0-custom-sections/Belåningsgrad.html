@@ -1,0 +1,413 @@
+<style>
+  #belaningsgrad .companyTabs {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+  }
+
+  #belaningsgrad .companyTabs li {
+    list-style: none;
+    padding: 0;
+  }
+
+  #belaningsgrad .companyTabs a {
+    display: block;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.1s ease-in-out;
+    background: #ffffff80;
+    color: #544952;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  #belaningsgrad .companyTabs a:hover {
+    color: #214d8e;
+    font-weight: 500;
+    background: #ffffff;
+  }
+
+  #belaningsgrad .activeTab {
+    color: #214d8e !important;
+    font-weight: 500 !important;
+    background: #ffffff !important;
+  }
+
+  #belaningsgrad #norwayLists_belaning {
+    padding: 16px;
+    background: #ffffff;
+    color: #544952;
+    max-height: 864px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #belaningsgrad #norwayLists_belaning.show-all {
+    max-height: 5000px;
+  }
+
+  #belaningsgrad #norwayLists_belaning:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, #ffffff);
+    z-index: 5;
+  }
+
+  #belaningsgrad #norwayLists_belaning.show-all:after {
+    content: none;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper thead th {
+    padding: 0 0 13px 0 !important;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper thead .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody {
+    font-size: 15px;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-positive {
+    color: #527db3 !important;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-negative {
+    color: #d96967 !important;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr {
+    border-top: 1px solid #d7d7d7;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr td {
+    padding: 12px 0;
+  }
+
+  #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  #belaningsgrad .cell-flag {
+    background-image: url("https://wtk.infrontservices.com/img/flags.png?version=20190306");
+  }
+
+  #belaningsgrad .belaning-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 10px 0 0;
+  }
+
+  @media (max-width: 1185px) {
+    #belaningsgrad .companyTabs {
+      display: none;
+    }
+  }
+</style>
+
+<script type="text/javascript">
+  var infrontUI_bela = null;
+
+  /**
+   * ---------------------------------------------
+   * belaningsgard pagination start
+   */
+  const belaningViewAllBtn = $("#belaning_viewAll");
+  const belaningListWrapper = $("#belaningsgrad #norwayLists_belaning");
+
+  function scrollToTopOfWidget() {
+    $("html, body").animate(
+      {
+        scrollTop: $("#belaningsgrad #norwayLists_belaning").offset().top - 150
+      },
+      1000
+    ); // Adjust the duration as needed (in milliseconds)
+  }
+
+  $(document).on("click", "#belaning_viewAll", function () {
+    if (belaningListWrapper.length) {
+      belaningListWrapper.toggleClass("show-all");
+    } else {
+      $("#belaningsgrad #norwayLists_belaning").toggleClass("show-all");
+    }
+
+    $(this).text(function (i, text) {
+      return text === "Visa mindre" ? "Visa allt" : "Visa mindre";
+    });
+
+    // go to top of data table
+    scrollToTopOfWidget();
+  });
+  // ---------------------------------------------
+
+  //include InfrontSessionInclude
+  function updateShowAllButtonVisibility() {
+    if (belaningListWrapper.height() < 860) {
+      belaningViewAllBtn.prop("disabled", true);
+      belaningListWrapper.addClass("show-all");
+    } else {
+      belaningListWrapper.removeClass("show-all");
+      belaningViewAllBtn.removeAttr("disabled");
+    }
+  }
+
+  $(document).ready(function () {
+    var infrontSession_bela = null;
+
+    fetch("/rest-api/Infront%20token/token")
+      .then((response) => response.json())
+      .then((data) => {
+        var token = data.token;
+        if (token) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "sv";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_bela = new Infront.UI(opts);
+          infrontUI_bela.registerEventObserver("onReady", infrontReady_bela);
+          infrontUI_bela.init();
+          infrontSDK = new InfrontSDK.SDK({
+            signedToken: token,
+            onReady: infrontSDKReady_bela
+          });
+        }
+      });
+  });
+
+  //End Include
+  var widget_bela;
+  var currentFeed_bela;
+
+  function instrumentTradeLink_bela(isin, feed) {
+    return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
+  }
+
+  function createBaseListOptions_bela(instruments, feed) {
+    var cvOpts = new Infront.QuoteListWidgetOptions();
+    cvOpts.maxItems = instruments.length;
+    cvOpts.columns = [
+      {
+        name: "TICKER",
+        flag: true,
+        hover: "FULL_NAME"
+      },
+      {
+        name: "FULL_NAME"
+      },
+
+      {
+        name: "LAST_VALID"
+      },
+      {
+        name: "CHANGE"
+      },
+      {
+        name: "PCT_CHANGE"
+      },
+      {
+        name: "TURNOVER"
+      },
+      {
+        name: "MCAP",
+        heading: "MCap",
+        shorten: true,
+        type: Infront.FieldType.Computed,
+        dataType: Infront.DataType.Integer,
+        computeFields: ["NUM_SHARES", "LAST_VALID"],
+        compute: function (rowId, args) {
+          return args[0] * args[1];
+        }
+      },
+      {
+        name: "BROKER_COLLATERAL_PCT",
+        translate: function (c, v, i) {
+          return "<strong>" + InfrontUtil.formatPercent(v, 0) + "</strong>";
+        }
+      },
+      {
+        name: "S_DATETIME"
+      },
+
+      {
+        name: "",
+        type: Infront.FieldType.Computed,
+        sortable: false,
+        className: "cell-text-right",
+        computeFields: ["ISIN"],
+        compute: (rowId, args) => {
+          return args[0];
+        },
+        translate: function (rowId, isin) {
+          var result =
+            "<a href='" +
+            instrumentTradeLink_bela(isin, rowId.feed) +
+            "'><img title='Trade this' alt='H' src='/images/18.2c2f7afa18c8abb97cf4d9c/1703832132295/tradebtn_mini_no.png' class='btnTrade'></a>";
+          return result;
+        }
+      }
+    ];
+
+    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_bela) || Array.isArray(currentFeed_bela)) {
+      cvOpts.columns = cvOpts.columns.filter((x) => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
+    }
+    cvOpts.instruments = instruments;
+    cvOpts.sortable = true;
+    cvOpts.enableChangeStatusColors = true;
+    cvOpts.defaultSortedColumn = "TICKER";
+    cvOpts.defaultSortOrder = 0;
+    cvOpts.useChains = false;
+    cvOpts.interactionHighlight = true;
+    return cvOpts;
+  }
+
+  function infrontReady_bela(event) {}
+
+  var instruments_bela = [];
+  var timeout_bela;
+
+  function changeFeed_bela(feed) {
+    if (currentFeed_bela == feed) {
+      return;
+    }
+    currentFeed_bela = feed;
+    if (widget_bela) {
+      widget_bela.destroy();
+    }
+    $("#loader_belaning").show();
+    clearTimeout(timeout_bela);
+    instruments_bela = [];
+    if (Array.isArray(feed)) {
+      feed.reduce((seq, f) => {
+        return seq.then(() => loadFeed_bela(f));
+      }, Promise.resolve());
+    } else {
+      loadFeed_bela(feed);
+    }
+  }
+
+  function loadFeed_bela(feed) {
+    return new Promise((res, rej) => {
+      res();
+      infrontSDK.get(
+        InfrontSDK.feedContents({
+          contentType: InfrontSDK.FeedContentType.SymbolIds,
+          feed: feed,
+          subscribe: false,
+          limit: -1,
+          fields: ["Ticker", "ISIN"],
+          onData: function (results) {
+            results.map((id) => {
+              return infrontSDK.get(
+                InfrontSDK.symbolData({
+                  subscribe: false,
+                  content: {
+                    AdditionalData: true,
+                    Basic: true
+                  },
+                  fields: ["Ticker", "CollateralPct"],
+                  id,
+
+                  onData: function (item) {
+                    if ((Array.isArray(currentFeed_bela) && currentFeed_bela.includes(feed)) || currentFeed_bela === feed) {
+                      if (item.get("CollateralPct") !== null) {
+                        update_bela({
+                          feed: item.get("Feed"),
+                          ticker: item.get("Ticker")
+                        });
+                      } else {
+                        update_bela();
+                      }
+                    }
+                  },
+                  onStatus: function (requestName, status) {
+                    console.log(requestName, " : ", status);
+                  }
+                })
+              );
+            });
+          }
+        })
+      );
+    });
+  }
+
+  function update_bela(instrument) {
+    if (instrument) {
+      instruments_bela.push(instrument);
+    }
+    clearTimeout(timeout_bela);
+    timeout_bela = setTimeout(initWidget_bela, 500);
+  }
+
+  function initWidget_bela() {
+    $("#loader_belaning").hide();
+    if (widget_bela) {
+      widget_bela.destroy();
+    }
+    var opts = createBaseListOptions_bela(instruments_bela);
+    widget_bela = infrontUI_bela.quoteList("norwayLists_belaning", opts);
+    setTimeout(updateShowAllButtonVisibility, 2000);
+  }
+
+  function infrontSDKReady_bela(event) {
+    changeFeed_bela(17921);
+  }
+
+  function toggleActiveTab(element) {
+    const tabs = document.querySelectorAll("#norwayLists_belaning_tabs a");
+    tabs.forEach((tab) => {
+      tab.classList.remove("activeTab");
+    });
+    element.classList.add("activeTab");
+  }
+
+  // on change of table data, run updateShowAllButtonVisibility
+  document.addEventListener("DOMContentLoaded", function () {
+    const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+    observer.observe(document.getElementById("norwayLists_belaning"), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  });
+</script>
+
+<div id="belaningsgrad">
+  <ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top: 0; border-left: 0; border-right: 0">
+    <li><a class="activeTab" onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
+    <li><a onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
+    <li><a onclick="changeFeed_bela(17665);toggleActiveTab(this);">Danmark</a></li>
+    <li><a onclick="changeFeed_bela(100);toggleActiveTab(this);">Finland</a></li>
+    <li><a onclick="changeFeed_bela(26);toggleActiveTab(this);">Tyskland</a></li>
+    <li><a onclick="changeFeed_bela(19);toggleActiveTab(this);">UK</a></li>
+    <li><a onclick="changeFeed_bela(2008);toggleActiveTab(this);">Frankrike</a></li>
+    <li><a onclick="changeFeed_bela(2012);toggleActiveTab(this);">Spanien</a></li>
+    <li><a onclick="changeFeed_bela(2047);toggleActiveTab(this);">Italien</a></li>
+    <li><a onclick="changeFeed_bela(14);toggleActiveTab(this);">USA - NYSE</a></li>
+    <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
+  </ul>
+
+  <div id="norwayLists_belaning" class="col-md-12">
+    <div id="loader_belaning">Loading...</div>
+  </div>
+
+  <div class="belaning-pagination pagination">
+    <button id="belaning_viewAll" type="button">Visa mer</button>
+  </div>
+</div>

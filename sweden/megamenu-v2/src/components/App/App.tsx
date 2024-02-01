@@ -17,7 +17,7 @@ import type {
   LinkType,
 } from "./types";
 
-const URL_PREFIX = "/rest-api/1/0";
+const URL_PREFIX = "/rest-api/1/1";
 const MAIN_URL =
   URL_PREFIX +
   "/19.17e5c29718bfae2e601182da/nodes?format=json&json=%7B%22properties%22%3A%5B%22*%22%5D%7D";
@@ -175,8 +175,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                 <SearchDesktop />
 
                 <Login
-                  loginText={data.loginBtnText}
-                  loginLink={data.loginBtnLink}
+                // loginText={data.loginBtnText}
+                // loginLink={data.loginBtnLink}
                 />
 
                 <a
@@ -222,8 +222,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
             <div className="spacer-h" />
 
             <MobileLogin
-              loginLink={data.loginBtnLink}
-              loginText={data.loginBtnText}
+            // loginLink={data.loginBtnLink}
+            // loginText={data.loginBtnText}
             />
 
             <MobileSearchFieldVisibilityTrigger
