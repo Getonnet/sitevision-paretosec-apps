@@ -57,23 +57,31 @@ const Navbar = ({ menuItems, subMenuItems }: INavBar) => {
               <nav className="dropdown-list-megamenu w-dropdown-list">
                 <div className="dropdown-list-full-wrapper">
                   <div className="navigation-drop-container">
-                    {ddItem.columns.map((col: any, i) => (
-                      <div className="navigation-column" key={`column-${i}`}>
-                        <MegaMenuFirstLink link={col[0]} />
-                        <div className="nav-content-wrap">
-                          {col.slice(1).map((linkItem: ILink) => (
-                            <a
-                              href={linkItem.properties.URL}
-                              className="navigation-link-block w-inline-block"
-                              aria-label={linkItem.name}
-                              key={linkItem.name}
-                            >
-                              <div className="nav-dd-link">{linkItem.name}</div>
-                            </a>
-                          ))}
+                    {Object.keys(ddItem.columns).map((key: any, i) => {
+                      const col = ddItem.columns[key];
+                      return (
+                        <div
+                          className={`navigation-column ${key}`}
+                          key={`column-${i}`}
+                        >
+                          <MegaMenuFirstLink link={col[0]} />
+                          <div className="nav-content-wrap">
+                            {col.slice(1).map((linkItem: ILink) => (
+                              <a
+                                href={linkItem.properties.URL}
+                                className="navigation-link-block w-inline-block"
+                                aria-label={linkItem.name}
+                                key={linkItem.name}
+                              >
+                                <div className="nav-dd-link">
+                                  {linkItem.name}
+                                </div>
+                              </a>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </nav>
