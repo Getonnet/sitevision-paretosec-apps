@@ -52,22 +52,25 @@ const MobileNavBar = ({ menuItems, subMenuItems }: INavBar) => {
             ) : ddItem && ddItem.type === "Megamenu" ? (
               <nav className="dropdown-list-mob w-dropdown-list">
                 <div className="dropdown-list-wrapper-mob">
-                  {ddItem.columns.map((col: any) => (
-                    <div className="navigation-column-mob">
-                      <MegaMenuFirstLinkMobile link={col[0]} />
-                      <div className="nav-content-wrap-mob">
-                        {col.slice(1).map((linkItem: ILink) => (
-                          <a
-                            href={linkItem.properties.URL}
-                            className="navigation-link-block-mob w-inline-block"
-                            aria-label={linkItem.name}
-                          >
-                            <div className="nav-dd-link">{linkItem.name}</div>
-                          </a>
-                        ))}
+                  {Object.keys(ddItem.columns).map((key: any, i) => {
+                    const col = ddItem.columns[key];
+                    return (
+                      <div className={`navigation-column-mob ${key}`} key={key}>
+                        <MegaMenuFirstLinkMobile link={col[0]} />
+                        <div className="nav-content-wrap-mob">
+                          {col.slice(1).map((linkItem: ILink) => (
+                            <a
+                              href={linkItem.properties.URL}
+                              className="navigation-link-block-mob w-inline-block"
+                              aria-label={linkItem.name}
+                            >
+                              <div className="nav-dd-link">{linkItem.name}</div>
+                            </a>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </nav>
             ) : (
