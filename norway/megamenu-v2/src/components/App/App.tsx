@@ -30,7 +30,12 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
   const [, setChildMenuItems, childMenuItems] = useState<ISubMenuItems>({});
   const [mobileSearchToggle, setMobileSearchToggle] = useState(false);
 
-  const fetchData = (url: string, type: LinkType, parentID?: string) => {
+  const fetchData = (
+    url: string,
+    type: LinkType,
+    parentID?: string,
+    colName = "col-1"
+  ) => {
     return requester
       .doGet({
         url: url,
@@ -69,10 +74,10 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               ...prev,
               [parentID]: {
                 ...menuItem,
-                columns: [
-                  ...(Array.isArray(menuItem.columns) ? menuItem.columns : []),
-                  data,
-                ],
+                columns: {
+                  ...menuItem.columns,
+                  [colName]: data,
+                },
               },
             }));
           } else {
@@ -80,7 +85,7 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
               ...prev,
               [parentID]: {
                 type: "Megamenu",
-                columns: [data],
+                columns: { [colName]: data },
               },
             }));
           }
@@ -122,7 +127,8 @@ const App: React.FunctionComponent<AppProperties> = ({ data }) => {
                   fetchData(
                     URL_PREFIX + col.path + URL_SUFFIX,
                     "Megamenu",
-                    r.properties.ggParentChildId
+                    r.properties.ggParentChildId,
+                    col.name.replace(" ", "-").toLowerCase()
                   )
                 // .then(() => console.log(childMenuItems.current))
               );
