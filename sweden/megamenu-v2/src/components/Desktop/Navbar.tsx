@@ -1,5 +1,5 @@
 import React from "react";
-import { ILink, ISubMenuItems } from "../App/types";
+import type { ILink, ISubMenuItems } from "../App/types";
 import MegaMenuFirstLink from "./megamenuFirstLink";
 
 export interface INavBar {
@@ -9,9 +9,9 @@ export interface INavBar {
 
 const Navbar = ({ menuItems, subMenuItems }: INavBar) => {
   React.useEffect(() => {
-    // @ts-ignore
+    // @ts-expect-error: Webflow does not exist on window
     window.Webflow && window.Webflow.destroy();
-    // @ts-ignore
+    // @ts-expect-error: Webflow does not exist on window
     window.Webflow && window.Webflow.ready();
   }, [menuItems, subMenuItems]);
 
@@ -47,6 +47,7 @@ const Navbar = ({ menuItems, subMenuItems }: INavBar) => {
                     href={di.properties.URL}
                     className="navigation-link-block w-inline-block"
                     aria-label={di.name}
+                    key={di.name}
                   >
                     <div className="nav-dd-link">{di.name}</div>
                   </a>
@@ -56,22 +57,31 @@ const Navbar = ({ menuItems, subMenuItems }: INavBar) => {
               <nav className="dropdown-list-megamenu w-dropdown-list">
                 <div className="dropdown-list-full-wrapper">
                   <div className="navigation-drop-container">
-                    {ddItem.columns.map((col: any) => (
-                      <div className="navigation-column">
-                        <MegaMenuFirstLink link={col[0]} />
-                        <div className="nav-content-wrap">
-                          {col.slice(1).map((linkItem: ILink) => (
-                            <a
-                              href={linkItem.properties.URL}
-                              className="navigation-link-block w-inline-block"
-                              aria-label={linkItem.name}
-                            >
-                              <div className="nav-dd-link">{linkItem.name}</div>
-                            </a>
-                          ))}
+                    {Object.keys(ddItem.columns).map((key: any, i) => {
+                      const col = ddItem.columns[key];
+                      return (
+                        <div
+                          className={`navigation-column ${key}`}
+                          key={`column-${i}`}
+                        >
+                          <MegaMenuFirstLink link={col[0]} />
+                          <div className="nav-content-wrap">
+                            {col.slice(1).map((linkItem: ILink) => (
+                              <a
+                                href={linkItem.properties.URL}
+                                className="navigation-link-block w-inline-block"
+                                aria-label={linkItem.name}
+                                key={linkItem.name}
+                              >
+                                <div className="nav-dd-link">
+                                  {linkItem.name}
+                                </div>
+                              </a>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </nav>

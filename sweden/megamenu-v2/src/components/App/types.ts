@@ -62,7 +62,7 @@ export type DropdownMenu = {
 
 export type MegaMenuMenu = {
   type: "Megamenu";
-  columns: Array<ILink[]>;
+  columns: Record<string, ILink[]>;
 };
 
 export interface ISubMenuItems {
