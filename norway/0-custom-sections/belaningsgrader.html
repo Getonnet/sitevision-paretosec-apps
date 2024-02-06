@@ -4,8 +4,6 @@
     gap: 10px;
     padding: 0;
     margin: 0;
-    background: transparent;
-    border: none;
   }
 
   #belaningsgrad .companyTabs li {
@@ -80,11 +78,11 @@
   }
 
   #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-positive {
-    color: #527db3 !important;
+    color: #527db3;
   }
 
   #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody .cell-status-negative {
-    color: #d96967 !important;
+    color: #d96967;
   }
 
   #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr {
@@ -97,18 +95,6 @@
 
   #belaningsgrad #norwayLists_belaning .cell-table-wrapper tbody tr .cell-table__txt--broker-is-shortable {
     text-align: right;
-  }
-
-  #belaningsgrad .cell-flag {
-    background-image: url("https://wtk.infrontservices.com/img/flags.png?version=20190306");
-  }
-
-  #belaningsgrad .belaning-pagination {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 10px 0 0;
   }
 
   @media (max-width: 1185px) {
@@ -129,23 +115,20 @@
   const belaningListWrapper = $("#belaningsgrad #norwayLists_belaning");
 
   function scrollToTopOfWidget() {
-    $("html, body").animate(
-      {
-        scrollTop: $("#belaningsgrad #norwayLists_belaning").offset().top - 150
-      },
-      1000
-    ); // Adjust the duration as needed (in milliseconds)
+    $("html, body").animate({
+      scrollTop: $("#belaningsgrad #norwayLists_belaning").offset().top - 150
+    }, 1000); // Adjust the duration as needed (in milliseconds)
   }
 
-  $(document).on("click", "#belaning_viewAll", function () {
+  $(document).on("click", "#belaning_viewAll", function() {
     if (belaningListWrapper.length) {
       belaningListWrapper.toggleClass("show-all");
     } else {
       $("#belaningsgrad #norwayLists_belaning").toggleClass("show-all");
     }
 
-    $(this).text(function (i, text) {
-      return text === "Visa mindre" ? "Visa allt" : "Visa mindre";
+    $(this).text(function(i, text) {
+      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
     });
 
     // go to top of data table
@@ -164,30 +147,30 @@
     }
   }
 
-  $(document).ready(function () {
+  $(document).ready(function() {
     var infrontSession_bela = null;
 
     fetch("/rest-api/Infront%20token/token")
-      .then((response) => response.json())
-      .then((data) => {
-        var token = data.token;
-        if (token) {
-          let opts = new Infront.InfrontUIOptions();
-          opts.language = "sv";
-          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
-          opts.streaming = true;
-          opts.signed_token = token;
-          opts.token_type = "JWT";
-          opts.client_application = "WEB";
-          infrontUI_bela = new Infront.UI(opts);
-          infrontUI_bela.registerEventObserver("onReady", infrontReady_bela);
-          infrontUI_bela.init();
-          infrontSDK = new InfrontSDK.SDK({
-            signedToken: token,
-            onReady: infrontSDKReady_bela
-          });
-        }
-      });
+    .then((response) => response.json())
+    .then((data) => {
+      var token = data.token;
+      if (token) {
+        let opts = new Infront.InfrontUIOptions();
+        opts.language = "no";
+        opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+        opts.streaming = true;
+        opts.signed_token = token;
+        opts.token_type = "JWT";
+        opts.client_application = "WEB";
+        infrontUI_bela = new Infront.UI(opts);
+        infrontUI_bela.registerEventObserver("onReady", infrontReady_bela);
+        infrontUI_bela.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: token,
+          onReady: infrontSDKReady_bela
+        });
+      }
+    });
   });
 
   //End Include
@@ -195,20 +178,22 @@
   var currentFeed_bela;
 
   function instrumentTradeLink_bela(isin, feed) {
-    return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
+    return (
+      "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed
+    );
   }
 
   function createBaseListOptions_bela(instruments, feed) {
     var cvOpts = new Infront.QuoteListWidgetOptions();
     cvOpts.maxItems = instruments.length;
-    cvOpts.columns = [
-      {
-        name: "TICKER",
-        flag: true,
-        hover: "FULL_NAME"
-      },
+    cvOpts.columns = [{
+      name: "TICKER",
+      flag: true,
+      hover: "FULL_NAME"
+    },
       {
         name: "FULL_NAME"
+
       },
 
       {
@@ -230,13 +215,13 @@
         type: Infront.FieldType.Computed,
         dataType: Infront.DataType.Integer,
         computeFields: ["NUM_SHARES", "LAST_VALID"],
-        compute: function (rowId, args) {
+        compute: function(rowId, args) {
           return args[0] * args[1];
         }
       },
       {
         name: "BROKER_COLLATERAL_PCT",
-        translate: function (c, v, i) {
+        translate: function(c, v, i) {
           return "<strong>" + InfrontUtil.formatPercent(v, 0) + "</strong>";
         }
       },
@@ -253,18 +238,18 @@
         compute: (rowId, args) => {
           return args[0];
         },
-        translate: function (rowId, isin) {
+        translate: function(rowId, isin) {
           var result =
             "<a href='" +
             instrumentTradeLink_bela(isin, rowId.feed) +
-            "'><img title='Trade this' alt='H' src='/images/18.2c2f7afa18c8abb97cf4d9c/1703832132295/tradebtn_mini_no.png' class='btnTrade'></a>";
+            "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
           return result;
         }
       }
     ];
 
     if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_bela) || Array.isArray(currentFeed_bela)) {
-      cvOpts.columns = cvOpts.columns.filter((x) => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
+      cvOpts.columns = cvOpts.columns.filter(x => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
     }
     cvOpts.instruments = instruments;
     cvOpts.sortable = true;
@@ -276,7 +261,9 @@
     return cvOpts;
   }
 
-  function infrontReady_bela(event) {}
+  function infrontReady_bela(event) {
+
+  }
 
   var instruments_bela = [];
   var timeout_bela;
@@ -299,6 +286,7 @@
     } else {
       loadFeed_bela(feed);
     }
+
   }
 
   function loadFeed_bela(feed) {
@@ -311,7 +299,8 @@
           subscribe: false,
           limit: -1,
           fields: ["Ticker", "ISIN"],
-          onData: function (results) {
+          onData: function(results) {
+
             results.map((id) => {
               return infrontSDK.get(
                 InfrontSDK.symbolData({
@@ -323,29 +312,35 @@
                   fields: ["Ticker", "CollateralPct"],
                   id,
 
-                  onData: function (item) {
+                  onData: function(item) {
+
                     if ((Array.isArray(currentFeed_bela) && currentFeed_bela.includes(feed)) || currentFeed_bela === feed) {
                       if (item.get("CollateralPct") !== null) {
                         update_bela({
                           feed: item.get("Feed"),
                           ticker: item.get("Ticker")
                         });
+
                       } else {
                         update_bela();
                       }
                     }
+
                   },
-                  onStatus: function (requestName, status) {
+                  onStatus: function(requestName, status) {
                     console.log(requestName, " : ", status);
                   }
                 })
               );
             });
+
           }
         })
       );
     });
+
   }
+
 
   function update_bela(instrument) {
     if (instrument) {
@@ -353,6 +348,8 @@
     }
     clearTimeout(timeout_bela);
     timeout_bela = setTimeout(initWidget_bela, 500);
+
+
   }
 
   function initWidget_bela() {
@@ -366,11 +363,11 @@
   }
 
   function infrontSDKReady_bela(event) {
-    changeFeed_bela(17921);
+    changeFeed_bela(18177);
   }
 
   function toggleActiveTab(element) {
-    const tabs = document.querySelectorAll("#norwayLists_belaning_tabs a");
+    const tabs = document.querySelectorAll("#belaningsgrad .companyTabs a");
     tabs.forEach((tab) => {
       tab.classList.remove("activeTab");
     });
@@ -378,7 +375,7 @@
   }
 
   // on change of table data, run updateShowAllButtonVisibility
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     const observer = new MutationObserver(() => updateShowAllButtonVisibility());
     observer.observe(document.getElementById("norwayLists_belaning"), {
       attributes: true,
@@ -389,16 +386,16 @@
 </script>
 
 <div id="belaningsgrad">
-  <ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top: 0; border-left: 0; border-right: 0">
-    <li><a class="activeTab" onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
-    <li><a onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
+  <ul id="norwayLists_belaning_tabs" class="companyTabs customTabs" style="border-top:0;border-left:0;border-right:0">
+    <li><a class="activeTab" onclick="changeFeed_bela(18177);toggleActiveTab(this);">Norge</a></li>
+    <li><a onclick="changeFeed_bela(17921);toggleActiveTab(this);">Sverige</a></li>
     <li><a onclick="changeFeed_bela(17665);toggleActiveTab(this);">Danmark</a></li>
     <li><a onclick="changeFeed_bela(100);toggleActiveTab(this);">Finland</a></li>
     <li><a onclick="changeFeed_bela(26);toggleActiveTab(this);">Tyskland</a></li>
     <li><a onclick="changeFeed_bela(19);toggleActiveTab(this);">UK</a></li>
     <li><a onclick="changeFeed_bela(2008);toggleActiveTab(this);">Frankrike</a></li>
-    <li><a onclick="changeFeed_bela(2012);toggleActiveTab(this);">Spanien</a></li>
-    <li><a onclick="changeFeed_bela(2047);toggleActiveTab(this);">Italien</a></li>
+    <li><a onclick="changeFeed_bela(2012);toggleActiveTab(this);">Spania</a></li>
+    <li><a onclick="changeFeed_bela(2047);toggleActiveTab(this);">Italia</a></li>
     <li><a onclick="changeFeed_bela(14);toggleActiveTab(this);">USA - NYSE</a></li>
     <li><a onclick="changeFeed_bela(15);toggleActiveTab(this);">USA - NASDAQ</a></li>
   </ul>
@@ -407,7 +404,7 @@
     <div id="loader_belaning">Loading...</div>
   </div>
 
-  <div class="belaning-pagination pagination">
-    <button id="belaning_viewAll" type="button">Visa mer</button>
+  <div class="pagination">
+    <button id="belaning_viewAll" type="button">Vis alt</button>
   </div>
 </div>

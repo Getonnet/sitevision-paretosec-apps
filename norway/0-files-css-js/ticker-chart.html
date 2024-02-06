@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .chart-widget-demo {
+      height: 560px;
+    }
+  </style>
+  <link type="text/css" rel="stylesheet" href="//wtk.infrontservices.com/css/InfrontFramework-3.6.21.css" />
+  <link type="text/css" rel="stylesheet" href="//wtk.infrontservices.com/themes/light-3.9.16/theme.css" />
+  <script type="text/javascript" src="//wtk.infrontservices.com/js/CommonFramework-2.9.16.min.js"></script>
+  <script type="text/javascript" src="//wtk.infrontservices.com/js/InfrontUI-3.6.21.min.js"></script>
+  <script>
+    /* Instantiate Infront web toolkit and run it when document is ready */
+    var infront;
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const sdk = new InfrontSDK.SDK({
+        signedToken: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE3MDcxMzkxMDQsImlhdCI6MTcwNzEwMzEwNCwianRpIjoiYzI2ZDU4ZWItN2YxZC00MzI3LTk0MDctMWJlMjAwYmM4NzdiIiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiZWVjYWM1OWMtMmM3OS00NTEyLWI5YzItZDI1MzIyMThhM2JjIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.ZNCzSYQrqoqw_kDPbDx8id-9PnabMGlcTXKkRlu-wFVULLFT9WlkYe3kig7W7TDlL_95hpK4yh0b4JFBeVPh4RLMKcMMpJxrVXWo71AYh0I6GSgLBag3RaOGiJESRFdL2K9gOXLQP8IMzBFcdMooWsCQVsa7-j7pejRTZbVtM4VZcGodP_ZiwQhsN1HTFo0l76NXbD-wmfeBqdMPU3Hx08lDlaccrTIkdBeMDCH84iGOh2eXMWLVO2QwpKBZX7TzN9D6TUvLOvMUnvW458rvnpAjvkMdv_O7h-6QVUJLjyHFJkZmsThE3haA4PF9HYE2E8ngsdsiQNaMNPMzNMuOvA",
+        onReady: (event) => {
+          infrontReady(sdk);
+        },
+        onDisconnect: (event) => {
+          console.warn("Disconnected:", event);
+        }
+      });
+    });
+
+    /* Infront web toolkit ready to go, defining widgets inside the infrontReady function */
+    function infrontReady() {
+      // options
+      const opts = new Infront.ChartWidgetOptions();
+
+      /* Instruments */
+      opts.instruments = [
+        new Infront.Instrument(15, "TSLA"),
+//    new Infront.Instrument(15, "AAPL"),
+//    new Infront.Instrument(26, "DAI"),
+        new Infront.Instrument(26, "BMW")
+//    new Infront.Instrument(26, "EOAN"),
+//    new Infront.Instrument(2098, "DAX"),
+//    new Infront.Instrument(26, "PUM"),
+//    new Infront.Instrument(6340, "ATX"),
+//    new Infront.Instrument(2161, "SX5E"),
+//    new Infront.Instrument(20, "DJI"),
+//    new Infront.Instrument(2412, "DE0008491002-EUR"),
+//    new Infront.Instrument(2095, "EURUSD"),
+//    new Infront.Instrument(2260, "0P00000MVB"),
+//    new Infront.Instrument(100, "DIGIGR"),
+//    new Infront.Instrument(18177, "DNB"),
+//    new Infront.Instrument(2412, "NO0010817448-NOK"),
+//    new Infront.Instrument(17666, "-0,5 111.E.33"),
+//    new Infront.Instrument(17666, "2NYK13HjaDKK26RF"),
+//    new Infront.Instrument(18177, "OSEBX"),
+      ];
+
+      /* Indicators */
+// opts.indicators = [
+//   { type: Infront.Chart.IndicatorType.VWAP },
+//   { type: Infront.Chart.IndicatorType.BOLLINGER_BANDS },
+//   { type: Infront.Chart.IndicatorType.MACD },
+// ];
+// opts.indicators = [
+//     {
+//         type: Infront.Chart.IndicatorType.SMA,
+//         linkedTo: 1, // 0 = first, 1 = second item of instruments array, ...
+//         params: {
+//             period: 15,
+//             color: 'purple', // '#555555', ...
+//             // ...
+//         }
+//     },
+//     {
+//         type: Infront.Chart.IndicatorType.SMA,
+//         linkedTo: 'volume', // special case
+//         params: {
+//             period: 200,
+//             color: '#00FF00',
+//         }
+//     },
+// ];
+
+      /* overwrite CSS colors */
+// opts.colors = ['#91e8e1', '#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b'];
+// opts.indicatorColors = ['#AA0A3C', '#F08200', '#BBCB56', '#0F7CBD', '#FBBE0D', '#E47CFF', '#53C973', '#009292'];
+// opts.annotationColors = ['#000000', '#DDDDDD', '#0000FF', '#444444'];
+
+// opts.labelAlpha = '55';
+// opts.labelOutsideAlpha = 'AA';
+// opts.legendAlpha = 'DD';
+
+      /* General settings */
+      opts.chartType = Infront.Chart.ChartType.AREA;
+// opts.chartType = Infront.Chart.ChartType.CANDLESTICK;
+// opts.chartType = Infront.Chart.ChartType.LINE;
+// opts.chartType = Infront.Chart.ChartType.OHLC;
+// opts.chartType = Infront.Chart.ChartType.BASELINE;
+// opts.chartType = Infront.Chart.ChartType.HEIKINASHI;
+// opts.chartType = Infront.Chart.ChartType.HOLLOWCANDLESTICK;
+// opts.chartType = Infront.Chart.ChartType.POINTS;
+
+// opts.cursorType = Infront.Chart.CursorType.VERTICAL;
+// opts.cursorType = Infront.Chart.CursorType.ARROW;
+// opts.cursorSnapX = false;
+// opts.cursorSnapY = true;
+// opts.prevCloseType = Infront.Chart.PrevCloseType.LINE;
+// opts.prevCloseType = Infront.Chart.PrevCloseType.DOT;
+// opts.showPrevClose = false;
+      opts.showVolume = true;
+// opts.showVolumeUnderlay = true;
+// opts.volumeAlpha = '33';
+// opts.showSplits = true;
+// opts.showDividends = true;
+// opts.showCalendar = true;
+// opts.calendarFeeds = [916]; // 962, 963, ...
+// opts.adjustDividends = true;
+// opts.adjustSplits = false;
+// opts.companyEventSmallDots = true;
+
+// opts.mainDataType = Infront.Chart.DataType.CLOSE;
+// opts.mainDataType = Infront.Chart.DataType.BID;
+// special data types:
+// opts.mainDataType = Infront.Chart.DataType.BID_ASK;
+// opts.mainDataType = Infront.Chart.DataType.PERFORMANCE;
+
+      opts.streaming = true;
+      opts.caching = true;
+
+// opts.mainOnTop = false;
+// opts.showLegend = false;
+// opts.showTooltip = false;
+// opts.useNativeAnnotationSettings = true;
+
+      opts.watermarkType = Infront.Chart.WatermarkType.SYMBOL;
+// opts.watermarkType = Infront.Chart.WatermarkType.DESCRIPTION;
+// opts.watermarkType = Infront.Chart.WatermarkType.CUSTOM;
+// opts.watermarkCustomText = 'Infront';
+
+      opts.showLogo = true;
+      opts.logo = {
+        // src: 'https://www.infrontfinance.com/dist/images/Infront_logo.png',
+        // src: 'https://wtk.infrontservices.com/themes/terminal-latest/infront-logo-color-cmyk.svg',
+        // src: 'https://wtk.infrontservices.com/themes/terminal-latest/infront-logo-mono-light.svg',
+        // src: 'https://wtk.infrontservices.com/themes/terminal-latest/infront-logo-mono-dark.svg',
+        // infrontLogo: Infront.Chart.LogoType.COLOR,
+        // infrontLogo: Infront.Chart.LogoType.WHITE,
+        // position: Infront.Chart.LogoPosition.BOTTOM_RIGHT,
+        // offset: 20,
+        // opacity: 0.8, // 0: fully transparent, 1: fully opaque
+        // width: 128,
+        // height: 25,
+      };
+
+      /* Ordinate settings */
+// opts.showOrdinate = false;
+// opts.ordinateCompareBase = 100;
+// opts.ordinateType = Infront.Chart.OrdinateType.LOGARITHMIC;
+// opts.ordinateScaling = Infront.Chart.OrdinateScaling.ABSOLUTE;
+// opts.ordinateScaling = Infront.Chart.OrdinateScaling.RELATIVE;
+// opts.ordinateScaling = Infront.Chart.OrdinateScaling.REBASE_ON_MAIN;
+      opts.showOppositeOrdinate = true;
+// opts.ordinateLabelsOutside= true;
+// opts.showSeriesLabels = false;
+// opts.gridType = Infront.Chart.GridType.NONE;
+// opts.gridType = Infront.Chart.GridType.VERTICAL;
+// opts.gridType = Infront.Chart.GridType.HORIZONTAL;
+// opts.showAlternateGridColor = true;
+
+      /* Period settings */
+// opts.selectablePeriods = ["T", "S", "1D", "2D", "5D", "10D", "30D", Infront.Chart.Period.ONE_MONTH, "6M", "9M", "1Y", "2Y", "5Y", "YTD", "ALL"];
+// opts.selectablePeriods = ["1D", "2D", "5D"];
+// opts.defaultPeriod = "1D";
+// opts.defaultPeriod = "5D";
+// opts.defaultPeriod = "1M";
+      opts.defaultPeriod = "1Y";
+
+      /* Resolution settings */
+// opts.autoResolution = false;
+// opts.defaultResolutions = {
+//     [Infront.Chart.IntradayPeriod.SECOND]: Infront.Chart.IntradayResolution.ONE_SECOND,
+//     [Infront.Chart.IntradayPeriod.ONE_DAY]: Infront.Chart.IntradayResolution.ONE_MINUTE,
+//     [Infront.Chart.IntradayPeriod.PERIOD_24H]: Infront.Chart.IntradayResolution.ONE_MINUTE,
+//     [Infront.Chart.IntradayPeriod.TWO_DAYS]: Infront.Chart.IntradayResolution.ONE_MINUTE,
+//     [Infront.Chart.IntradayPeriod.THREE_DAYS]: Infront.Chart.IntradayResolution.FIVE_MINUTES,
+//     [Infront.Chart.HistoricalPeriod.FIVE_YEARS]: Infront.Chart.HistoricalResolution.ONE_WEEK,
+//     // ... add more if required, .e.g for historical periods!
+// };
+// User filters for the available resolutions
+// opts.selectableIntradayResolutions = [];
+// opts.selectableHistoricalResolutions = [
+//     Infront.Chart.HistoricalResolution.AUTO,
+//     Infront.Chart.HistoricalResolution.ONE_DAY,
+//     Infront.Chart.HistoricalResolution.THREE_DAYS,
+//     Infront.Chart.HistoricalResolution.FIVE_DAYS,
+//     Infront.Chart.HistoricalResolution.ONE_WEEK,
+//     Infront.Chart.HistoricalResolution.ONE_MONTH,
+// ];
+
+      /* UI settings */
+      opts.showNavigator = true;
+
+// opts.reflowTimeout = 100;
+
+// opts.legendItemClick = Infront.Chart.LegendItemClickType.NONE;
+// opts.legendItemClick = Infront.Chart.LegendItemClickType.HIDE_SERIES;
+// opts.legendItemClick = Infront.Chart.LegendItemClickType.EDIT_SERIES;
+// opts.legendItemClick = Infront.Chart.LegendItemClickType.REMOVE_SERIES;
+      opts.legendItemClick = Infront.Chart.LegendItemClickType.EDIT_REMOVE_SERIES;
+
+      opts.topToolbar = {
+        // Dropdown Menus
+        chartTypeMenu: true,
+        periodMenu: true,
+        periodSelector: true,
+        resolutionMenu: true,
+        indicatorMenu: true,
+        annotationMenu: true,
+        templateMenu: true,
+        cursorTypeMenu: true,
+        newCompareMenu: true,
+        compareMenu: true, // deprecated
+        // Buttons
+        cursorEventsButton: true,
+        currencyMenu: true,
+        settingsMenu: true,
+        // InstrumentHeader (right side)
+        instrumentHeader: true,
+        // toggle fullscreen btn (right side)
+        fullScreenButton: true
+      };
+
+      opts.bottomToolbar = {
+        periodButtons: true,
+        // periodMenu: true,
+        resolutionMenu: true
+      };
+
+      opts.instrumentHeader = {
+        chartFields: true,
+        quoteFields: true
+      };
+
+      /*
+      opts.instrumentHeaderChartFields = {
+        Unknown: [{
+          name: 'currentPeriod',
+          label: false
+        }, {
+          name: 'pctChange',
+          label: false,
+          enableStatusColors: true,
+          // blinkType: Infront.BlinkType.UpDown,
+          // blinkDuration: Infront.BlinkDuration.Long,
+        }, {
+          name: 'absChange',
+          label: false,
+          enableStatusColors: true
+        }],
+        // Stock: [{
+        //   name: 'currentPeriod',
+        //   label: false
+        // }],
+        // label is optional parameter
+
+        // default: [],
+        // symbolType: [],
+        // symbolSubType: [],
+      };
+
+       opts.instrumentHeaderQuoteFields = {
+        Unknown: [{
+          name: 'VWAP',
+          label: true,
+        }, {
+          name: 'ACC_VOLUME',
+          label: true,
+        }, {
+          name: 'CHANGE',
+          label: true,
+          enableStatusColors: true,
+        }, {
+          name: 'PCT_CHANGE',
+          enableStatusColors: true,
+          // blinkType: Infront.BlinkType.UpDown,
+          // blinkDuration: Infront.BlinkDuration.Long,
+        }],
+        Index: [{
+          name: 'ACC_VOLUME',
+          label: true,
+        }, {
+          name: 'CHANGE',
+          label: true,
+          enableStatusColors: true,
+        }, {
+          name: 'PCT_CHANGE',
+          enableStatusColors: true,
+        }],
+        // default: [],
+        // symbolType: [],
+        // symbolSubType: [],
+      };
+      */
+
+      opts.generalDropDownOptions = {
+        booleanRepresentation: Infront.Chart.BooleanRepresentation.CHECKBOX
+      };
+
+      opts.defaultCurrency = Infront.Chart.Currency.DEFAULT; // initial currency
+// opts.selectableCurrencies = [Infront.Chart.Currency.USD, Infront.Chart.Currency.EUR];
+// opts.selectableCurrencies = ['USD', 'EUR', 'JPY'];
+// opts.selectableCurrencies = ['USD', Infront.Chart.Currency.GBP];
+// opts.selectableCurrencies = [];
+// opts.selectableCurrencies;
+// opts.selectableCurrencies = {
+//     list: [
+//     {
+//       name: 'TestFolder1',
+//       items: [
+//         Infront.Chart.Currency.EUR,
+//         Infront.Chart.Currency.USD,
+//         "CHF",
+//       ]
+//     }, {
+//       name: 'TestFolder2',
+//       items: [
+//         Infront.Chart.Currency.PLN,
+//         "JPY",
+//         Infront.Chart.Currency.HKD,
+//       ]
+//     }],
+//     collapsable: Infront.Chart.Menu.COLLAPSABLE.FIRST,
+// };
+
+      opts.selectableIndicators = {
+        list: [
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME_BY_PRICE,
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME,
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME_UNDERLAY,
+          // Indicators
+          {
+            name: "Indicators",
+            translate: true,
+            items: [
+              // Infront.Chart.IndicatorType.VOLUME_BY_PRICE,
+              Infront.Chart.IndicatorType.SMA,
+              Infront.Chart.IndicatorType.EMA,
+              Infront.Chart.IndicatorType.WMA,
+              Infront.Chart.IndicatorType.BOLLINGER_BANDS,
+              Infront.Chart.IndicatorType.VWAP
+            ]
+          },
+          // Oscillators (have own panes / y-axis)
+          {
+            name: "Oscillators",
+            translate: true,
+            items: [
+              Infront.Chart.IndicatorType.MACD,
+              Infront.Chart.IndicatorType.MOMENTUM,
+              Infront.Chart.IndicatorType.RSI,
+              Infront.Chart.IndicatorType.RVI,
+              Infront.Chart.IndicatorType.STDDEV,
+              Infront.Chart.IndicatorType.STOCHASTIC, // STOCHASTIC is almost the same as STOCHASTIC_FAST!
+              Infront.Chart.IndicatorType.STOCHASTIC_SLOW,
+              Infront.Chart.IndicatorType.STOCHASTIC_FAST,
+              Infront.Chart.IndicatorType.ATR
+            ]
+          }
+          // Service functions
+          // Infront.Chart.IndicatorType.TOGGLE_INDICATORS,
+          // Infront.Chart.IndicatorType.DELETE_ALL_INDICATORS,
+        ],
+        collapsable: Infront.Chart.Menu.COLLAPSABLE.CLOSED
+      };
+
+// opts.selectableNewCompare = {
+//   list : [
+//     {
+//         name: 'Major Indices',
+//         translate: true,
+//         items: [{
+//                 item: new Infront.Instrument(2087, 'NDX'),
+//                 name: 'Nasdaq 100',
+//                 iconAfter: 'US',
+//             }, {
+//                 item: new Infront.Instrument(2087, 'COMP'),
+//                 name: 'Nasdaq Composite',
+//                 iconAfter: 'US',
+//             }, {
+//                 item: new Infront.Instrument(6092, 'DIA'),
+//                 name: 'Dow Jones (ETF)',
+//                 iconAfter: 'US',
+//             }, {
+//                 item: new Infront.Instrument(6092, 'SPY'),
+//                 name: 'S&P 500 (ETF)',
+//                 iconAfter: InfrontUtil.CountryFlagMap.US,
+//             }, {
+//                 item: new Infront.Instrument(6092, 'QWLD'),
+//                 name: 'MSCI World (ETF)',
+//                 iconAfter: InfrontUtil.CountryFlagMap.GLOBAL,
+//             }, {
+//                 item: new Infront.Instrument(2098, 'DAX'),
+//                 name: 'DAX Index',
+//                 iconAfter: 'DE',
+//             }, {
+//                 item: new Infront.Instrument(2089, 'PX1'),
+//                 name: 'CAC40',
+//                 iconAfter: 'FRA',
+//             }, {
+//                 item: new Infront.Instrument(2161, 'SX5E'),
+//                 name: 'EURO STOXX 50',
+//                 iconAfter: 'EU',
+//             }, {
+//                 item: new Infront.Instrument(2161, 'SXXP'),
+//                 name: 'STOXX EUROPE 600',
+//                 iconAfter: 'EU',
+//             }
+//         ]
+//     },
+//     {
+//         name: 'Nordic Indices',
+//         translate: true,
+//         items: [{
+//                 item: new Infront.Instrument(18177, 'OSEBX'),
+//                 name: 'OSEBX',
+//                 iconAfter: 'NO',
+//             }, {
+//                 item: new Infront.Instrument(18177, 'OBX'),
+//                 name: 'OBX',
+//                 iconAfter: 'NOR',
+//             }, {
+//                 item: new Infront.Instrument(17921, 'OMXS30'),
+//                 name: 'OMXS30',
+//                 iconAfter: 'SE',
+//             }, {
+//                 item: new Infront.Instrument(17665, 'OMXC25'),
+//                 name: 'OMXC25',
+//                 iconAfter: 'DK',
+//             }, {
+//                 item: new Infront.Instrument(100, 'OMXH25'),
+//                 name: 'OMXH25',
+//                 iconAfter: 'FI',
+//             }
+//         ]
+//     },
+//     {
+//         name: 'Commodities',
+//         translate: true,
+//         items: [{
+//                 item: new Infront.Instrument(2229, 'BRT'),
+//                 name: 'Brent Spot',
+//                 iconAfter: InfrontUtil.CountryFlagMap.GLOBAL,
+//             }, {
+//                 item: new Infront.Instrument(2229, 'WTI'),
+//                 name: 'WTI Spot',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_0,
+//             }, {
+//                 item: new Infront.Instrument(2159, 'GLDSPOT'),
+//                 name: 'Gold Spot',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_0,
+//             }, {
+//                 item: new Infront.Instrument(2159, 'SLVSPOT'),
+//                 name: 'Silver Spot',
+//                 iconAfter: InfrontUtil.CountryFlagMap.GLOBAL,
+//             }, {
+//                 item: new Infront.Instrument(2264, 'SPOT'),
+//                 name: 'Fresh Salmon Spot 3-6KG',
+//                 iconAfter: InfrontUtil.CountryFlagMap.GLOBAL,
+//             }
+//         ]
+//     }, {
+//         name: 'Major Futures',
+//         translate: true,
+//         items: [{
+//                 item: new Infront.Instrument(2101, 'YMFUT1'),
+//                 name: 'Dow Jones (mini)',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_1,
+//             }, {
+//                 item: new Infront.Instrument(21, 'NQFUT1'),
+//                 name: 'Nasdaq 100 (mini)',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_1,
+//             }, {
+//                 item: new Infront.Instrument(21, 'ESFUT1'),
+//                 name: 'S&P500 (mini)',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_1,
+//             }, {
+//                 item: new Infront.Instrument(6330, 'VIX'),
+//                 name: 'VIX Volatility Index',
+//                 iconAfter: InfrontUtil.CountryFlagMap.CODE_1,
+//             }
+//           ]
+//       }
+//   ],
+//   collapsable: Infront.Chart.Menu.COLLAPSABLE.FIRST,
+// }
+
+// opts.selectableCompare = {
+//   list : [
+//       {
+//           name: "World Indices",
+//           translate: true,
+//           items: [
+//               new Infront.Chart.Menu.Compare.Instrument(2098, "DAX"),
+//               new Infront.Chart.Menu.Compare.Instrument(20, "DJI"),
+//           ]
+//       },
+//       {
+//           name: "Automotive",
+//           translate: true,
+//           items: [
+//               new Infront.Chart.Menu.Compare.Instrument(26, "DAI"),
+//               new Infront.Chart.Menu.Compare.Instrument(26, "BMW"),
+//               new Infront.Chart.Menu.Compare.Instrument(15, "TSLA")
+//           ]
+//       }
+//   ],
+//   collapsable: Infront.Chart.Menu.COLLAPSABLE.OPEN,
+// };
+
+// ChartEdit modal configurations
+// opts.globalSettingsNavigation = [
+//   Infront.Chart.UserParamsNavigationItem.DISPLAY,
+//   Infront.Chart.UserParamsNavigationItem.AXIS,
+//   Infront.Chart.UserParamsNavigationItem.EVENTS
+// ];
+
+      opts.globalSettingsViewGroup = {
+        [Infront.Chart.UserParamsNavigationItem.DISPLAY]: [
+          "watermarkType",
+          "watermarkCustomText",
+          "gridType",
+          "showAlternateGridColor",
+          "cursorType",
+          "cursorSnapX", // activated for testing
+          "cursorSnapY", // activated for testing
+          "prevCloseType", // WTKWDG-562 users can not switch the prev. close type
+          "showPrevClose",
+          "mainOnTop",
+          "showNavigator",
+          "showLegend",
+          "showTooltip",
+          "streaming", // activated for testing
+          "caching" // activated for testing
+        ],
+        [Infront.Chart.UserParamsNavigationItem.AXIS]: [
+          "ordinateScaling",
+          "ordinateCompareBase",
+          "showOrdinate",
+          "showOppositeOrdinate",
+          "ordinateType",
+          "ordinateLabelsOutside",
+          "showSeriesLabels"
+        ],
+        [Infront.Chart.UserParamsNavigationItem.EVENTS]: [
+          "showSplits",
+          "showDividends",
+          "showCalendar",
+          "calendarFeeds",
+          // 'showNews', // FIXME: to be activated later
+          // 'showReleases', // FIXME: to be activated later
+          "adjustSplits",
+          "adjustDividends"
+        ]
+      };
+
+// opts.instrumentSettingsNavigation = [
+//   Infront.Chart.UserParamsNavigationItem.LINE,
+//   Infront.Chart.UserParamsNavigationItem.VOLUME,
+//   Infront.Chart.UserParamsNavigationItem.EVENTS
+// ];
+
+// opts.instrumentSettingsViewGroup = {
+//   [Infront.Chart.UserParamsNavigationItem.LINE]: [
+//     'visible',
+//     'targetCurrency',
+//     'chartType',
+//     'dataType',
+//     'color',
+//     'upWickColor',
+//     'wickColor',
+//     'upColor',
+//     'downColor',
+//     // 'negativeColor',
+//     // 'lineColor',
+//     'lineWidth',
+//   ],
+//   [Infront.Chart.UserParamsNavigationItem.VOLUME]: [
+//     // 'volumeType', // WTKWDG-541 not wanted (for now)
+//     'showVolume',
+//     'volumeUseUpDownColors',
+//     'showVolumeUnderlay',
+//     'volumeUnderlayUseUpDownColors',
+//     'volumePositiveColor',
+//     'volumeNegativeColor',
+//     'volumeColor',
+//   ],
+//   [Infront.Chart.UserParamsNavigationItem.EVENTS]: [
+//     'showSplits',
+//     'showDividends',
+//     'showCalendar',
+//     // 'showNews', // FIXME: to be activated later
+//     // 'showReleases', // FIXME: to be activated later
+//     'adjustSplits',
+//     'adjustDividends',
+//   ],
+// };
+
+      opts.linkChannels = [7755];
+      opts.linkAction = Infront.LinkAction.Replace;
+
+// create widget
+      const widget = infront.chartWidget("chartwidget", opts);
+
+    }
+  </script>
+</head>
+<body class="cell-body">
+<div class="cell-wrapper">
+  <div class="cell-row">
+    <div class="cell cell--w12">
+      <div class="cell-content">
+        <div id="chartwidget" class="chart-widget-demo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

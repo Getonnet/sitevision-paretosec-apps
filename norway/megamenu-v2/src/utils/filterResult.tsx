@@ -4,9 +4,7 @@ interface filterResultType {
 }
 
 export const filterResult = ({ result, exclude }: filterResultType) => {
-  const filterRes = result.filter((item) => {
+  return result.filter((item) => {
     return !exclude.includes(item);
   });
-
-  return filterRes;
 };

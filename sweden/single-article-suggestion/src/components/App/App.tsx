@@ -80,7 +80,7 @@ const App: React.FunctionComponent<AppProperties> = ({ articleId }) => {
           />
 
           <a href={article.current.URL} className={styles.content}>
-            <p className={styles.text}>Les også</p>
+            <p className={styles.text}>Läs även</p>
 
             <h2 className={styles.title}>
               {article.current["SV.Title"]}{" "}
