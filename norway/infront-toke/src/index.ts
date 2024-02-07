@@ -4,6 +4,7 @@ import log from "@sitevision/api/server/LogUtil";
 import storage from "@sitevision/api/server/storage";
 import requester from "@sitevision/api/server/Requester";
 import { TokenGenPayload, TokenGenUrl } from "./http.service";
+import searchUtil from "@sitevision/api/server/SearchUtil";
 
 interface Token {
   access_token: string;
@@ -123,3 +124,28 @@ router.get("/maanedsportefolje", (req, res) => {
     });
 });
 // END fetch data for `Månedsportefølje table to module`
+
+/**
+ * ----------------------------------------------------
+ * Search results endpoints
+ */
+router.get("/search-result", (req, res) => {
+  const term = req.params.q as string;
+
+  // @ts-expect-error: copied example from docs, so ignoring ts error on second argument
+  const result = searchUtil.search(term, null, 0, 5);
+
+  if (result.hasHits()) {
+    const hits = result.getHits();
+    const links: string[] = [];
+    while (hits.hasNext()) {
+      const hit: any = hits.next();
+      links.push(
+        `<a href="${hit.getField("uri")}" title="">${hit.getField("title")}</a>`
+      );
+    }
+    res.json({ result: links });
+  } else {
+    res.json({ result: ["Ingen resultater."] });
+  }
+});
