@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .chart-widget-demo {
+      height: 560px;
+    }
+  </style>
+
+  <link rel="stylesheet" type="text/css" href=https://wtk.infrontservices.com/css/InfrontFramework-3.11.17.css />
+  <link rel="stylesheet" type="text/css" href=https://wtk.infrontservices.com/themes/light-3.11.17/theme.css />
+
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/highstock.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/highcharts-more.js"></script>
+
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/CommonFramework-2.11.17.min.js"></script>
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/InfrontUI-3.11.17.min.js"></script>
+
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/InfrontIndicator-3.11.17.min.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/indicators/indicators-all.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/drag-panes.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/annotations-advanced.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/stock-tools.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/heikinashi.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/hollowcandlestick.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/exporting.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/offline-exporting.js"></script>
+
+  <style>
+    .cell-w-chart-nextgen .cell-mininav__btn--selected {
+      background: transparent;
+      color: #544952;
+      border-bottom: 2px solid #214D8E;
+    }
+  </style>
+
+  <script>
+    /* Instantiate Infront web toolkit and run it when document is ready */
+    var infront;
+    document.addEventListener("DOMContentLoaded", function(event) {
+      infront = new Infront.UI({
+        "signed_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE3MDc0MzA3MDQsImlhdCI6MTcwNzM5NDcwNCwianRpIjoiYTBhZTYwMzgtMDM2ZS00MzY3LTg4Y2YtYWY3MGJkNTM5MDNlIiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiNmFkNmQ0ZDUtMTIwNi00NDcxLWI1NDMtMTI5MjdkZDRhZjE1IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.QKGe8Ic_W3jPkAbbM_KQC1mnjrPD8OSNLKRZ4L-U3KP7F1Ri77Ib8lXVfOugFbrVc-t3NDdsz0W8pJ2qPJc3bTS3Q73HuVeqP_lVevuDDqXe9g2rlHy3f7bT2-SQM_bKFfC8wzw_w21cCl3EQ42y_albeGrqFChjD8Crr923oPpZ5hgJE-PixBAcZChK3MM1KKz8hCeEKcp5FWzcgmaXecmzhWl7IVuIPDTyn7McQ5YWykGLXMQCE053DoLJ-royeIalqdwikTLeAWnXobLgy5ojPYA0WtbwoMmRH4fBbUiP5tq8EtO-9k5OdVMPmfsVAkc5TOQwuwvVNIaOiMYUHg",
+        "streaming": true,
+        "enableLoginDialog": true,
+        "store_session": true
+      });
+      infront.registerEventObserver("onReady", infrontReady);
+      infront.init();
+    });
+
+    /* Infront web toolkit ready to go, defining widgets inside the infrontReady function */
+    function infrontReady() {
+      // options
+      const opts = new Infront.ChartWidgetOptions();
+
+      /* Instruments */
+      opts.instruments = [
+        // new Infront.Instrument(15, "TSLA")
+        new Infront.Instrument(18177, "EQNR"),
+        // new Infront.Instrument(18177, "OSEBX")
+      ];
+
+      /* overwrite CSS colors */
+      opts.colors = ['#527DB3', '#7cb5ec'];
+      // opts.indicatorColors = ['#AA0A3C', '#F08200', '#BBCB56', '#0F7CBD', '#FBBE0D', '#E47CFF', '#53C973', '#009292'];
+      // opts.annotationColors = ['#000000', '#DDDDDD', '#0000FF', '#444444'];
+
+      /* General settings */
+      opts.chartType = Infront.Chart.ChartType.AREA;
+      opts.gridType = '';
+      opts.streaming = true;
+      opts.caching = true;
+      // opts.watermarkType = Infront.Chart.WatermarkType.SYMBOL;
+      opts.showLogo = false;
+
+      /* Ordinate settings */
+      opts.showOppositeOrdinate = true;
+
+      /* Period settings */
+      // opts.selectablePeriods = ["T", "S", "1D", "2D", "5D", "10D", "30D", Infront.Chart.Period.ONE_MONTH, "6M", "9M", "1Y", "2Y", "5Y", "YTD", "ALL"];
+      opts.selectablePeriods = ["1D", "2D", "5D", "10D", "30D", "6M", "1Y", "5Y", "YTD", "ALL"];
+      // opts.defaultPeriod = "1D";
+      // opts.defaultPeriod = "5D";
+      // opts.defaultPeriod = "1M";
+      opts.defaultPeriod = "1Y";
+
+      /* UI settings */
+      opts.showNavigator = false;
+      opts.legendItemClick = Infront.Chart.LegendItemClickType.EDIT_REMOVE_SERIES;
+      opts.topToolbar = {
+        // Dropdown Menus
+        chartTypeMenu: false,
+        periodMenu: false,
+        periodSelector: false,
+        resolutionMenu: false,
+        indicatorMenu: false,
+        annotationMenu: false,
+        templateMenu: false,
+        cursorTypeMenu: false,
+        newCompareMenu: false,
+        compareMenu: false, // deprecated
+        // Buttons
+        cursorEventsButton: false,
+        currencyMenu: false,
+        settingsMenu: false,
+        // InstrumentHeader (right side)
+        instrumentHeader: false,
+        // toggle fullscreen btn (right side)
+        fullScreenButton: true
+      };
+
+      opts.bottomToolbar = {
+        // periodMenu: true,
+        periodButtons: true,
+        resolutionMenu: false
+      };
+
+      opts.instrumentHeader = {
+        chartFields: false,
+        quoteFields: false
+      };
+      opts.generalDropDownOptions = {
+        booleanRepresentation: Infront.Chart.BooleanRepresentation.CHECKBOX
+      };
+
+      opts.defaultCurrency = Infront.Chart.Currency.NOK; // initial currency
+      opts.selectableIndicators = {
+        list: [
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME_BY_PRICE,
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME,
+          Infront.Chart.IndicatorType.TOGGLE_VOLUME_UNDERLAY,
+          // Indicators
+          {
+            name: "Indicators",
+            translate: true,
+            items: [
+              // Infront.Chart.IndicatorType.VOLUME_BY_PRICE,
+              Infront.Chart.IndicatorType.SMA,
+              Infront.Chart.IndicatorType.EMA,
+              Infront.Chart.IndicatorType.WMA,
+              Infront.Chart.IndicatorType.BOLLINGER_BANDS,
+              Infront.Chart.IndicatorType.VWAP
+            ]
+          },
+          // Oscillators (have own panes / y-axis)
+          {
+            name: "Oscillators",
+            translate: true,
+            items: [
+              Infront.Chart.IndicatorType.MACD,
+              Infront.Chart.IndicatorType.MOMENTUM,
+              Infront.Chart.IndicatorType.RSI,
+              Infront.Chart.IndicatorType.RVI,
+              Infront.Chart.IndicatorType.STDDEV,
+              Infront.Chart.IndicatorType.STOCHASTIC, // STOCHASTIC is almost the same as STOCHASTIC_FAST!
+              Infront.Chart.IndicatorType.STOCHASTIC_SLOW,
+              Infront.Chart.IndicatorType.STOCHASTIC_FAST,
+              Infront.Chart.IndicatorType.ATR
+            ]
+          }
+          // Service functions
+          // Infront.Chart.IndicatorType.TOGGLE_INDICATORS,
+          // Infront.Chart.IndicatorType.DELETE_ALL_INDICATORS,
+        ],
+        collapsable: Infront.Chart.Menu.COLLAPSABLE.CLOSED
+      };
+
+      opts.globalSettingsViewGroup = {
+        [Infront.Chart.UserParamsNavigationItem.DISPLAY]: [
+          "watermarkType",
+          "watermarkCustomText",
+          "gridType",
+          "showAlternateGridColor",
+          "cursorType",
+          "cursorSnapX", // activated for testing
+          "cursorSnapY", // activated for testing
+          "prevCloseType", // WTKWDG-562 users can not switch the prev. close type
+          "showPrevClose",
+          "mainOnTop",
+          "showNavigator",
+          "showLegend",
+          "showTooltip",
+          "streaming", // activated for testing
+          "caching" // activated for testing
+        ],
+        [Infront.Chart.UserParamsNavigationItem.AXIS]: [
+          "ordinateScaling",
+          "ordinateCompareBase",
+          "showOrdinate",
+          "showOppositeOrdinate",
+          "ordinateType",
+          "ordinateLabelsOutside",
+          "showSeriesLabels"
+        ],
+        [Infront.Chart.UserParamsNavigationItem.EVENTS]: [
+          "showSplits",
+          "showDividends",
+          "showCalendar",
+          "calendarFeeds",
+          // 'showNews', // FIXME: to be activated later
+          // 'showReleases', // FIXME: to be activated later
+          "adjustSplits",
+          "adjustDividends"
+        ]
+      };
+
+      opts.linkChannels = [7755];
+      opts.linkAction = Infront.LinkAction.Replace;
+
+      // create widget
+      const widget = infront.chartWidget("chartwidget", opts);
+    }
+  </script>
+</head>
+<body class="cell-body">
+<div class="cell-wrapper">
+  <div class="cell-row">
+    <div class="cell cell--w12">
+      <div class="cell-content">
+        <div id="chartwidget" class="chart-widget-demo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

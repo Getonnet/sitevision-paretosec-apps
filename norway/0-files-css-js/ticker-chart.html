@@ -6,23 +6,36 @@
       height: 560px;
     }
   </style>
-  <link type="text/css" rel="stylesheet" href="//wtk.infrontservices.com/css/InfrontFramework-3.6.21.css" />
-  <link type="text/css" rel="stylesheet" href="//wtk.infrontservices.com/themes/light-3.9.16/theme.css" />
-  <script type="text/javascript" src="//wtk.infrontservices.com/js/CommonFramework-2.9.16.min.js"></script>
-  <script type="text/javascript" src="//wtk.infrontservices.com/js/InfrontUI-3.6.21.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href=https://wtk.infrontservices.com/css/InfrontFramework-3.11.17.css />
+  <link rel="stylesheet" type="text/css" href=https://wtk.infrontservices.com/themes/light-3.11.17/theme.css />
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/CommonFramework-2.11.17.min.js"></script>
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/InfrontUI-3.11.17.min.js"></script>
+
+  <script type="text/javascript" src="https://wtk.infrontservices.com/js/InfrontIndicator-3.11.17.min.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/highstock.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/indicators/indicators-all.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/drag-panes.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/annotations-advanced.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/stock-tools.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/heikinashi.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/hollowcandlestick.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/highcharts-more.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/exporting.js"></script>
+  <script type="text/javascript" src="https://code.highcharts.com/stock/9.3.1/modules/offline-exporting.js"></script>
+
   <script>
     /* Instantiate Infront web toolkit and run it when document is ready */
     var infront;
     document.addEventListener("DOMContentLoaded", function(event) {
-      const sdk = new InfrontSDK.SDK({
-        signedToken: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE3MDcxMzkxMDQsImlhdCI6MTcwNzEwMzEwNCwianRpIjoiYzI2ZDU4ZWItN2YxZC00MzI3LTk0MDctMWJlMjAwYmM4NzdiIiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiZWVjYWM1OWMtMmM3OS00NTEyLWI5YzItZDI1MzIyMThhM2JjIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.ZNCzSYQrqoqw_kDPbDx8id-9PnabMGlcTXKkRlu-wFVULLFT9WlkYe3kig7W7TDlL_95hpK4yh0b4JFBeVPh4RLMKcMMpJxrVXWo71AYh0I6GSgLBag3RaOGiJESRFdL2K9gOXLQP8IMzBFcdMooWsCQVsa7-j7pejRTZbVtM4VZcGodP_ZiwQhsN1HTFo0l76NXbD-wmfeBqdMPU3Hx08lDlaccrTIkdBeMDCH84iGOh2eXMWLVO2QwpKBZX7TzN9D6TUvLOvMUnvW458rvnpAjvkMdv_O7h-6QVUJLjyHFJkZmsThE3haA4PF9HYE2E8ngsdsiQNaMNPMzNMuOvA",
-        onReady: (event) => {
-          infrontReady(sdk);
-        },
-        onDisconnect: (event) => {
-          console.warn("Disconnected:", event);
-        }
+      infront = new Infront.UI({
+        "signed_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE3MDczMzM1MDQsImlhdCI6MTcwNzI5NzUwNCwianRpIjoiYzk5MWMxZjktOTFiNi00MjkxLWIxZDEtMjIyMDRhZWFlNDY4IiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiNjkzNzgwNWUtMzA0Yy00NjM4LWIyMWQtZGJjZGMyMzhmNjhlIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.ZuqKgVuNMydckb1xTpMlNgApjyxML-RyxWOE_fMvViWJLmkdOp5CHo72-xB8-1MNqMXE2Qe1fuZFjDYTE4h5frCf4-faXuwYZzJ3JbetsK-GokkT8-fHMItGiwUUAAbyCO6OQyQl7H3ahqsEOxndfkIqG076v0smuHJUIOSlkJGTaNWNHXQaCFUW8ztdKgbJuRpXOsMybH36grHcbrvR5eW_v9E__Om7m4nwA4fRmfMjElqZkS4Dgl9pe_tvdYnBwzv03rFMMhWbBd6pE-UdyH1ZTelmFDClUEj5GomKRhXmIljA0pl-rILNfz-QNp-wvoCITFk2S2pOlxgB9_9Mpg",
+        "streaming": true,
+        "enableLoginDialog": true,
+        "store_session": true
       });
+      infront.registerEventObserver("onReady", infrontReady);
+      infront.init();
     });
 
     /* Infront web toolkit ready to go, defining widgets inside the infrontReady function */
@@ -35,7 +48,7 @@
         new Infront.Instrument(15, "TSLA"),
 //    new Infront.Instrument(15, "AAPL"),
 //    new Infront.Instrument(26, "DAI"),
-        new Infront.Instrument(26, "BMW")
+//         new Infront.Instrument(26, "BMW")
 //    new Infront.Instrument(26, "EOAN"),
 //    new Infront.Instrument(2098, "DAX"),
 //    new Infront.Instrument(26, "PUM"),
@@ -166,11 +179,11 @@
 // opts.showAlternateGridColor = true;
 
       /* Period settings */
-// opts.selectablePeriods = ["T", "S", "1D", "2D", "5D", "10D", "30D", Infront.Chart.Period.ONE_MONTH, "6M", "9M", "1Y", "2Y", "5Y", "YTD", "ALL"];
-// opts.selectablePeriods = ["1D", "2D", "5D"];
-// opts.defaultPeriod = "1D";
-// opts.defaultPeriod = "5D";
-// opts.defaultPeriod = "1M";
+      // opts.selectablePeriods = ["T", "S", "1D", "2D", "5D", "10D", "30D", Infront.Chart.Period.ONE_MONTH, "6M", "9M", "1Y", "2Y", "5Y", "YTD", "ALL"];
+      // opts.selectablePeriods = ["1D", "2D", "5D"];
+      // opts.defaultPeriod = "1D";
+      // opts.defaultPeriod = "5D";
+      // opts.defaultPeriod = "1M";
       opts.defaultPeriod = "1Y";
 
       /* Resolution settings */
@@ -208,35 +221,35 @@
 
       opts.topToolbar = {
         // Dropdown Menus
-        chartTypeMenu: true,
-        periodMenu: true,
-        periodSelector: true,
-        resolutionMenu: true,
-        indicatorMenu: true,
-        annotationMenu: true,
-        templateMenu: true,
-        cursorTypeMenu: true,
-        newCompareMenu: true,
-        compareMenu: true, // deprecated
+        chartTypeMenu: false,
+        periodMenu: false,
+        periodSelector: false,
+        resolutionMenu: false,
+        indicatorMenu: false,
+        annotationMenu: false,
+        templateMenu: false,
+        cursorTypeMenu: false,
+        newCompareMenu: false,
+        compareMenu: false, // deprecated
         // Buttons
-        cursorEventsButton: true,
-        currencyMenu: true,
-        settingsMenu: true,
+        cursorEventsButton: false,
+        currencyMenu: false,
+        settingsMenu: false,
         // InstrumentHeader (right side)
-        instrumentHeader: true,
+        instrumentHeader: false,
         // toggle fullscreen btn (right side)
         fullScreenButton: true
       };
 
       opts.bottomToolbar = {
-        periodButtons: true,
         // periodMenu: true,
-        resolutionMenu: true
+        periodButtons: true,
+        resolutionMenu: false
       };
 
       opts.instrumentHeader = {
-        chartFields: true,
-        quoteFields: true
+        chartFields: false,
+        quoteFields: false
       };
 
       /*
@@ -304,7 +317,7 @@
         booleanRepresentation: Infront.Chart.BooleanRepresentation.CHECKBOX
       };
 
-      opts.defaultCurrency = Infront.Chart.Currency.DEFAULT; // initial currency
+      opts.defaultCurrency = Infront.Chart.Currency.NOK; // initial currency
 // opts.selectableCurrencies = [Infront.Chart.Currency.USD, Infront.Chart.Currency.EUR];
 // opts.selectableCurrencies = ['USD', 'EUR', 'JPY'];
 // opts.selectableCurrencies = ['USD', Infront.Chart.Currency.GBP];
