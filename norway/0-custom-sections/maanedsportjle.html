@@ -1,0 +1,169 @@
+<script type="text/javascript">
+  let ct_infrontUI = null;
+  let ct_chartWidget = null;
+  let ct_chartWidgetOptions = null;
+
+  let ct_quoteListWidget = null;
+  // let ct_marketFeed = 18177;
+  let ct_modelPortfolio = {};
+
+  // include InfrontSessionInclude
+  $(document).ready(function() {
+    fetch("/rest-api/Infront%20token/token")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.token) {
+        let opts = new Infront.InfrontUIOptions();
+        opts.language = "no";
+        opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+        opts.streaming = true;
+        opts.signed_token = data.token;
+        opts.token_type = "JWT";
+        opts.client_application = "WEB";
+        ct_infrontUI = new Infront.UI(opts);
+        ct_infrontUI.registerEventObserver("onReady", ct_infrontReady);
+        ct_infrontUI.init();
+        infrontSDK = new InfrontSDK.SDK({
+          signedToken: data.token,
+          onReady: infrontSDKReady
+        });
+      }
+    });
+  });
+
+  //End Include
+
+  function ct_setChart(feed, ticker) {
+    ct_chartWidgetOptions.instruments = [{
+      feed: feed,
+      ticker: ticker
+    }];
+    ct_chartWidget.modify(ct_chartWidgetOptions);
+  }
+
+  function ct_infrontReady() {
+    let d = new Date();
+    d.setMonth(d.getMonth() - 1);
+
+    /*
+            --- Item type   : monthportfolio
+            --- Report type : <!--@Item.Rapporttype-->
+            --- Paragraph   : Paretoporteføljen nå
+            */
+    let quoteListOptions = new Infront.QuoteListWidgetOptions();
+    quoteListOptions.columns = [
+      "TICKER",
+      {
+        name: "dateOfRec",
+        type: "custom",
+        heading: "Tatt inn",
+        content: function(rowId) {
+          let date = new Date(ct_modelPortfolio[rowId.ticker]["purchaseDate"]);
+          return date.toISOString().slice(0, 10).split("-").reverse().join(".");
+        }
+      },
+      {
+        name: "weightpct",
+        type: Infront.FieldType.Computed,
+        decimals: 1,
+        heading: "Vekt %",
+        computeFields: ["TICKER"],
+        compute: function(rowId, args) {
+          const num = 100.0 / Object.keys(ct_modelPortfolio).length;
+          return num.toFixed(1);
+        }
+      },
+      {
+        name: "lastMonthClose",
+        type: "custom",
+        decimals: 2,
+        heading: "Siste mnd. sluttkurs",
+        className: "cell-text-right",
+        content: function(rowId) {
+          return ct_modelPortfolio[rowId.ticker]["purchasePrice"];
+        }
+      },
+      {
+        name: "LAST",
+        heading: "Kurs nå",
+        decimals: 2
+      },
+      {
+        name: "PCT_CHANGE",
+        heading: "Endring i dag"
+      },
+      {
+        name: "changeMonth",
+        heading: "Endring denne mnd",
+        type: "computed",
+        decimals: 2,
+        computeFields: ["LAST_VALID"],
+        compute: function(rowId, args) {
+          if (args[0]) {
+            let refPriceStr = ct_modelPortfolio[rowId.ticker]["purchasePrice"];
+            let refPrice = parseFloat(refPriceStr);
+            let result = (100 * (args[0] / refPrice - 1)).toFixed(2);
+            let resultStr = result.toString().replace(".", ",");
+            return result >= 0 ?
+              "<span class='cell-status-positive'>" + resultStr + "%</span>" :
+              "<span class='cell-status-negative'>" + resultStr + "%</span>";
+          }
+        },
+        translate: function(rowId, args) {
+          return args;
+        }
+      }
+    ];
+
+    quoteListOptions.sortable = false;
+    quoteListOptions.enableChangeStatusColors = true;
+    quoteListOptions.widgetTitle = "Månedsportefølje";
+    quoteListOptions.onInstrumentSelected = function(instrument) {
+      ct_setChart(instrument.feed, instrument.ticker);
+    };
+
+    $.getJSON("/rest-api/Infront%20token/maanedsportefolje", function(data) {
+      quoteListOptions.instruments = [];
+      $.each(data["positions"], function(idx, val) {
+        ct_modelPortfolio[val["ticker"]] = val;
+        let pos = {
+          ticker: val["ticker"],
+          feed: val["Ticker"] == "BANK" ? 18199 : 18177
+        };
+        quoteListOptions.instruments.push(pos);
+      });
+      ct_quoteListWidget = ct_infrontUI.quoteList("#monthportfolio210", quoteListOptions);
+    });
+  }
+</script>
+
+<style>
+  #monthportfolio210,
+  #monthportfolio210 table thead tr th {
+    color: #544952;
+  }
+
+  #monthportfolio210 .cell-h4 {
+    font-family: "Roboto", sans-serif;
+    display: block;
+    font-size: 16px;
+    line-height: 130%;
+    color: #544952;
+  }
+
+  #monthportfolio210 .cell-table tr th,
+  #monthportfolio210 .cell-table tr:not(:last-of-type) td {
+    border: none;
+  }
+
+  #monthportfolio210 .cell-status-positive {
+    color: #527DB3;
+
+  }
+
+  #monthportfolio210 .cell-status-negative {
+    color: #D96967;
+  }
+</style>
+
+<div id="monthportfolio210" class="data-table"></div>

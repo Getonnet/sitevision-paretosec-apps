@@ -1,0 +1,480 @@
+<link rel="stylesheet" type="text/css" media="all" href="https://wtk.infrontservices.com/css/InfrontFramework-3.11.17.css" />
+<link rel="stylesheet" type="text/css" media="all" href="https://wtk.infrontservices.com/themes/light-3.11.17/theme.css" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://wtk.infrontservices.com/js/CommonFramework-2.10.5.min.js"></script>
+<script src="https://wtk.infrontservices.com/js/InfrontUI-3.10.5.min.js"></script>
+<script src="https://code.highcharts.com/stock/9.3.1/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/9.3.1/highcharts-more.js"></script>
+<script src="https://policy.app.cookieinformation.com/uc.js"></script>
+<script src="https://wtk.infrontservices.com/js/InfrontIndicator-3.11.17.min.js"></script>
+
+
+<script type="text/javascript">
+  var infrontUI_shorting = null;
+  var quoteListWidget = null;
+  var marketFeed = 18177;
+  var chartWidget = null;
+  var chartWidgetOptions = null;
+  var infrontSDK_shorting = null;
+  var token_shorting = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHQ3RhaXRJRElteW0wZzVreUlPLUdnWDlyeDJ3b1RVZlRiZFM1NnN4REFRIn0.eyJleHAiOjE3MDc3NTQ3MDQsImlhdCI6MTcwNzcxODcwNCwianRpIjoiOTFhNzk1YzAtNjM2ZS00MmQ0LWI2YzctNDA4MmVmOTZjZDVlIiwiaXNzIjoiaHR0cHM6Ly9wYXJldG8uY2xvdWQuZXUuaW5mcm9udHNlcnZpY2VzLmNvbS9hdXRoL3JlYWxtcy9wYXJldG8iLCJhdWQiOlsiZG9jdW1lbnQtaHViLXNlcnZpY2UiLCJhY2NvdW50Il0sInN1YiI6ImY6MmU0OGI4YWYtMGNlZC00MTUxLWI2NzctYTU0MTgyMDM4ODdlOjUzOTI2MTA2MiIsInR5cCI6IkJlYXJlciIsImF6cCI6Ind0ay1jbGllbnQiLCJzZXNzaW9uX3N0YXRlIjoiZGYxYjcwODgtNDJhYS00NTNmLTk4OGQtNjRlZDFlZmZlZTNmIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL2dhdGV3YXkuZXUuaW5mcm9udGZpbmFuY2UuY29tIiwiaHR0cHM6Ly9wYXJldG8uZXUuaW5mcm9udGZpbmFuY2UuY29tIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZG9jdW1lbnQtaHViLXNlcnZpY2UiOnsicm9sZXMiOlsiRE9DVU1FTlRfSFVCIiwiRE9DSFVCX0RJUkVDVCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiUGFyZXRvX1NhbmRib3giLCJsb2NhbGUiOiJlbiIsInhucyI6InBhcmV0byJ9.S977miKVRzZsKAa8wDDW883RSlAF6VGut-USJDKJoRncyC4KodWm6TFhea_Iuhs9Kau6znEn6B0_zi66eWjifzg1hgTjCI34GBKSR8EkL_3nBgPBpesTZpOcmHrrm8wdJKGfggJY2o9WRHawHpJCZ20jksPjxeVh707UOd44lRXJ06ovQ0WZeH0om-uBd_GmudO4aS5p0eBPsQb7uzlkCbqkHYrmNh4q8ZHoZVYhVekA4LiDh8sm053e9Jr0FZzZFe00l7hE_jWIMM4ZYQfLfF864KFkL12Gk-kblbyNlJIrSE1TDvV3xvhPsMb4ywTzbIP5fdTnlmGpeIkxZfJU3w";
+
+  /**
+   * ---------------------------------------------
+   * Fond pagination start
+   */
+  const shortViewAllBtn = $("#short_viewAll");
+  const listWrapper = $("#shorting #norwayLists");
+
+  function scrollToTopOfWidget() {
+    $("html, body").animate(
+      {
+        scrollTop: $("#shorting #norwayLists").offset().top - 150
+      },
+      1000
+    ); // Adjust the duration as needed (in milliseconds)
+  }
+
+  $(document).on("click", "#short_viewAll", function () {
+    if (listWrapper.length) {
+      listWrapper.toggleClass("show-all");
+    } else {
+      $("#shorting #norwayLists").toggleClass("show-all");
+    }
+
+    $(this).text(function (i, text) {
+      return text === "Vis mindre" ? "Vis alt" : "Vis mindre";
+    });
+
+    // go to top of data table
+    scrollToTopOfWidget();
+  });
+  // ---------------------------------------------
+
+  //include InfrontSessionInclude
+  function updateShowAllButtonVisibility() {
+    if (listWrapper.height() < 860) {
+      shortViewAllBtn.prop("disabled", true);
+      listWrapper.addClass("show-all");
+    } else {
+      listWrapper.removeClass("show-all");
+      shortViewAllBtn.removeAttr("disabled");
+    }
+  }
+
+  $(document).ready(function () {
+    // fetch("/rest-api/Infront%20token/token")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     token_shorting = data.token;
+
+        if (token_shorting) {
+          let opts = new Infront.InfrontUIOptions();
+          opts.language = "no";
+          opts.routingUrl = "https://pareto-mws1.infrontservices.com/mws";
+          opts.streaming = true;
+          opts.signed_token = token_shorting;
+          opts.token_type = "JWT";
+          opts.client_application = "WEB";
+          infrontUI_shorting = new Infront.UI(opts);
+          infrontUI_shorting.registerEventObserver("onReady", infrontReady);
+          infrontUI_shorting.init();
+          infrontSDK_shorting = new InfrontSDK.SDK({
+            signedToken: token_shorting,
+            onReady: infrontSDKReady
+          });
+        }
+  //     });
+  });
+
+  //End Include
+  function instrumentTradeLink(isin, feed) {
+    return "https://online.paretosec.com/trade/trade?isin=" + isin + "&market=" + feed;
+  }
+
+  var widget_shorting;
+  var currentFeed_shorting;
+
+  function createBaseListOptions(instruments) {
+    var cvOpts = new Infront.QuoteListWidgetOptions();
+    cvOpts.columns = [
+      {
+        name: "TICKER",
+        hover: "FULL_NAME",
+        flag: true
+      },
+      {
+        name: "FULL_NAME"
+      },
+      {
+        name: "LAST_VALID"
+      },
+      {
+        name: "CHANGE"
+      },
+      {
+        name: "PCT_CHANGE"
+      },
+      {
+        name: "TURNOVER"
+      },
+      {
+        name: "MCAP",
+        heading: "MCap",
+        shorten: true,
+        type: Infront.FieldType.Computed,
+        dataType: Infront.DataType.Integer,
+        computeFields: ["NUM_SHARES", "LAST_VALID"],
+        compute: function (rowId, args) {
+          return args[0] * args[1];
+        }
+      },
+      {
+        name: "BROKER_IS_SHORTABLE"
+      },
+      "S_DATETIME",
+
+      {
+        name: "",
+        type: Infront.FieldType.Computed,
+        sortable: false,
+        className: "cell-text-right",
+        computeFields: ["ISIN"],
+        compute: (rowId, args) => {
+          return args[0];
+        },
+        translate: function (rowId, isin) {
+          var result =
+            "<a href='" + instrumentTradeLink(isin, rowId.feed) + "'><img title='Trade this' alt='H' src='/images/18.4c63de6f18c8ad0610edf88/1703828215710/tradebtn_mini_no.png' class='btnTrade'></a>";
+          return result;
+        }
+      }
+    ];
+    if ([26, 19, 2008, 2012, 2047, 15, 14].includes(currentFeed_shorting) || Array.isArray(currentFeed_shorting)) {
+      cvOpts.columns = cvOpts.columns.filter((x) => !["TURNOVER", "MCAP", "TURNOVER", "LAST_VALID", "CHANGE", "PCT_CHANGE", "S_DATETIME"].includes(x.name));
+    }
+    cvOpts.instruments = instruments;
+    cvOpts.sortable = true;
+    cvOpts.enableChangeStatusColors = true;
+    cvOpts.defaultSortedColumn = "TICKER";
+    cvOpts.defaultSortOrder = 0;
+    cvOpts.useChains = false;
+    cvOpts.interactionHighlight = true;
+    return cvOpts;
+  }
+
+  function infrontReady(event) {}
+
+  var instruments = [];
+  var timeout;
+
+  function changeFeed(feed) {
+    if (currentFeed_shorting == feed) {
+      return;
+    }
+    currentFeed_shorting = feed;
+    if (widget_shorting) {
+      widget_shorting.destroy();
+    }
+    $("#loader").show();
+
+    clearTimeout(timeout);
+    instruments = [];
+    if (Array.isArray(feed)) {
+      feed.forEach(loadFeed);
+    } else {
+      loadFeed(feed);
+    }
+  }
+
+  var listeners = [];
+
+  function loadFeed(feed) {
+    infrontSDK_shorting.get(
+      InfrontSDK.feedContents({
+        contentType: InfrontSDK.FeedContentType.SymbolIds,
+        feed: feed,
+        subscribe: false,
+        limit: -1,
+        fields: ["Ticker", "ISIN"],
+        onData: function (results) {
+          listeners = results.map((id) => {
+            return infrontSDK_shorting.get(
+              InfrontSDK.symbolData({
+                subscribe: false,
+                content: {
+                  AdditionalData: true,
+                  Basic: true
+                },
+                fields: ["Ticker", "IsShortable"],
+                id,
+
+                onData: function (item) {
+                  if (item.get("IsShortable") === 1) {
+                    update({
+                      feed: item.get("Feed"),
+                      ticker: item.get("Ticker")
+                    });
+                  } else {
+                    update();
+                  }
+                },
+                onStatus: function (requestName, status) {
+                  //console.log(requestName, " : ", status);
+                }
+              })
+            );
+          });
+        }
+      })
+    );
+    // updateShowAllButtonVisibility();
+  }
+
+  function update(instrument) {
+    if (instrument) {
+      instruments.push(instrument);
+    }
+    clearTimeout(timeout);
+    timeout = setTimeout(initWidget, 500);
+  }
+
+  function initWidget() {
+    $("#loader").hide();
+    if (widget_shorting) {
+      widget_shorting.destroy();
+    }
+    var opts = createBaseListOptions(instruments);
+    widget_shorting = infrontUI_shorting.quoteList("norwayLists", opts);
+    setTimeout(updateShowAllButtonVisibility, 2000);
+  }
+
+  function infrontSDKReady(event) {
+    changeFeed(18177);
+  }
+
+  function toggleActiveTab(element) {
+    const tabs = document.querySelectorAll("#shorting .companyTabs a");
+    tabs.forEach((tab) => {
+      tab.classList.remove("activeTab");
+    });
+    element.classList.add("activeTab");
+  }
+
+  function handleMobileSorting(element) {
+    const selected = element.value;
+    changeFeed(parseInt(selected));
+    setTimeout(updateShowAllButtonVisibility, 2000);
+  }
+
+  // on change of table data, runupdateShowAllButtonVisibility
+  document.addEventListener("DOMContentLoaded", function () {
+    const observer = new MutationObserver(() => updateShowAllButtonVisibility());
+    observer.observe(document.getElementById("norwayLists"), {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+  });
+</script>
+
+<style>
+  #shorting .shorting__heading h4 {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    color: #544952;
+    margin-bottom: 10px;
+  }
+
+  #shorting .shorting__heading p {
+    font-size: 17px;
+    font-weight: 300;
+    color: #003255;
+    margin-bottom: 30px;
+  }
+
+  #shorting .shorting__heading p a {
+    text-decoration: underline;
+    text-decoration-color: #003255 !important;
+  }
+
+  #shorting .companyTabs {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+  }
+
+  #shorting .companyTabs li {
+    list-style: none;
+    padding: 0;
+  }
+
+  #shorting .companyTabs a {
+    display: block;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.1s ease-in-out;
+    background: #ffffff80;
+    color: #544952;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  #shorting .companyTabs a:hover {
+    color: #214d8e;
+    font-weight: 500;
+    background: #ffffff;
+  }
+
+  #shorting .activeTab {
+    color: #214d8e !important;
+    font-weight: 500 !important;
+    background: #ffffff !important;
+  }
+
+  #shorting #norwayLists {
+    padding: 16px;
+    background: #ffffff;
+    color: #544952;
+    max-height: 864px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #shorting #norwayLists.show-all {
+    max-height: unset;
+    max-height: max-content;
+  }
+
+  #shorting #norwayLists:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, transparent, #ffffff);
+    z-index: 5;
+  }
+
+  #shorting #norwayLists.show-all:after {
+    content: none;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper thead th {
+    padding: 0 0 13px 0 !important;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper thead .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody {
+    font-size: 15px;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody .cell-status-positive {
+    color: #527db3 !important;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody .cell-status-negative {
+    color: #d96967 !important;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody tr {
+    border-top: 1px solid #d7d7d7;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody tr td {
+    padding: 12px 0;
+  }
+
+  #shorting #norwayLists .cell-table-wrapper tbody tr .cell-table__txt--broker-is-shortable {
+    text-align: right;
+  }
+
+  #mobileSorting {
+    display: none;
+  }
+
+  #mobileSorting select {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px 20px;
+    font-family: "Roboto", sans-serif;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    background: #ffffff;
+    color: #214d8e;
+  }
+
+  #mobileSorting select:focus {
+    outline: none;
+  }
+
+  @media (max-width: 1185px) {
+    #mobileSorting {
+      display: block;
+    }
+    #shorting .companyTabs {
+      display: none;
+    }
+  }
+</style>
+
+<div id="shorting">
+  <div class="shorting__heading">
+    <h4>Shorting</h4>
+    <p>
+      Utvalget av aksjer som kan shortes endres kontinuerlig. Hvis du ønsker å shorte en aksje som ikke finnes i listen kan du kontakte oss på telefon <a href="tel:24 13 39 39">24 13 39 39</a> . Det
+      er ingen garanti for at aksjer på listen kan shortes til enhver tid eller at eksisterende aksjelån ikke blir tilbakekalt.
+    </p>
+  </div>
+
+  <div id="mobileSorting">
+    <select onchange="handleMobileSorting(this)">
+      <option value="18177">Norge</option>
+      <option value="17921">Sverige</option>
+      <option value="17665">Danmark</option>
+      <option value="100">Finland</option>
+      <option value="26">Tyskland</option>
+      <option value="19">UK</option>
+      <option value="2008">Frankrike</option>
+      <option value="2012">Spania</option>
+      <option value="2047">Italia</option>
+      <option value="14">USA - NYSE</option>
+      <option value="15">USA - NASDAQ</option>
+    </select>
+  </div>
+
+  <ul class="companyTabs customTabs" style="border-top: 0; border-left: 0; border-right: 0">
+    <li><a class="activeTab" onclick="changeFeed(18177); toggleActiveTab(this);">Norge</a></li>
+    <li><a onclick="changeFeed(17921); toggleActiveTab(this);">Sverige</a></li>
+    <li><a onclick="changeFeed(17665); toggleActiveTab(this);">Danmark</a></li>
+    <li><a onclick="changeFeed(100); toggleActiveTab(this);">Finland</a></li>
+    <li><a onclick="changeFeed(26); toggleActiveTab(this);">Tyskland</a></li>
+    <li><a onclick="changeFeed(19); toggleActiveTab(this);">UK</a></li>
+    <li><a onclick="changeFeed(2008); toggleActiveTab(this);">Frankrike</a></li>
+    <li><a onclick="changeFeed(2012); toggleActiveTab(this);">Spania</a></li>
+    <li><a onclick="changeFeed(2047); toggleActiveTab(this);">Italia</a></li>
+    <li><a onclick="changeFeed(14); toggleActiveTab(this);">USA - NYSE</a></li>
+    <li><a onclick="changeFeed(15); toggleActiveTab(this);">USA - NASDAQ</a></li>
+  </ul>
+
+  <div id="norwayLists">
+    <div id="loader">Loading...</div>
+  </div>
+
+  <div class="pagination">
+    <button id="short_viewAll" type="button">Vis alt</button>
+  </div>
+</div>
