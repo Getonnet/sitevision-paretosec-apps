@@ -46,3 +46,13 @@ export function limitSentenceTo15Words(sentence) {
   const limitedWords = words.slice(0, 15);
   return limitedWords.join(" ");
 }
+
+export const getArticleType = (path) => {
+  if (path.includes("Aktuelt")) {
+    return "Aktuelt";
+  } else if (path.includes("Pareto TV")) {
+    return "Pareto TV";
+  } else {
+    return "Visning";
+  }
+};

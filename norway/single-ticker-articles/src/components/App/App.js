@@ -5,10 +5,13 @@ import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
 import {
   formatTimestampToNorwegianDate,
+  getArticleType,
   limitSentenceTo15Words,
 } from "../util";
 import {
+  ARTICLE_COLLECTION_ID,
   PARETO_TV_COLLECTION_ID,
+  REST_API_BASE,
   VISNING_COLLECTION_ID,
 } from "../../../settings";
 
@@ -25,7 +28,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${window.sv.PageContext.pageId}/properties`,
+        url: `${REST_API_BASE}/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },
@@ -46,7 +49,7 @@ const App = () => {
   const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/0/${imageId}/properties`,
+        url: `${REST_API_BASE}/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -72,7 +75,7 @@ const App = () => {
 
   const get20Articles = (tickerId) => {
     const articles = requester.doGet({
-      url: `/rest-api/1/0/3.113c8d5d18b5cf299b63922/nodes`,
+      url: `${REST_API_BASE}/${ARTICLE_COLLECTION_ID}/nodes`,
       data: {
         properties: articleProperties,
         skip: articlePerRequest * currentPage.current,
@@ -80,7 +83,7 @@ const App = () => {
       },
     });
     const paretoTvArticles = requester.doGet({
-      url: `/rest-api/1/0/${PARETO_TV_COLLECTION_ID}/nodes`,
+      url: `${REST_API_BASE}/${PARETO_TV_COLLECTION_ID}/nodes`,
       data: {
         properties: articleProperties,
         skip: articlePerRequest * currentPage.current,
@@ -88,7 +91,7 @@ const App = () => {
       },
     });
     const visningArticles = requester.doGet({
-      url: `/rest-api/1/0/${VISNING_COLLECTION_ID}/nodes`,
+      url: `${REST_API_BASE}/${VISNING_COLLECTION_ID}/nodes`,
       data: {
         properties: articleProperties,
         skip: articlePerRequest * currentPage.current,
@@ -163,7 +166,7 @@ const App = () => {
                 <header>
                   <small className={styles.date}>
                     {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
-                    av Pareto Securities | Aktuelt
+                    av Pareto Securities |{getArticleType(a.path)}
                   </small>
                   <h3 className="subheading3">
                     <a href={a.properties.URL}>{a.name}</a>
