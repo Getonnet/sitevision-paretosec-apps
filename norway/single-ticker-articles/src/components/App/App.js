@@ -75,6 +75,7 @@ const App = () => {
         },
       })
       .then((res) => {
+        console.log("res::: ", res);
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
