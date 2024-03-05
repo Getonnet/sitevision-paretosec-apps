@@ -13,7 +13,7 @@ import {
   PARETO_TV_COLLECTION_ID,
   REST_API_BASE,
   VISNING_COLLECTION_ID,
-} from "../../../settings";
+} from "../../settings";
 
 const articlePerRequest = 20;
 
