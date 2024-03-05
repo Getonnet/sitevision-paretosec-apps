@@ -166,7 +166,7 @@ const App = () => {
                 <header>
                   <small className={styles.date}>
                     {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
-                    av Pareto Securities |{getArticleType(a.path)}
+                    av Pareto Securities | {getArticleType(a.path)}
                   </small>
                   <h3 className="subheading3">
                     <a href={a.properties.URL}>{a.name}</a>
