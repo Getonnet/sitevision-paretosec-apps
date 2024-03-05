@@ -7,6 +7,10 @@ import {
   formatTimestampToNorwegianDate,
   limitSentenceTo15Words,
 } from "../util";
+import {
+  PARETO_TV_COLLECTION_ID,
+  VISNING_COLLECTION_ID,
+} from "../../../settings";
 
 const articlePerRequest = 20;
 
@@ -21,7 +25,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/1/${window.sv.PageContext.pageId}/properties`,
+        url: `/rest-api/1/0/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },
@@ -42,7 +46,7 @@ const App = () => {
   const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/1/${imageId}/properties`,
+        url: `/rest-api/1/0/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -58,38 +62,59 @@ const App = () => {
       });
   };
 
+  const articleProperties = [
+    "ticker",
+    "SV.Image",
+    "creationDate",
+    "URL",
+    "article_summary",
+  ];
+
   const get20Articles = (tickerId) => {
-    requester
-      .doGet({
-        url: `/rest-api/1/1/3.113c8d5d18b5cf299b63922/nodes`,
-        data: {
-          properties: [
-            "ticker",
-            "SV.Image",
-            "creationDate",
-            "URL",
-            "article_summary",
-          ],
-          skip: articlePerRequest * currentPage.current,
-          limit: articlePerRequest,
-        },
-      })
+    const articles = requester.doGet({
+      url: `/rest-api/1/0/3.113c8d5d18b5cf299b63922/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+    const paretoTvArticles = requester.doGet({
+      url: `/rest-api/1/0/${PARETO_TV_COLLECTION_ID}/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+    const visningArticles = requester.doGet({
+      url: `/rest-api/1/0/${VISNING_COLLECTION_ID}/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+
+    Promise.all([articles, paretoTvArticles, visningArticles])
       .then((res) => {
         console.log("res::: ", res);
+        // res = [articles[], paretoTvArticles[], visningArticles[]]
+
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
 
         // filter data
-        res.map((article) => {
+        res.flat().map((post) => {
           if (
-            typeof article.properties.ticker !== "undefined" &&
-            article.properties.ticker.includes(tickerId)
+            typeof post.properties.ticker !== "undefined" &&
+            post.properties.ticker.includes(tickerId)
           ) {
-            setFirst3Articles((oldArticles) => [...oldArticles, article]);
+            setFirst3Articles((oldArticles) => [...oldArticles, post]);
             // console.count("matched ticker");
             // fetch featured image
-            getFeaturedImageFromId(article.id, article.properties["SV.Image"]);
+            getFeaturedImageFromId(post.id, post.properties["SV.Image"]);
           } else {
             // console.count("no match");
           }
