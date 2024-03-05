@@ -5,8 +5,15 @@ import requester from "@sitevision/api/client/requester";
 import useState from "react-usestateref";
 import {
   formatTimestampToNorwegianDate,
+  getArticleType,
   limitSentenceTo15Words,
 } from "../util";
+import {
+  ARTICLE_COLLECTION_ID,
+  PARETO_TV_COLLECTION_ID,
+  REST_API_BASE,
+  VISNING_COLLECTION_ID,
+} from "../../../settings";
 
 const articlePerRequest = 20;
 
@@ -21,7 +28,7 @@ const App = () => {
   const getTickerCode = () => {
     requester
       .doGet({
-        url: `/rest-api/1/1/${window.sv.PageContext.pageId}/properties`,
+        url: `${REST_API_BASE}/${window.sv.PageContext.pageId}/properties`,
         data: {
           properties: ["tickerCode", "countryCode"],
         },
@@ -42,7 +49,7 @@ const App = () => {
   const getFeaturedImageFromId = (articleId, imageId) => {
     requester
       .doGet({
-        url: `/rest-api/1/1/${imageId}/properties`,
+        url: `${REST_API_BASE}/${imageId}/properties`,
         data: {
           properties: ["URL"],
         },
@@ -58,38 +65,59 @@ const App = () => {
       });
   };
 
+  const articleProperties = [
+    "ticker",
+    "SV.Image",
+    "creationDate",
+    "URL",
+    "article_summary",
+  ];
+
   const get20Articles = (tickerId) => {
-    requester
-      .doGet({
-        url: `/rest-api/1/1/3.113c8d5d18b5cf299b63922/nodes`,
-        data: {
-          properties: [
-            "ticker",
-            "SV.Image",
-            "creationDate",
-            "URL",
-            "article_summary",
-          ],
-          skip: articlePerRequest * currentPage.current,
-          limit: articlePerRequest,
-        },
-      })
+    const articles = requester.doGet({
+      url: `${REST_API_BASE}/${ARTICLE_COLLECTION_ID}/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+    const paretoTvArticles = requester.doGet({
+      url: `${REST_API_BASE}/${PARETO_TV_COLLECTION_ID}/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+    const visningArticles = requester.doGet({
+      url: `${REST_API_BASE}/${VISNING_COLLECTION_ID}/nodes`,
+      data: {
+        properties: articleProperties,
+        skip: articlePerRequest * currentPage.current,
+        limit: articlePerRequest,
+      },
+    });
+
+    Promise.all([articles, paretoTvArticles, visningArticles])
       .then((res) => {
         console.log("res::: ", res);
+        // res = [articles[], paretoTvArticles[], visningArticles[]]
+
         // increase current page indicator
         setCurrentPage((oldPage) => oldPage + 1);
         if (!res.length) setPaginationIsInLastPage(true);
 
         // filter data
-        res.map((article) => {
+        res.flat().map((post) => {
           if (
-            typeof article.properties.ticker !== "undefined" &&
-            article.properties.ticker.includes(tickerId)
+            typeof post.properties.ticker !== "undefined" &&
+            post.properties.ticker.includes(tickerId)
           ) {
-            setFirst3Articles((oldArticles) => [...oldArticles, article]);
+            setFirst3Articles((oldArticles) => [...oldArticles, post]);
             // console.count("matched ticker");
             // fetch featured image
-            getFeaturedImageFromId(article.id, article.properties["SV.Image"]);
+            getFeaturedImageFromId(post.id, post.properties["SV.Image"]);
           } else {
             // console.count("no match");
           }
@@ -138,7 +166,7 @@ const App = () => {
                 <header>
                   <small className={styles.date}>
                     {formatTimestampToNorwegianDate(a.properties.creationDate)}{" "}
-                    av Pareto Securities | Aktuelt
+                    av Pareto Securities | {getArticleType(a.path)}
                   </small>
                   <h3 className="subheading3">
                     <a href={a.properties.URL}>{a.name}</a>
