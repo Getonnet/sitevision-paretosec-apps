@@ -101,15 +101,15 @@ const App = () => {
 
     Promise.all([articles, paretoTvArticles, visningArticles])
       .then((res) => {
-        console.log("res::: ", res);
-        // res = [articles[], paretoTvArticles[], visningArticles[]]
+        console.log("res::: ", res); // res = [articles[], paretoTvArticles[], visningArticles[]]
 
         // increase current page indicator
+        const resFlatArray = res.flat();
         setCurrentPage((oldPage) => oldPage + 1);
-        if (!res.length) setPaginationIsInLastPage(true);
+        if (!resFlatArray.length) setPaginationIsInLastPage(true);
 
         // filter data
-        res.flat().map((post) => {
+        resFlatArray.map((post) => {
           if (
             typeof post.properties.ticker !== "undefined" &&
             post.properties.ticker.includes(tickerId)

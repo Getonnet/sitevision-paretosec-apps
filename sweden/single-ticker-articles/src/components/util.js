@@ -45,3 +45,16 @@ export function limitSentenceTo15Words(sentence) {
   const limitedWords = words.slice(0, 15);
   return limitedWords.join(" ");
 }
+
+export const getArticleType = (path) => {
+  if (path.includes("Aktuelt") || path.includes("aktuelt")) {
+    return "Aktuelt";
+  } else if (
+    path.includes("Pareto TV") ||
+    path.includes("Pareto-tv") ||
+    path.includes("pareto tv")
+  ) {
+    return "Pareto TV";
+  }
+  return "Aktuelt"; // no visning in sweden
+};
