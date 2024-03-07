@@ -139,7 +139,7 @@ const App = () => {
   return (
     <>
       <h2 className={styles.title}>
-        Siste artikler om{" "}
+        Senaste artiklarna om{" "}
         <span className={styles.bold}>{pageTickerCode.current}</span>
       </h2>
       <div className={styles.sta_grid}>
